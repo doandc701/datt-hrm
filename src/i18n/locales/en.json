@@ -1,0 +1,80 @@
+{
+  "btn": {
+    "disable": "disable",
+    "enable": "enable",
+    "duplicate": "duplicate",
+    "detail": "detail",
+    "edit": "edit",
+    "view": "view",
+    "create": "create",
+    "ok": "OK",
+    "add": "add",
+    "register": "register",
+    "save": "save",
+    "back": "back",
+    "delete": "delete",
+    "cancel": "cancel",
+    "change": "change",
+    "search": "search",
+    "approval": "approval",
+    "reject": "reject",
+    "confirm": "confirm",
+    "start": "start",
+    "draft": "draft",
+    "send": "send",
+    "login": "login",
+    "select": "select",
+    "auto": "auto",
+    "success": "success",
+    "total": "total",
+    "entries": "entries",
+    "import": "import",
+    "next": "次へ",
+    "request": "request"
+  },
+  "text": {
+    "no": "No.",
+    "deleteSuccess": "delete success: {field}",
+    "resignSuccess": "Đăng ký thành công: {field}",
+    "noData": "ko co data",
+    "notEmptyData": "vui long dien vao truong nay",
+    "notEmptyInput": "khong duoc bo trong truong : {field}",
+    "errorTimePast": "loi chọn thời gian trong quá khứ",
+    "notEmptyChoose": "vui long dien vao truong nay :{field}",
+    "saveSuccess": "luu thanh cong : {field}",
+    "max255": "{field} toi da 255 ki tu",
+    "date": "date",
+    "time": "time",
+    "note": "note",
+    "code": "code",
+    "name": "name",
+    "email": "email",
+    "director": "director",
+    "all": "all"
+  },
+  "tableBox": {
+    "noData": "no data",
+    "action": "action"
+  },
+  "timePicker": {
+    "selectTime": "select time",
+    "selectDate": "select date",
+    "selectYear": "select year",
+    "selectMonth": "select month"
+  },
+  "uploadAvatar": {
+    "errType": "Incorrect file format or file extension.",
+    "maxImage": "Please upload images no larger than 10MB."
+  },
+  "deleteModal": {
+    "areYouSure": "Are you sure？",
+    "confirmDelete": "This process cannot be undone."
+  },
+  "closeModal": {
+    "confirm": "Confirm"
+  },
+  "topBar": {
+    "application": "application",
+    "logout": "logout"
+  }
+}

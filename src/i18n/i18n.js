@@ -1,0 +1,16 @@
+// should be variable === ja
+import { createI18n } from "vue-i18n";
+import numberFormats from "./rules/number";
+import datetimeFormats from "./rules/datetime";
+import en from "./locales/en.json";
+import ja from "./locales/ja.json";
+
+export default createI18n({
+  locale: import.meta.env.VITE_DEFAULT_LOCALE || "ja",
+  fallbackLocale: import.meta.env.VITE_FALLBACK_LOCALE || "en",
+  legacy: false,
+  globalInjection: true,
+  messages: { ja, en },
+  numberFormats,
+  datetimeFormats,
+});

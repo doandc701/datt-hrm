@@ -1,0 +1,168 @@
+/*
+ |--------------------------------------------------------------------------
+ | Sass
+ |--------------------------------------------------------------------------
+ |
+ | Import sass Shared
+ |
+ */
+@import "./_common.scss";
+/*
+ |--------------------------------------------------------------------------
+ | TailwindCSS Directives
+ |--------------------------------------------------------------------------
+ |
+ | Import TailwindCSS directives and swipe out at build-time with all of
+ | the styles it generates based on your configured design system.
+ |
+ | Please check this link for more details:
+ | https://tailwindcss.com/docs/installation#include-tailwind-in-your-css
+ |
+ */
+@import "./_tailwind.css";
+
+/*
+  |--------------------------------------------------------------------------
+  | Colors
+  |--------------------------------------------------------------------------
+  |
+  | Configuration of the main and dark-mode colors.
+  |
+  | Please check this link for more details:
+  | https://tailwindcss.com/docs/customizing-colors#using-css-variables
+  |
+  */
+@import "./_colors.scss";
+
+/*
+ |--------------------------------------------------------------------------
+ | Fonts
+ |--------------------------------------------------------------------------
+ |
+ | Import all fonts used in the template, the font configuration can be
+ | seen in "tailwind.config.js".
+ |
+ | Please check this link for more details:
+ | https://tailwindcss.com/docs/theme
+ |
+ */
+@import "./_roboto.css";
+
+/*
+ |--------------------------------------------------------------------------
+ | Mixins
+ |--------------------------------------------------------------------------
+ |
+ | Import helper mixins.
+ |
+ */
+@import "@left4code/tw-starter/dist/css/mixins/_media.css";
+
+/*
+ |--------------------------------------------------------------------------
+ | 3rd Party Libraries
+ |--------------------------------------------------------------------------
+ |
+ | Import 3rd party library CSS files.
+ |
+ */
+/*tippy*/
+@import "tippy.js/dist/tippy.css";
+@import "tippy.js/themes/light.css";
+@import "tippy.js/dist/svg-arrow.css";
+@import "tippy.js/animations/shift-away.css";
+@import "simplebar/src/simplebar.css";
+/*@import "@left4code/tw-starter/dist/css/_pagination.css";*/
+/*@import "highlight.js/styles/github.css";*/
+/*@import "toastify-js/src/toastify.css";*/
+/*@import "dropzone/dist/dropzone.css";*/
+/*@import "zoom-vanilla.js/dist/zoom.css";*/
+/*@import "tabulator-tables/dist/css/tabulator.css";*/
+/*@import "tom-select/dist/css/tom-select.css";*/
+/*@import "tiny-slider/dist/tiny-slider.css";*/
+
+@import "@left4code/tw-starter/dist/css/_accordion.css";
+@import "@left4code/tw-starter/dist/css/_alert.css";
+@import "@left4code/tw-starter/dist/css/_btn.css";
+@import "@left4code/tw-starter/dist/css/_dropdown.css";
+@import "@left4code/tw-starter/dist/css/_file.css";
+@import "@left4code/tw-starter/dist/css/_form-reset.css";
+@import "@left4code/tw-starter/dist/css/_form-check.css";
+@import "@left4code/tw-starter/dist/css/_form-control.css";
+@import "@left4code/tw-starter/dist/css/_form-help.css";
+@import "@left4code/tw-starter/dist/css/_form-inline.css";
+@import "@left4code/tw-starter/dist/css/_form-label.css";
+@import "@left4code/tw-starter/dist/css/_form-select.css";
+@import "@left4code/tw-starter/dist/css/_image-fit.css";
+@import "@left4code/tw-starter/dist/css/_input-group.css";
+@import "@left4code/tw-starter/dist/css/_intro.css";
+@import "@left4code/tw-starter/dist/css/_modal.css";
+@import "@left4code/tw-starter/dist/css/_progress.css";
+@import "@left4code/tw-starter/dist/css/_scrollbar.css";
+@import "@left4code/tw-starter/dist/css/_tab.css";
+@import "@left4code/tw-starter/dist/css/_typing-dots.css";
+@import "@left4code/tw-starter/dist/css/_box.css";
+/*
+ |--------------------------------------------------------------------------
+ | Animation
+ |--------------------------------------------------------------------------
+ |
+ | Import CSS Animation.
+ |
+ */
+@import "./animation/_zoom-in.scss";
+
+/*
+ |--------------------------------------------------------------------------
+ | Components
+ |--------------------------------------------------------------------------
+ |
+ | Import CSS components.
+ |
+ */
+@import "./components/table-box/_table.scss";
+@import "./components/table-box/_table-list.scss";
+@import "./components/table-box/_table-calendar.scss";
+@import "./components/_global.scss";
+@import "./components/_top-bar.scss";
+@import "./components/_login.scss";
+@import "./components/_report-chart.scss";
+@import "./components/_search.scss";
+@import "./components/_notification.scss";
+@import "./components/_report-box.scss";
+@import "./components/_report-box-2.scss";
+@import "./components/_report-box-3.scss";
+@import "./components/_report-box-4.scss";
+@import "./components/_content.scss";
+@import "./components/_top-nav.scss";
+@import "./components/_side-nav.scss";
+@import "./components/_breadcrumb.scss";
+@import "./components/_toastify.scss";
+@import "./components/_toastify-content.scss";
+@import "./components/_lucide-icon.scss";
+@import "./components/_top-bar-boxed.scss";
+@import "./components/_mobile-menu.scss";
+@import "./components/_inbox-filter.scss";
+@import "./components/_inbox.scss";
+@import "./components/_chat.scss";
+@import "./components/_chat-dropdown.scss";
+@import "./components/_news.scss";
+@import "./components/_pricing-tabs.scss";
+@import "./components/_error-page.css";
+@import "./components/_search-result.scss";
+@import "./components/_notification-content.scss";
+@import "./components/_report-maps.scss";
+@import "./components/_pos-dropdown.scss";
+@import "./components/_post.scss";
+@import "./components/_litepicker.scss";
+@import "./components/_tiny-slider.scss";
+@import "./components/_tippy.scss";
+@import "./components/_tabulator.scss";
+@import "./components/_tom-select.scss";
+@import "./components/_dropzone.css";
+@import "./components/_ckeditor.scss";
+@import "./components/_dark-mode-switcher.scss";
+@import "./components/_hljs.scss";
+@import "./components/_source-preview.scss";
+@import "./components/_full-calendar.scss";
+@import "./components/_pristine.scss";

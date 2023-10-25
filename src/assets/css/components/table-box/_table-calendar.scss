@@ -1,0 +1,53 @@
+.table-calendar {
+  th {
+    vertical-align: middle;
+  }
+  td{
+    vertical-align:top;
+  }
+  thead {
+    &.table-month {
+      th {
+        @apply border-b-0;
+        background-color: #f9f9f9;
+      }
+    }
+    &.table-group-week {
+      position: sticky;
+      top: -1px;
+      background: antiquewhite;
+      th {
+        &.isSaturday{
+          background: none repeat scroll 0 0 #e9f6fe!important;
+        }
+        &.isSunday{
+          background: none repeat scroll 0 0 #fff1f2!important;
+        }
+      }
+    }
+  }
+
+  tbody {
+    &.table-month {
+      tr {
+        td {
+          @apply bg-white border-b-0 dark:bg-darkmode-600;
+          box-shadow: 20px 3px 20px #0000000b;
+          &:first-child {
+            background: none repeat scroll 0 0 #fff1f2;
+          }
+          &:last-child {
+            background: none repeat scroll 0 0 #e9f6fe;
+          }
+        }
+        &:last-child {
+          @apply border-b;
+        }
+      }
+    }
+  }
+
+
+}
+
+

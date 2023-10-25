@@ -1,0 +1,2 @@
+const updateImageId = () => {};
+export { updateImageId };
