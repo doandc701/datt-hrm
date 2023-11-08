@@ -47,12 +47,12 @@ let updateNameTab = (to) => {
   let title = to.name;
   let type = to.query.type;
   document.title =
-    typeof title !== "undefined" ? title.toString() : "On-Site Portal";
+    typeof title !== "undefined" ? title.toString() : "Quản lý nhân sự";
   if (type === "edit") {
     document.title =
       typeof to.query.pageName !== "undefined"
         ? to.query.pageName.toString()
-        : "On-Site Portal";
+        : "Quản lý nhân sự";
   }
 };
 

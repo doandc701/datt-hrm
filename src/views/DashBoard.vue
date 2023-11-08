@@ -1,8 +1,8 @@
 <template>
-  <div class="page__dashboard grid grid-cols-12 gap-6">
+  <div class="page__dashboard master grid grid-cols-12 gap-6">
     <div class="col-span-12">
       <div class="">
-        <div class="intro-y col-span-12 mt-8 flex flex-wrap gap-5">
+        <div class="intro-y col-span-12 mt-8 flex flex-wrap-reverse">
           <div class="flex-1">
             <div
               class="custom__scroll grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5"
@@ -13,7 +13,7 @@
                 class="intro-y"
               >
                 <div class="zoom-in relative box__note">
-                  <a :href="item.note">
+                  <a :href="item.note" @click.prevent="handleTargetLink(item)">
                     <div
                       class="box p-5 overflow-hidden"
                       :style="`background-color:${item.color}`"
@@ -49,8 +49,10 @@
                         >
                           <ChevronRightIcon class="w-5 h-5" />
                         </div>
-                        <div class="text-[#fff]">
-                          <div class="flex-1 text-lg font-medium leading-8">
+                        <div class="text-[#fff] w-[70%]">
+                          <div
+                            class="flex-1 font-medium block-textName-dashboard"
+                          >
                             {{ item.title }}
                           </div>
                         </div>
@@ -67,37 +69,62 @@
               </div>
             </div>
           </div>
+          <div class="absolute right-0 top-[-25px] flex gap-3">
+            <span class="top-[-23px]">{{ $t("dashboard.shortCutText") }}</span>
+            <span class="mb-2 hover:text-[#613a3a]" @click="handleOpenAddLink"
+              ><PlusCircleIcon v-if="!isOpenLink" class="cursor-pointer" />
+              <XIcon v-else class="cursor-pointer" />
+            </span>
+          </div>
           <!-- CREATE LINK -->
-          <div class="max-[980px]:w-full">
-            <span class="flex justify-end mb-2"
-              ><PlusCircleIcon
-                class="cursor-pointer"
-                @click="handleOpenAddLink"
-            /></span>
-            <div v-if="isOpenLink" class="flex-1 box p-5 h-max">
+          <div class="max-[639px]:w-full">
+            <div v-if="isOpenLink" class="flex-1 box p-5 h-max ml-3">
+              <div class="w-4 h-4 mb-1" v-if="isLoading">
+                <LoadingIcon
+                  icon="spinning-circles"
+                  color="black"
+                  class="w-full h-full"
+                />
+              </div>
               <div>
-                <label for="crud-form-1" class="form-label">{{
-                  $t("dashboard.title")
-                }}</label>
+                <label for="crud-form-1" class="form-label"
+                  >{{ $t("dashboard.title") }}
+                  <span class="text-danger">*</span>
+                </label>
                 <input
                   v-model="textTitle"
                   id="crud-form-1"
                   type="text"
                   class="form-control w-full"
                   :placeholder="$t('dashboard.pleaseTitle')"
+                  @blur="handleBlur('title')"
                 />
+                <div
+                  v-if="errorInfo.title"
+                  class="d-block mt-2 pl-1 text-danger"
+                >
+                  {{ errorInfo.title }}
+                </div>
               </div>
               <div class="mt-3">
-                <label for="crud-form-2" class="form-label">{{
-                  $t("dashboard.linkConnect")
-                }}</label>
+                <label for="crud-form-2" class="form-label"
+                  >{{ $t("dashboard.linkConnect") }}
+                  <span class="text-danger">*</span>
+                </label>
                 <input
                   v-model="textLink"
                   id="crud-form-1"
                   type="text"
                   class="form-control w-full"
-                  :placeholder="$t('dashboard.linkConnect')"
+                  :placeholder="$t('dashboard.pleaseLink')"
+                  @blur="handleBlur('note')"
                 />
+                <div
+                  v-if="errorInfo.textLink"
+                  class="d-block mt-2 pl-1 text-danger"
+                >
+                  {{ errorInfo.textLink }}
+                </div>
               </div>
               <div class="text-right mt-5">
                 <button
@@ -113,6 +140,53 @@
           <!-- CREATE LINK -->
         </div>
       </div>
+      <div
+        class="grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5 my-3"
+      >
+        <a
+          href="/calendar/list"
+          @click.prevent="
+            router.push({
+              path: '/calendar/list',
+            })
+          "
+          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
+          ><span class="flex gap-3 items-center"
+            ><img
+              class="w-[45px]"
+              src="@/assets/images/svg/dashboard/calendar.png" /></span
+        ></a>
+        <a
+          href="https://teams.microsoft.com/l/chat/0/0?tenantId=6fd7afce-64cf-4904-8e48-bf3ae1c332ec"
+          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
+          ><span class="flex gap-3 items-center"
+            ><img
+              class="w-[45px]"
+              src="@/assets/images/svg/dashboard/teams.svg" /></span
+        ></a>
+        <a
+          href="https://outlook.office.com/"
+          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
+        >
+          <span class="flex gap-3 items-center">
+            <img
+              class="w-[45px]"
+              src="@/assets/images/svg/dashboard/outlook.svg"
+            />
+          </span>
+        </a>
+        <a
+          href="https://kosecgr.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx"
+          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
+        >
+          <span class="flex gap-3 items-center">
+            <img
+              class="w-[45px]"
+              src="@/assets/images/svg/dashboard/folder.png"
+            />
+          </span>
+        </a>
+      </div>
 
       <div class="mt-[26px`]">
         <h2 class="text-lg font-medium truncate mr-5 mt-[26px]">
@@ -120,10 +194,28 @@
         </h2>
 
         <div>
-          <div v-if="visibleAction" class="flex justify-end">
-            <button class="btn btn-primary shadow-md" @click="handleAddPost">
-              {{ $t("dashboard.addNewPost") }}
-            </button>
+          <div class="flex items-center justify-end">
+            <div
+              class="relative cursor-pointer"
+              @click="handleNumberNotification"
+            >
+              <BellIcon
+                class="hover:opacity-80"
+                :class="numberNotification > 0 ? 'bellring' : ''"
+              />
+              <span
+                v-if="numberNotification > 0"
+                class="number__notification"
+                >{{
+                  numberNotification < 100 ? numberNotification : "99+"
+                }}</span
+              >
+            </div>
+            <div v-if="visibleAction" class="ml-[20px]">
+              <button class="btn btn-primary shadow-md" @click="handleAddPost">
+                {{ $t("dashboard.addNewPost") }}
+              </button>
+            </div>
           </div>
           <div class="intro-y grid grid-cols-12 gap-6 mt-5">
             <div
@@ -170,23 +262,25 @@
                 </Dropdown>
               </div>
               <div
-                class="p-5 cursor-pointer"
+                class="p-5 cursor-pointer pb-[105px]"
                 @click="handleDetailPost(post.id)"
               >
                 <div
-                  v-if="post.image_posts.length > 0"
+                  v-if="customGUI(post.body).image?.src"
                   class="h-40 2xl:h-56 image-fit"
                 >
                   <img
                     alt="Midone Tailwind HTML Admin Template"
                     class="rounded-md"
-                    :src="post.image_posts[0].path"
+                    :src="customGUI(post.body).image?.src"
                   />
                 </div>
-                <p class="block font-medium text-base mt-5">{{ post.title }}</p>
+                <p class="block font-medium text-base mt-5 break-all">
+                  {{ post.title }}
+                </p>
               </div>
               <div
-                class="px-5 pt-3 pb-5 border-t border-slate-200/60 dark:border-darkmode-400"
+                class="px-5 pt-3 pb-5 border-t border-slate-200/60 dark:border-darkmode-400 absolute w-full left-0 bottom-0"
               >
                 <div class="w-full flex text-slate-500 text-xs sm:text-sm">
                   <div class="mr-2">
@@ -215,10 +309,7 @@
                 </div>
                 <div class="w-full flex items-center mt-3">
                   <div class="w-8 h-8 flex-none image-fit mr-3">
-                    <img
-                      class="rounded-full"
-                      :src="post.created_by.avatar_path"
-                    />
+                    <img class="rounded-full" :src="userInfo?.avatar_path" />
                   </div>
                   <div class="flex-1 relative text-slate-600">
                     <input
@@ -241,8 +332,12 @@
               class="intro-y col-span-12 flex flex-wrap justify-end sm:flex-row sm:flex-nowrap items-center"
             >
               <el-pagination
+                v-if="pagination.total"
                 layout="prev, pager, next"
-                :total="dataPost.length"
+                :limit="pagination.limit"
+                :page-size="pagination.limit"
+                :page="pagination.page"
+                :total="pagination.total"
                 @current-change="handleChangePage"
               />
             </div>
@@ -271,6 +366,7 @@ import { formatAverageNumbro } from "@/utils/fomat";
 import { useAuthStore } from "@/stores/auth";
 import { TYPE_ADMIN } from "@/config/constants";
 
+const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
@@ -288,6 +384,7 @@ const arrayBackGroundColor = [
   "#957455",
   "#d23a87",
 ];
+const isLoading = ref(false);
 const isOpenLink = ref(false);
 const inputComment = ref({});
 const currentUser = ref([]);
@@ -295,65 +392,67 @@ const textTitle = ref("");
 const textLink = ref("");
 const dataLink = ref([]);
 const dataPost = ref([]);
-const pagination = reactive({
-  page: 1,
-  limit: 10,
+const objPostRequriedRead = reactive({
+  dataRead: [],
+  pageP: {
+    total: 0,
+    limit: 0,
+    page: 0,
+  },
+});
+const numberNotification = ref(0);
+const errorInfo = reactive({
+  title: "",
+  textLink: "",
 });
 
+const pagination = reactive({
+  page: 1,
+  limit: 12,
+  total: 0,
+});
 const dataLinkHardware = [
   {
     id: 1,
     title: "休暇届．各種申請書",
-    note: "https://furyho.supenient.tech/request/leave-application/add",
+    note: "/request/leave-application/add",
     color: "#397ed4",
   },
   {
     id: 2,
     title: "稟議書申請",
-    note: "https://furyho.supenient.tech/request/other-request/add",
+    note: "/request/other-request/add",
     color: "#9f28a6",
   },
   {
     id: 3,
     title: "在宅勤務関連申請書",
-    note: "https://furyho.supenient.tech/request/leave-application/add",
+    note: "/request/leave-application/add",
     color: "#3c8592",
   },
   {
     id: 4,
     title: "出張報告書【製造部用】",
-    note: "https://furyho.supenient.tech/request/time-report/add",
+    note: "/request/time-report/add",
     color: "#d93125",
   },
   {
     id: 5,
     title: "会社携帯番号表",
-    note: "pdf",
+    note: "https://site-portal-storage.s3.ap-northeast-1.amazonaws.com/file/%E6%90%BA%E5%B8%AF%E7%95%AA%E5%8F%B7%E4%B8%80%E8%A6%A7%E8%A1%A8%E3%80%80.pdf",
     color: "#459229",
   },
   {
     id: 6,
     title: "KOSEC組織図",
-    note: "https://site-portal.supenient.vn/organization-chart",
+    note: "/organization-chart",
     color: "#183592",
   },
   {
     id: 7,
     title: "内線番号表",
-    note: "pdf",
+    note: "https://site-portal-storage.s3.ap-northeast-1.amazonaws.com/file/%E5%86%85%E7%B7%9A%E7%95%AA%E5%8F%B7%E8%A1%A8R5.1%EF%BD%9E.pdf",
     color: "#504d50",
-  },
-  {
-    id: 8,
-    title: "トップページ",
-    note: "https://furyho.supenient.tech",
-    color: "#957455",
-  },
-  {
-    id: 9,
-    title: "“＃”",
-    note: "https://furyho.supenient.tech",
-    color: "#d23a87",
   },
 ];
 const roleUser = authStore.userInfo.role_id;
@@ -364,20 +463,116 @@ const visibleAction = computed(() => {
 
 // method
 
+function handleBlur(value) {
+  if (value === "title") {
+    if (!textTitle.value || !textTitle.value.trim()) {
+      errorInfo.title = i18n.global.t("dashboard.errorTitle");
+    } else {
+      errorInfo.title = "";
+    }
+  } else if (value === "note") {
+    /* eslint-disable no-useless-escape */
+    const expression =
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    const regex = new RegExp(expression);
+    if (!textLink.value || !textLink.value.trim()) {
+      errorInfo.textLink = i18n.global.t("dashboard.errorLink");
+    } else {
+      if (textLink.value.match(regex)) {
+        errorInfo.textLink = "";
+      } else {
+        errorInfo.textLink = i18n.global.t("dashboard.errorURL");
+      }
+    }
+  }
+}
+
+function handleTargetLink(params) {
+  if (params.id === 5) {
+    window.location.href = params.note;
+  } else if (params.id === 7) {
+    window.location.href = params.note;
+  } else {
+    router.push({
+      path: params.note,
+    });
+  }
+}
+
+function customGUI(body) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(body, "text/html");
+  const title = doc.querySelector("strong")?.textContent;
+  const image = doc.querySelector("img");
+  const shortContent = doc.querySelector("p")?.textContent;
+  return {
+    title,
+    image: {
+      src: image?.getAttribute("src"),
+      alt: image?.getAttribute("alt"),
+      width: image?.getAttribute("width"),
+      height: image?.getAttribute("height"),
+    },
+    shortContent,
+  };
+}
+
+function resetInput() {
+  textTitle.value = textLink.value = "";
+}
+
+function validate() {
+  let check = true;
+  if (!textTitle.value || !textTitle.value.trim()) {
+    errorInfo.title = i18n.global.t("dashboard.errorTitle");
+    check = false;
+  }
+  if (!textLink.value || !textLink.value.trim()) {
+    errorInfo.textLink = i18n.global.t("dashboard.errorLink");
+    check = false;
+  }
+  if (errorInfo.title || errorInfo.textLink) check = false;
+  return check;
+}
+
 function handleOpenAddLink() {
   isOpenLink.value = !isOpenLink.value;
 }
 
+function handleNumberNotification() {
+  if (numberNotification.value <= 0) return;
+  dataPost.value = objPostRequriedRead.dataRead;
+  pagination.total = objPostRequriedRead.pageP.total;
+  pagination.limit = objPostRequriedRead.pageP.limit;
+  pagination.page = Math.ceil(
+    objPostRequriedRead.pageP.total / objPostRequriedRead.pageP.limit
+  );
+  for (let i = 0; i < objPostRequriedRead.dataRead.length; i++) {
+    if (objPostRequriedRead.dataRead[i].like.length > 0) {
+      const mapIDLike = objPostRequriedRead.dataRead[i].like.map(
+        (item) => item.id
+      );
+      if (mapIDLike) currentUser.value.push(...mapIDLike);
+    }
+  }
+}
+
 function handleSaveLink() {
-  if (!textTitle.value.trim() || !textLink.value.trim()) return;
+  let isValidate = validate();
+  if (!isValidate) return;
+  if (isLoading.value) return;
+  isLoading.value = true;
   const randomColor = Math.floor(Math.random() * arrayBackGroundColor.length);
   let successCallback = (response) => {
     const responeData = response?.data?.data?.data;
-    dataLink.value.push(responeData);
-    textTitle.value = textLink.value = "";
     ElMessage.success(i18n.global.t("text.saveSuccess"));
+    dataLink.value.push(responeData);
+    isLoading.value = false;
+    resetInput();
   };
-  let errorCallback = () => {};
+  let errorCallback = () => {
+    isLoading.value = false;
+  };
   let payload = {
     data: {
       title: textTitle.value.trim(),
@@ -397,6 +592,10 @@ function handleDetailPost(param) {
       id: param,
     },
   });
+  const findId = objPostRequriedRead.dataRead.find((item) => item.id === param);
+  if (findId) {
+    alreadyRead(param);
+  }
 }
 
 function handleAddPost() {
@@ -410,6 +609,8 @@ function handleEditPost(params) {
     path: "post/add",
     query: {
       id: params,
+      type: "edit",
+      pageName: i18n.global.t("dashboard.editPost"),
     },
   });
 }
@@ -453,7 +654,13 @@ function handleLike(paramsLike) {
   const result = mapID.filter((item) => currentUser.value.includes(item));
   let errorCallback = () => {};
   if (!result.length) {
-    let successCallback = () => {
+    let successCallback = (response) => {
+      const responeData = response?.data?.data?.data;
+      const findPostLiked = dataPost.value.find(
+        (item) => item.id === responeData.post_id
+      );
+      findPostLiked.like.push(responeData);
+      currentUser.value.push(responeData.id);
       paramsLike.like_count++;
     };
     let payload = {
@@ -464,6 +671,12 @@ function handleLike(paramsLike) {
     postDashBoardStore.actionLike(payload);
   } else {
     let successCallback = () => {
+      if (paramsLike) {
+        const findIndex = paramsLike.like.findIndex(
+          (item) => item.post_id === paramsLike.id
+        );
+        paramsLike.like.splice(findIndex, 1);
+      }
       paramsLike.like_count--;
     };
     let payload = {
@@ -473,16 +686,12 @@ function handleLike(paramsLike) {
     };
     postDashBoardStore.actionUnLike(payload);
   }
-  getListPost();
 }
 
 function handleComment(paramsComment) {
-  let successCallback = (response) => {
-    const responeData = response?.data?.data?.data;
-    if (responeData.post_id === paramsComment.id) {
-      paramsComment.comment_count++;
-      inputComment.value[paramsComment.id] = "";
-    }
+  let successCallback = () => {
+    paramsComment.comment_count++;
+    inputComment.value[paramsComment.id] = "";
   };
   let errorCallback = () => {};
   let payload = {
@@ -499,6 +708,7 @@ function handleComment(paramsComment) {
 function handleChangePage(value) {
   pagination.page = value;
   getListPost();
+  window.scrollTo(0, 0);
 }
 
 function getNoteLink() {
@@ -514,15 +724,37 @@ function getNoteLink() {
   noteLinkDashBoardStore.get(payload);
 }
 
+function getListPostRead() {
+  let successCallback = (response) => {
+    const responeData = response?.data?.data;
+    numberNotification.value = responeData.total;
+    objPostRequriedRead.dataRead = responeData.data;
+    objPostRequriedRead.pageP.total = responeData.total;
+    objPostRequriedRead.pageP.limit = responeData.limit;
+    objPostRequriedRead.pageP.page = Math.ceil(
+      responeData.total / responeData.limit
+    );
+  };
+  let errorCallback = () => {};
+  let payload = {
+    query: `filters[user_code]=${userInfo.code}&filters[is_required]=1&filters[is_readed]=0`,
+    successCallback,
+    errorCallback,
+  };
+  postDashBoardStore.list(payload);
+}
+
 function getListPost() {
   let successCallback = (response) => {
-    const responeData = response?.data?.data?.data;
-    dataPost.value = responeData;
-    currentUser.value = [];
-    for (let i = 0; i < responeData.length; i++) {
-      if (responeData[i].like.length > 0) {
-        const findLike = responeData[i].like.map((item) => item.id);
-        if (findLike) currentUser.value.push(...findLike);
+    const responeData = response?.data?.data;
+    dataPost.value = responeData.data;
+    pagination.total = responeData.total;
+    pagination.limit = responeData.limit;
+    pagination.page = Math.ceil(responeData.total / responeData.limit);
+    for (let i = 0; i < responeData.data.length; i++) {
+      if (responeData.data[i].like.length > 0) {
+        const mapIDLike = responeData.data[i].like.map((item) => item.id);
+        if (mapIDLike) currentUser.value.push(...mapIDLike);
       }
     }
   };
@@ -535,9 +767,21 @@ function getListPost() {
   postDashBoardStore.list(payload);
 }
 
+function alreadyRead(paramId) {
+  let errorCallback = () => {};
+  let successCallback = () => {};
+  let payload = {
+    code: paramId,
+    successCallback,
+    errorCallback,
+  };
+  postDashBoardStore.create(payload);
+}
+
 function initialData() {
   getNoteLink();
   getListPost();
+  getListPostRead();
 }
 
 onMounted(() => {
@@ -545,24 +789,3 @@ onMounted(() => {
   initialData();
 });
 </script>
-<style>
-/* .custom_icon {
-  animation: iconPlus 2.25s linear infinite alternate;
-  border-radius: 50%;
-} */
-
-/* @keyframes iconPlus {
-  0% {
-    transform: scale(1);
-    box-shadow: 0px 0px 0px 0px #b421217a;
-  }
-  50% {
-    transform: scale(1.2);
-    box-shadow: 0px 5px 5px 5px #853d3d7a;
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0px 0px 0px 0px #b421217a;
-  }
-} */
-</style>

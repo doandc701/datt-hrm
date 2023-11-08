@@ -11,7 +11,9 @@ export let GET_POST = (params, successCallback, errorCallback) => {
 };
 
 export let CREATE_POST = (params, successCallback, errorCallback) => {
-  let url = `/post-dashboard`;
+  let url = `/post-dashboard${
+    params.payload.code ? "/" + params.payload.code + "/read" : ""
+  }`;
   let data = params.payload.data;
   return Api.post(url, data).then(successCallback).catch(errorCallback);
 };

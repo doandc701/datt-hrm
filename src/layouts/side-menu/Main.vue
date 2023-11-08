@@ -10,7 +10,7 @@
         >
           <img class="w-6" src="@/assets/images/logo.svg" />
           <span class="ml-3 hidden text-lg text-white md:block">
-            On-Site Portal
+            Quản lý nhân sự
           </span>
         </router-link>
         <div class="side-nav__devider my-6"></div>

@@ -6,7 +6,7 @@
         <div class="hidden min-h-screen flex-col xl:flex">
           <a class="-intro-x flex items-center pt-5" href="">
             <img class="w-6" src="@/assets/images/logo.svg" />
-            <span class="ml-3 text-lg text-white">On-Site Portal</span>
+            <span class="ml-3 text-lg text-white">Quản lý nhân sự</span>
           </a>
           <div class="my-auto">
             <img

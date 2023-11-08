@@ -6,8 +6,8 @@ export let LIST_NOTE_LINK = (params, successCallback, errorCallback) => {
 };
 
 export let GET_NOTE_LINK = (params, successCallback, errorCallback) => {
-    let url = `/note/${params.payload.code}`;
-    return Api.get(url).then(successCallback).catch(errorCallback);
+  let url = `/note/${params.payload.code}`;
+  return Api.get(url).then(successCallback).catch(errorCallback);
 };
 
 export let CREATE_NOTE_LINK = (params, successCallback, errorCallback) => {

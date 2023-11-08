@@ -1,7 +1,7 @@
 <template>
   <div v-if="dataPost" class="intro-y news xl:w-3/5 p-5 box mt-8 w-full">
     <!-- BEGIN: Blog Layout -->
-    <h2 class="intro-y font-medium text-xl sm:text-2xl">
+    <h2 class="intro-y font-medium text-xl sm:text-2xl break-all">
       {{ dataPost.title }}
     </h2>
     <div
@@ -9,7 +9,7 @@
     >
       {{ dataPost.created_at }}
     </div>
-    <div class="intro-y mt-6">
+    <div class="intro-y mt-6 break-all">
       <div v-html="dataPost.body"></div>
     </div>
     <div class="intro-y flex relative pt-16 sm:pt-6 items-center pb-6">
@@ -22,11 +22,23 @@
             formatAverageNumbro(dataPost.comment_count)
           }}</span>
         </div>
-        <div class="intro-x sm:mr-3 ml-auto">
-          {{ $t("dashboard.likes") }}:
-          <span class="font-medium">{{
-            formatAverageNumbro(dataPost.like_count)
-          }}</span>
+
+        <div class="intro-x sm:mr-3 ml-auto" @click="handleLike(dataPost)">
+          <div
+            v-if="postLikedByCurrentUser(dataPost).length > 0"
+            class="text-[#0566ff]"
+          >
+            {{ $t("dashboard.likes") }}:
+            <span class="font-medium">{{
+              formatAverageNumbro(dataPost.like_count)
+            }}</span>
+          </div>
+          <div v-else>
+            {{ $t("dashboard.likes") }}:
+            <span class="font-medium">{{
+              formatAverageNumbro(dataPost.like_count)
+            }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -115,6 +127,7 @@ const postDashBoardStore = usePostDashBoardStore();
 const dataPost = ref(null);
 const inputComment = ref("");
 const getQuery = route.query;
+const currentUser = ref([]);
 
 function handleComment(paramsComment) {
   let successCallback = (response) => {
@@ -133,6 +146,50 @@ function handleComment(paramsComment) {
     errorCallback,
   };
   postDashBoardStore.actionComment(payload);
+}
+
+function postLikedByCurrentUser(post) {
+  const mapID = post.like.map((item) => item.id);
+  const result = mapID.filter((item) => currentUser.value.includes(item));
+  return result;
+}
+
+function handleLike(paramsLike) {
+  const mapID = paramsLike.like.map((item) => item.id);
+  const result = mapID.filter((item) => currentUser.value.includes(item));
+  let errorCallback = () => {};
+  if (!result.length) {
+    let successCallback = (response) => {
+      const responeData = response?.data?.data?.data;
+      if (dataPost.value.id === responeData.post_id) {
+        dataPost.value.like.push(responeData);
+        currentUser.value.push(responeData.id);
+        paramsLike.like_count++;
+      }
+    };
+    let payload = {
+      code: paramsLike.id,
+      successCallback,
+      errorCallback,
+    };
+    postDashBoardStore.actionLike(payload);
+  } else {
+    let successCallback = () => {
+      if (paramsLike) {
+        const findIndex = paramsLike.like.findIndex(
+          (item) => item.post_id === paramsLike.id
+        );
+        paramsLike.like.splice(findIndex, 1);
+      }
+      paramsLike.like_count--;
+    };
+    let payload = {
+      code: paramsLike.id,
+      successCallback,
+      errorCallback,
+    };
+    postDashBoardStore.actionUnLike(payload);
+  }
 }
 
 function handleDeleteComment(paramIdPost, paramIdCMT) {
@@ -154,7 +211,10 @@ function handleDeleteComment(paramIdPost, paramIdCMT) {
 
 function getPost(param) {
   let successCallback = (response) => {
-    dataPost.value = response.data.data.data;
+    const responeData = response.data.data.data;
+    const mapIDLike = responeData.like.map((item) => item.id);
+    dataPost.value = responeData;
+    currentUser.value = mapIDLike;
   };
   let errorCallback = () => {};
   let payload = {
