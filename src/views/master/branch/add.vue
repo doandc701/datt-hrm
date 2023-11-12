@@ -224,7 +224,8 @@ let resign = () => {
     successCallback,
     errorCallback,
   };
-  masterBranchStore.create(payload);
+  console.log(payload.data);
+  // masterBranchStore.create(payload);
 };
 
 let save = () => {
