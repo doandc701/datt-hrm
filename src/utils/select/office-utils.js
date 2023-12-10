@@ -9,16 +9,16 @@ export const getListOffice = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageOffice = page;
       if (apiStore.listOffice.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listOffice = [
             ..._.cloneDeep(apiStore.listOffice),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listOffice = [...new Set(listOffice)];
         }
       } else {
-        apiStore.listOffice = response?.data?.data?.data ?? [];
+        apiStore.listOffice = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},
@@ -33,7 +33,7 @@ export const getListOfficeFilter = (config, page = 1) => {
   let payload = {
     successCallback: (response) => {
       apiStore.pageOffice = page;
-      apiStore.listOffice = response?.data?.data?.data ?? [];
+      apiStore.listOffice = response?.data?.data ?? [];
       return apiStore.listOffice;
     },
     errorCallback: () => {

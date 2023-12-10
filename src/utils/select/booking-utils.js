@@ -7,7 +7,7 @@ export const getListBooking = () => {
   let payload = {
     successCallback: (response) => {
       if (apiStore.listBooking.length === 0) {
-        apiStore.listBooking = response?.data?.data?.data ?? [];
+        apiStore.listBooking = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},

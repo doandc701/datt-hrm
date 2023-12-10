@@ -437,7 +437,7 @@ const errorInfo = ref({
 // get detail
 let getListBasicInfomation = (code) => {
   let successCallback = (response) => {
-    const dataResponse = response.data.data.data;
+    const dataResponse = response.data.data;
     sales.value = _.map(dataResponse.sales, "code");
     defaultOptionsSales.value = dataResponse.sales ?? [];
     salePlaning.value = _.map(dataResponse.sale_planing, "code");
@@ -489,7 +489,7 @@ let resign = () => {
     isLoading.value = true;
     const data = compileData();
     let successCallback = (response) => {
-      let dataResponse = response?.data?.data?.data;
+      let dataResponse = response?.data?.data;
       managementCode.value = dataResponse.code;
       ElMessage.success(i18n.global.t("resignError.resignSuccess"));
       reportStore.matterBasicInfo = data;

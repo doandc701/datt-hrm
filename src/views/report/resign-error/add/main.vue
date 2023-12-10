@@ -188,7 +188,7 @@ const resetScreen = () => {
 //get detail
 let getDetail = () => {
   let successCallback = (response) => {
-    data.value = response?.data?.data?.data;
+    data.value = response?.data?.data;
   };
   let errorCallback = () => {};
   let payload = {
@@ -201,7 +201,7 @@ let getDetail = () => {
 
 let getConfig = () => {
   let successCallback = (response) => {
-    reportStore.configBasicInformation = response.data.data.data;
+    reportStore.configBasicInformation = response.data.data;
   };
   let errorCallback = () => {};
   let payload = {

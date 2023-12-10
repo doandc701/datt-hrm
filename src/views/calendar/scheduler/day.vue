@@ -142,7 +142,7 @@ export default {
       let successCallback = (response) => {
         let resource = [];
         let eventData = [];
-        response?.data?.data?.data.map((item) => {
+        response?.data?.data.map((item) => {
           if (moment(item.end).isSameOrAfter(item.start)) {
             eventData.push({
               id: uuidv4(),

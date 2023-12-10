@@ -131,7 +131,7 @@ const currentUser = ref([]);
 
 function handleComment(paramsComment) {
   let successCallback = (response) => {
-    const responeData = response?.data?.data?.data;
+    const responeData = response?.data?.data;
     paramsComment.comment_count++;
     dataPost.value.comment.unshift(responeData);
     inputComment.value = "";
@@ -160,7 +160,7 @@ function handleLike(paramsLike) {
   let errorCallback = () => {};
   if (!result.length) {
     let successCallback = (response) => {
-      const responeData = response?.data?.data?.data;
+      const responeData = response?.data?.data;
       if (dataPost.value.id === responeData.post_id) {
         dataPost.value.like.push(responeData);
         currentUser.value.push(responeData.id);
@@ -211,7 +211,7 @@ function handleDeleteComment(paramIdPost, paramIdCMT) {
 
 function getPost(param) {
   let successCallback = (response) => {
-    const responeData = response.data.data.data;
+    const responeData = response.data.data;
     const mapIDLike = responeData.like.map((item) => item.id);
     dataPost.value = responeData;
     currentUser.value = mapIDLike;

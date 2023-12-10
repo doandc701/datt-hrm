@@ -9,16 +9,16 @@ export const getListBranch = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageBranch = page;
       if (apiStore.listBranch.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listBranch = [
             ..._.cloneDeep(apiStore.listBranch),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listBranch = [...new Set(listBranch)];
         }
       } else {
-        apiStore.listBranch = response?.data?.data?.data ?? [];
+        apiStore.listBranch = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},

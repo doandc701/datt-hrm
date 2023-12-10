@@ -61,7 +61,7 @@
             {{ errorInfo.branchName }}
           </div>
         </div>
-        <div class="mt-3" v-if="route.query.code">
+        <!-- <div class="mt-3" v-if="route.query.code">
           <label class="form-label font-medium text-base">
             {{ $t("text.director") }}
           </label>
@@ -70,17 +70,17 @@
             v-model:code="userDirector"
             v-model:config="selectUser"
           ></SelectMultiUser>
-        </div>
-        <div class="mt-5">
+        </div> -->
+        <!-- <div class="mt-5">
           {{ $t("branch.flowConfirm") }}
-        </div>
-        <div class="mt-3">
+        </div> -->
+        <!-- <div class="mt-3">
           <Confirm
             v-model:flow-begin="flowBegin"
             v-model:type-validate="typeValidate"
             v-model:flow-approve="flow"
           ></Confirm>
-        </div>
+        </div> -->
         <div class="text-right mt-5">
           <router-link :to="{ path: '/master/branch/list' }">
             <button class="btn btn-outline-secondary w-28 mr-1" type="button">
@@ -163,7 +163,8 @@ const resetScreen = () => {
 // get detail
 let getDetail = () => {
   let successCallback = (response) => {
-    let dataResponse = response?.data?.data?.branch;
+    let dataResponse = response?.data.data;
+    console.log(dataResponse);
     branchCode.value = dataResponse.code;
     branchName.value = dataResponse.name;
     userDirector.value = _.map(dataResponse.director, "code");
@@ -193,16 +194,20 @@ let getDetailFlow = () => {
 };
 
 let registerCheck = () => {
-  masterBranchStore.registerData = true;
-  masterBranchStore.checkFlow.validateFlow = true;
+  // masterBranchStore.registerData = true;
+  // masterBranchStore.checkFlow.validateFlow = true;
+  resign();
 };
 
 let saveCheck = () => {
-  masterBranchStore.saveData = true;
-  masterBranchStore.checkFlow.validateFlow = true;
+  // masterBranchStore.saveData = true;
+  // masterBranchStore.checkFlow.validateFlow = true;
+  save();
 };
 
 let resign = () => {
+  const isValidate = validate();
+  if (!isValidate) return;
   if (isLoading.value) return;
   isLoading.value = true;
   let successCallback = () => {
@@ -219,16 +224,17 @@ let resign = () => {
     data: {
       code: branchCode.value,
       name: branchName.value,
-      flow: flow.value,
+      // flow: flow.value,
     },
     successCallback,
     errorCallback,
   };
-  console.log(payload.data);
-  // masterBranchStore.create(payload);
+  masterBranchStore.create(payload);
 };
 
 let save = () => {
+  const isValidate = validate();
+  if (!isValidate) return;
   if (isLoading.value) return;
   isLoading.value = true;
   let successCallback = () => {
@@ -245,8 +251,8 @@ let save = () => {
     code: route.query.code,
     data: {
       name: branchName.value,
-      director: userDirector.value,
-      flow: flow.value,
+      // director: userDirector.value,
+      // flow: flow.value,
     },
     successCallback,
     errorCallback,
@@ -323,11 +329,11 @@ watch(
 );
 
 onMounted(() => {
-  getListUser();
-  getListOffice();
+  // getListUser();
+  // getListOffice();
   if (route.query.code) {
     getDetail();
-    getDetailFlow();
+    // getDetailFlow();
   }
 });
 
@@ -341,7 +347,7 @@ watch(
   () => {
     if (route.query.code) {
       getDetail();
-      getDetailFlow();
+      // getDetailFlow();
     } else {
       resetScreen();
     }

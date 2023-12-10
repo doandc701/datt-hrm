@@ -169,7 +169,7 @@ let retrieveList = () => {
 
   let payload = {
     successCallback: (response) => {
-      let dataResponse = response?.data?.data;
+      let dataResponse = response?.data;
       let listData = dataResponse.data;
       data.value.total = dataResponse.total;
       if (!listData.length && data.value.model.page !== 1) {

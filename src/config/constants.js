@@ -158,7 +158,7 @@ const TYPE_BASIC_INFORMATION = [
   { value: "metal_contractor", label: "板金業者" },
   { value: "painter", label: "塗装業者" },
 ];
-const TYPE_ADMIN = 1;
+const TYPE_ADMIN = "ADMIN";
 export {
   APP_TOKEN_NAME,
   PAGE_LIMIT,

@@ -169,7 +169,7 @@ const resetScreen = () => {
 // get detail
 let getDetail = () => {
   let successCallback = (response) => {
-    let dataResponse = response?.data?.data?.data;
+    let dataResponse = response?.data?.data;
     idRequest.value = dataResponse.code;
     title.value = dataResponse.title;
     dataPage2Begin.value = dataResponse;

@@ -102,8 +102,8 @@ const resetScreen = () => {
 // get detail
 let getDetail = () => {
   let successCallback = (response) => {
-    name.value = response.data.data.data.name;
-    pureColor.value = response.data.data.data.color;
+    name.value = response.data.data.name;
+    pureColor.value = response.data.data.color;
   };
   let errorCallback = () => {};
   let payload = {

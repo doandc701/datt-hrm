@@ -447,7 +447,7 @@ let getQueryEventMonth = () => {
 let getEventMonth = () => {
   let payload = {
     successCallback: (response) => {
-      let dataResponse = response.data.data.data;
+      let dataResponse = response.data.data;
       dataList.value = dateList.value.map((week) => {
         return {
           in_day: groupDataByType(dataResponse, week, "common", "repeated"),

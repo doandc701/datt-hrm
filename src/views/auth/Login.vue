@@ -148,10 +148,10 @@ let login = () => {
         moment().endOf("day").utc().toString()
       );
       localStorage.setItem("emailLogin", email.value);
-      localStorage.setItem("userInfo", JSON.stringify(response.data.data.user));
-      authStore.userInfo = response.data.data.user;
+      localStorage.setItem("userInfo", JSON.stringify(response.data.data));
+      authStore.userInfo = response.data.data;
       ElMessage.success(i18n.global.t("auth.loginSuccess"));
-      if (response.data.data.user.first_login) {
+      if (response.data.data.first_login) {
         router.push({
           path: "/setting-password",
         });

@@ -6,7 +6,7 @@ export const getListTeam = () => {
   const apiStore = useApiStore();
   let payload = {
     successCallback: (response) => {
-      apiStore.listTeam = response?.data?.data?.data;
+      apiStore.listTeam = response?.data?.data;
     },
     errorCallback: () => {},
     query: getQueryString(""),

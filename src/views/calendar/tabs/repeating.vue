@@ -659,7 +659,7 @@ function getDataProps() {
       showBtnDelete.value = true;
       disabledSelectTime.value = false;
       let successCallback = (response) => {
-        const allData = response?.data?.data?.data;
+        const allData = response?.data?.data;
         const mapId = allData.facility.map((item) => item.id);
         const mapCodeAttendees = allData.attendees.map((item) => item.code);
 

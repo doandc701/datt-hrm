@@ -290,7 +290,7 @@ function handlePost() {
 
 function getPostEdit(paramsID) {
   let successCallback = (response) => {
-    const responeData = response?.data?.data?.data;
+    const responeData = response?.data?.data;
     const mapID = responeData.image_posts.map((item) => item.id);
     const arrayInfor = responeData.user_reads.map((item) => item.user_info);
     const mapIdCode = arrayInfor.map((item) => item.code);

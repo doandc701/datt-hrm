@@ -105,7 +105,7 @@ const masterBranchStore = useMasterBranchStore();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
 
-const roleUser = authStore.userInfo.role_id;
+const roleUser = authStore.userInfo.roles;
 
 const resizeTable = ref(JSON.parse(localStorage.getItem("listBranch")));
 const config = ref({

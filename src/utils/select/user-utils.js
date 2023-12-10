@@ -9,16 +9,16 @@ export const getListUser = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageUser = page;
       if (apiStore.listUser.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listUser = [
             ..._.cloneDeep(apiStore.listUser),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listUser = [...new Set(listUser)];
         }
       } else {
-        apiStore.listUser = response?.data?.data?.data ?? [];
+        apiStore.listUser = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},
@@ -45,16 +45,16 @@ export const getListUserBasicInformation = (
     successCallback: (response) => {
       apiStore[pageName] = page;
       if (apiStore[listName] && apiStore[listName].length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listUser = [
             ..._.cloneDeep(apiStore[listName]),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore[listName] = [...new Set(listUser)];
         }
       } else {
-        apiStore[listName] = response?.data?.data?.data ?? [];
+        apiStore[listName] = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},

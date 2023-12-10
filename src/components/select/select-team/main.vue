@@ -66,7 +66,7 @@ let getAccountInfo = (code) => {
   let payload = {
     code: code,
     successCallback: (response) => {
-      let dataInfo = response?.data?.data?.data;
+      let dataInfo = response?.data?.data;
       let check = _.findIndex(defaultOptions.value, function (o) {
         return o.id === dataInfo?.id;
       });
@@ -89,7 +89,7 @@ let remoteMethod = (query) => {
     loading.value = true;
     let payload = {
       successCallback: (response) => {
-        options.value = response?.data?.data?.data;
+        options.value = response?.data?.data;
         loading.value = false;
       },
       errorCallback: () => {

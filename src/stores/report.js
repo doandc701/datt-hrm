@@ -104,8 +104,8 @@ export const useReportStore = defineStore("reportStore", {
     },
     get_resign_error(payload) {
       const successCallback = (response) => {
-        if (response?.data?.data?.data) {
-          const dataResponse = response.data.data.data;
+        if (response?.data?.data) {
+          const dataResponse = response.data.data;
           this.matterBasicInfo = {
             status: dataResponse.status ?? 1,
             serial_number: dataResponse.serial_number,
@@ -316,7 +316,7 @@ export const useReportStore = defineStore("reportStore", {
       const handleJoinChannel = () => {
         // console.log("here", data[0]?.data);
         const successCallback = (response) => {
-          handleUserIsEditing(response?.data?.data?.data ?? null);
+          handleUserIsEditing(response?.data?.data ?? null);
         };
         const errorCallback = (err) => {
           console.log(err);

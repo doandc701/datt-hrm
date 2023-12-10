@@ -455,7 +455,7 @@ const dataLinkHardware = [
     color: "#504d50",
   },
 ];
-const roleUser = authStore.userInfo.role_id;
+const roleUser = authStore.userInfo.roles;
 
 const visibleAction = computed(() => {
   return roleUser == TYPE_ADMIN;
@@ -564,7 +564,7 @@ function handleSaveLink() {
   isLoading.value = true;
   const randomColor = Math.floor(Math.random() * arrayBackGroundColor.length);
   let successCallback = (response) => {
-    const responeData = response?.data?.data?.data;
+    const responeData = response?.data?.data;
     ElMessage.success(i18n.global.t("text.saveSuccess"));
     dataLink.value.push(responeData);
     isLoading.value = false;
@@ -655,7 +655,7 @@ function handleLike(paramsLike) {
   let errorCallback = () => {};
   if (!result.length) {
     let successCallback = (response) => {
-      const responeData = response?.data?.data?.data;
+      const responeData = response?.data?.data;
       const findPostLiked = dataPost.value.find(
         (item) => item.id === responeData.post_id
       );
@@ -713,7 +713,7 @@ function handleChangePage(value) {
 
 function getNoteLink() {
   let successCallback = (response) => {
-    dataLink.value = response?.data?.data?.data;
+    dataLink.value = response?.data?.data;
   };
   let errorCallback = () => {};
   let payload = {

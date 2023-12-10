@@ -9,16 +9,16 @@ export const getListCategory = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageCategory = page;
       if (apiStore.listCategory.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listCategory = [
             ..._.cloneDeep(apiStore.listCategory),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listCategory = [...new Set(listCategory)];
         }
       } else {
-        apiStore.listCategory = response?.data?.data?.data ?? [];
+        apiStore.listCategory = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},

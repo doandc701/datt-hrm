@@ -9,16 +9,16 @@ export const getListGroup = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageGroup = page ?? null;
       if (apiStore.listGroup && apiStore.listGroup.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listGroup = [
             ..._.cloneDeep(apiStore.listGroup),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listGroup = [...new Set(listGroup)] ?? null;
         }
       } else {
-        apiStore.listGroup = response?.data?.data?.data ?? [];
+        apiStore.listGroup = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},

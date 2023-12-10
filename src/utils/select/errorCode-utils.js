@@ -9,16 +9,16 @@ export const getListErrorCode = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageErrorCode = page;
       if (apiStore.listErrorCode.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listUser = [
             ..._.cloneDeep(apiStore.listErrorCode),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listErrorCode = [...new Set(listUser)];
         }
       } else {
-        apiStore.listErrorCode = response?.data?.data?.data ?? [];
+        apiStore.listErrorCode = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},
@@ -33,7 +33,7 @@ export const getListErrorCodeFilter = (config, page = 1) => {
   let payload = {
     successCallback: (response) => {
       apiStore.pageErrorCode = page;
-      apiStore.listErrorCode = response?.data?.data?.data ?? [];
+      apiStore.listErrorCode = response?.data?.data ?? [];
       return apiStore.listErrorCode;
     },
     errorCallback: () => {

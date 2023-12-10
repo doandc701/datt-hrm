@@ -101,16 +101,16 @@ let remoteMethod = (query) => {
     let payload = {
       successCallback: (response) => {
         if (options.value.length > 0) {
-          if (response?.data?.data?.data) {
+          if (response?.data?.data) {
             let listErrorCode = [
               ..._.cloneDeep(options.value),
-              ...response.data.data.data,
+              ...response.data.data,
             ];
 
             options.value = [...new Set(listErrorCode)];
           }
         } else {
-          options.value = response?.data?.data?.data;
+          options.value = response?.data?.data;
         }
 
         loading.value = false;

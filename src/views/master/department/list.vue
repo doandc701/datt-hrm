@@ -157,7 +157,7 @@ const masterDepartmentStore = useMasterDepartmentStore();
 const authStore = useAuthStore();
 
 // variable
-const roleUser = authStore.userInfo.role_id;
+const roleUser = authStore.userInfo.roles;
 const resizeTable = ref(JSON.parse(localStorage.getItem("listDepartment")));
 const config = ref({
   action: "list_department",

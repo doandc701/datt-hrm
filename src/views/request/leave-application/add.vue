@@ -372,7 +372,7 @@ const refreshPage = () => {
 
 let getDetail = () => {
   let successCallback = (response) => {
-    let dataResponse = response?.data?.data?.data;
+    let dataResponse = response?.data?.data;
     idRequest.value = dataResponse.code;
     requestDate.value = dataResponse.request_date;
     requestBy.value = dataResponse.request_by.name;

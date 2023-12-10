@@ -9,16 +9,16 @@ export const getListDepartment = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageDepartment = page;
       if (apiStore.listDepartment.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listDepartment = [
             ..._.cloneDeep(apiStore.listDepartment),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listDepartment = [...new Set(listDepartment)];
         }
       } else {
-        apiStore.listDepartment = response?.data?.data?.data ?? [];
+        apiStore.listDepartment = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},
@@ -33,7 +33,7 @@ export const getListDepartmentFilter = (config, page = 1) => {
   let payload = {
     successCallback: (response) => {
       apiStore.pageDepartment = page;
-      apiStore.listDepartment = response?.data?.data?.data ?? [];
+      apiStore.listDepartment = response?.data?.data ?? [];
       return apiStore.listDepartment;
     },
     errorCallback: () => {

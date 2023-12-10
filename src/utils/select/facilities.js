@@ -9,16 +9,16 @@ export const getListFacilities = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageFacilities = page;
       if (apiStore.listFacilities.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listFacilities = [
             ..._.cloneDeep(apiStore.listFacilities),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listFacilities = [...new Set(listFacilities)];
         }
-      } else { 
-        apiStore.listFacilities = response?.data?.data?.data ?? [];
+      } else {
+        apiStore.listFacilities = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},

@@ -264,7 +264,7 @@ let search = () => {
 
 let getConfig = () => {
   let successCallback = (response) => {
-    reportStore.configBasicInformation = response.data.data.data;
+    reportStore.configBasicInformation = response.data.data;
   };
   let errorCallback = () => {};
   let payload = {

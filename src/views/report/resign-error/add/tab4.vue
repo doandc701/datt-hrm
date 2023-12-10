@@ -522,7 +522,7 @@ let save = () => {
     const data = compileData();
     let successCallback = (response) => {
       ElMessage.success(i18n.global.t("resignError.saveSuccess"));
-      let actionInfoSummary = response.data.data.data.action;
+      let actionInfoSummary = response.data.data.action;
       actionInfoSummary.forEach((item, key) => {
         actionInfo.value[key].id = item.id;
         data.action[key].id = item.id;

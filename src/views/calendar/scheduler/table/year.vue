@@ -64,8 +64,8 @@ function initialDataYears(year) {
   }
 
   const successCallback = async (response) => {
-    const responesData = response.data.data.data;
-    // console.log("response.data.data.data", responesData);
+    const responesData = response.data.data;
+    // console.log("response.data.data", responesData);
     for (let i = 0; i < responesData.length; i++) {
       // push vào mảng mới để xử lý dữ liệu
 

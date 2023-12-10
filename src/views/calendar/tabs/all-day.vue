@@ -378,7 +378,7 @@ function getDataProps() {
     } else if (props.idInfor) {
       showBtnDelete.value = true;
       let successCallback = (response) => {
-        const allData = response?.data?.data?.data;
+        const allData = response?.data?.data;
         const mapCodeAttendees = allData.attendees.map((item) => item.code);
         valueDate.value = [
           new Date(allData.start_date),

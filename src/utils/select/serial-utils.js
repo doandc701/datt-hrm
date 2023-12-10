@@ -9,16 +9,16 @@ export const getListSerial = (queryFilter, page = 1) => {
     successCallback: (response) => {
       apiStore.pageSerial = page;
       if (apiStore.listSerial.length > 0) {
-        if (response?.data?.data?.data) {
+        if (response?.data?.data) {
           let listSerial = [
             ..._.cloneDeep(apiStore.listSerial),
-            ...response.data.data.data,
+            ...response.data.data,
           ];
 
           apiStore.listSerial = [...new Set(listSerial)];
         }
       } else {
-        apiStore.listSerial = response?.data?.data?.data ?? [];
+        apiStore.listSerial = response?.data?.data ?? [];
       }
     },
     errorCallback: () => {},

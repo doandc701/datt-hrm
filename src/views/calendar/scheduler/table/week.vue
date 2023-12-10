@@ -465,7 +465,7 @@ let getEventWeek = () => {
   isLoading.value = true;
   let payload = {
     successCallback: (response) => {
-      let dataResponse = response?.data?.data?.data;
+      let dataResponse = response?.data?.data;
       userDataList.value = listUserConfig.value.map((user, index) => {
         return {
           user,
