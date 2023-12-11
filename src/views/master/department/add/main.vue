@@ -16,9 +16,9 @@
             <Tab class="w-full py-2" tag="button">
               {{ $t("department.tab1") }}
             </Tab>
-            <Tab class="w-full py-2" tag="button" :disabled="!route.query.code">
+            <!-- <Tab class="w-full py-2" tag="button" :disabled="!route.query.code">
               {{ $t("department.tab2") }}
-            </Tab>
+            </Tab> -->
           </TabList>
         </div>
       </div>
@@ -27,7 +27,7 @@
           <Tab1></Tab1>
         </TabPanel>
         <TabPanel>
-          <Tab2></Tab2>
+          <!-- <Tab2></Tab2> -->
         </TabPanel>
       </TabPanels>
     </TabGroup>
@@ -42,7 +42,7 @@ export default {
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import Tab1 from "./tab1.vue";
-import Tab2 from "./tab2.vue";
+// import Tab2 from "./tab2.vue";
 import { getListBranch } from "@/utils/select/branch-utils";
 import { getListUser, removeListUser } from "@/utils/select/user-utils";
 

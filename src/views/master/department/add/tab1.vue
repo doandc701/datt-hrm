@@ -365,15 +365,18 @@ let resign = () => {
     let successCallback = (response) => {
       ElMessage.success(i18n.global.t("department.resignSuccess"));
       isLoading.value = false;
-      if (response?.data?.data?.department?.code) {
-        let code = response?.data?.data?.department?.code;
-        router.push({
-          query: {
-            code,
-            type: "edit",
-          },
-        });
-      }
+      // if (response?.data?.data?.department?.code) {
+      //   let code = response?.data?.data?.department?.code;
+      //   router.push({
+      //     query: {
+      //       code,
+      //       type: "edit",
+      //     },
+      //   });
+      // }
+      router.push({
+        path: "/master/department/list",
+      });
     };
     let errorCallback = (error) => {
       let keyError = error?.response?.data?.messages[0];
@@ -548,6 +551,9 @@ let save = () => {
     let successCallback = () => {
       ElMessage.success(i18n.global.t("department.saveSuccess"));
       isLoading.value = false;
+      router.push({
+        path: "/master/department/list",
+      });
     };
     let errorCallback = () => {
       isLoading.value = false;
@@ -580,13 +586,13 @@ let getConfig = () => {
 
 let getDetail = () => {
   let successCallback = (response) => {
-    let dataResponse = response?.data?.data?.department;
+    let dataResponse = response?.data?.data;
     departmentName.value = dataResponse.name;
     departmentCode.value = dataResponse.code;
-    codeBranch.value = dataResponse.branch.code;
-    selectBranch.value.defaultOptions.push(dataResponse.branch);
+    codeBranch.value = dataResponse.branch_code;
+    // selectBranch.value.defaultOptions.push(dataResponse.branch);
     offices.value = [];
-    dataResponse.office.forEach((element) => {
+    dataResponse.offices.forEach((element) => {
       offices.value.push({
         code: element.code,
         name: element.name,

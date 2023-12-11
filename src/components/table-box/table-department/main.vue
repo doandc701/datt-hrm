@@ -49,7 +49,7 @@
           <slot
             :index="index + 1 + (data.model.page - 1) * data.model.limit"
             :row="row"
-            :leng="row.office.length ? row.office.length : 1"
+            :leng="row?.office?.length ? row.office.length : 1"
             class="text-left"
             name="row"
           ></slot>
@@ -93,7 +93,7 @@ export default {
 };
 </script>
 <script setup>
-import { PAGE_LIMIT } from "@/config/constants";
+// import { PAGE_LIMIT } from "@/config/constants";
 import { ref, watch, onMounted, computed } from "vue";
 import Pagination from "./pagination.vue";
 
@@ -135,12 +135,8 @@ const data = ref({
   isLoading: false,
   total: 0,
   model: {
-    page: sessionStorage.getItem("PAGE_NUMBER")
-      ? Number(sessionStorage.getItem("PAGE_NUMBER"))
-      : 1,
-    limit: sessionStorage.getItem("PAGE_LIMIT")
-      ? Number(sessionStorage.getItem("PAGE_LIMIT"))
-      : PAGE_LIMIT[0],
+    page: 1,
+    limit: 10,
     search: "",
     dataFilter: "",
     typeSearch: "",
@@ -157,7 +153,7 @@ let retrieveList = () => {
 
   let payload = {
     successCallback: (response) => {
-      let dataResponse = response?.data?.data;
+      let dataResponse = response?.data;
       let listData = dataResponse.data;
       data.value.total = dataResponse.total;
       if (!listData.length && data.value.model.page !== 1) {
@@ -167,8 +163,8 @@ let retrieveList = () => {
       emit("update:total-items", data.value.total);
       emit("page", dataResponse.current_page);
       emit("limit", dataResponse.limit);
-      sessionStorage.setItem("PAGE_NUMBER", dataResponse.current_page);
-      sessionStorage.setItem("PAGE_LIMIT", dataResponse.limit);
+      // sessionStorage.setItem("PAGE_NUMBER", dataResponse.current_page);
+      // sessionStorage.setItem("PAGE_LIMIT", dataResponse.limit);
       data.value.isLoading = false;
     },
     errorCallback: () => {
