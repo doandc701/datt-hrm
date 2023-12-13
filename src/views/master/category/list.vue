@@ -108,7 +108,7 @@ const categoryCalendarStore = useCategoryCalendarStore();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
 
-const roleUser = authStore.userInfo.roles;
+const roleUser = authStore.userInfo.role_id;
 const resizeTable = ref(JSON.parse(localStorage.getItem("listCategory")));
 const config = ref({
   action: "list_category",

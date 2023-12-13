@@ -74,19 +74,19 @@
             </td>
             <td class="text-left">
               <div class="block-textName">
-                {{ row.branch?.name ?? "" }}
+                {{ row.branch_code?.name ?? "" }}
               </div>
             </td>
             <td class="text-left">
               <div class="block-textName">
-                {{ row.department?.name ?? "" }}
+                {{ row.department_code?.name ?? "" }}
               </div>
             </td>
-            <td class="text-left">
+            <!-- <td class="text-left">
               <div class="block-textName">
                 {{ row.office?.name ?? "" }}
               </div>
-            </td>
+            </td> -->
             <td class="w-56" v-if="visibleAction">
               <div class="flex justify-center items-center">
                 <a
@@ -187,10 +187,10 @@ const config = ref({
       sort: "department",
       label: i18n.global.t("employee.departmentName"),
     },
-    {
-      sort: "office",
-      label: i18n.global.t("employee.officeName"),
-    },
+    // {
+    //   sort: "office",
+    //   label: i18n.global.t("employee.officeName"),
+    // },
   ],
   sort: {
     field: "code",

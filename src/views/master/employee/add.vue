@@ -161,7 +161,7 @@
         </div>
         <!-- END: Layout department -->
         <!-- BEGIN: Layout office -->
-        <div class="mt-3">
+        <!-- <div class="mt-3">
           <label class="form-label font-medium text-base"
             >{{ $t("employee.office") }}
             <span class="text-danger">*</span></label
@@ -173,7 +173,7 @@
           <div v-if="selectOffice.error" class="d-block mt-2 pl-1 text-danger">
             {{ errorInfo.officeCode }}
           </div>
-        </div>
+        </div> -->
         <!-- END: Layout office -->
         <!-- BEGIN: Layout postition -->
         <div class="mt-3">
@@ -196,7 +196,7 @@
         </div>
         <!-- END: Layout postition -->
         <!-- BEGIN: Microsoft Team -->
-        <div class="mt-3">
+        <!-- <div class="mt-3">
           <label class="form-label font-medium text-base">{{
             $t("employee.microsoftId")
           }}</label>
@@ -210,19 +210,14 @@
           >
             {{ errorInfo.microsoftID }}
           </div>
-        </div>
+        </div> -->
         <!-- END: Microsoft Team -->
         <!-- BEGIN: TimeZone -->
         <div class="mt-3">
           <label class="form-label font-medium text-base">{{
             $t("employee.timezone")
           }}</label>
-          <el-select
-            v-model="timezone"
-            :placeholder="$t('btn.select')"
-            class="w-full"
-            size="large"
-          >
+          <el-select v-model="timezone" class="w-full" size="large">
             <el-option
               v-for="item in LIST_TIMEZONE"
               :key="item.key"
@@ -318,20 +313,16 @@ import UploadAvatar from "@/components/upload/upload-avatar/main.vue";
 import { ElMessage } from "element-plus";
 import SelectBranch from "@/components/select/select-branch/main.vue";
 import SelectDepartment from "@/components/select/select-department/main.vue";
-import SelectOffice from "@/components/select/select-office/main.vue";
-import SelectTeam from "@/components/select/select-team/main.vue";
+// import SelectOffice from "@/components/select/select-office/main.vue";
+// import SelectTeam from "@/components/select/select-team/main.vue";
 import { getListBranch } from "@/utils/select/branch-utils";
 import {
   getListDepartment,
   removeListDepartment,
   getListDepartmentFilter,
 } from "@/utils/select/department-utils";
-import {
-  getListOffice,
-  removeListOffice,
-  getListOfficeFilter,
-} from "@/utils/select/office-utils";
-import { getListTeam, removeListTeam } from "@/utils/select/team-utils";
+// import { getListOfficeFilter } from "@/utils/select/office-utils";
+// import { getListTeam, removeListTeam } from "@/utils/select/team-utils";
 
 import { useApiStore } from "@/stores/api";
 import { useRoute, useRouter } from "vue-router";
@@ -371,12 +362,12 @@ const selectOffice = ref({
 });
 const positionCode = ref("");
 const userRole = ref(1);
-const selectMicrosoftTeams = ref({
-  error: false,
-  defaultOptions: "",
-});
+// const selectMicrosoftTeams = ref({
+//   error: false,
+//   defaultOptions: "",
+// });
 const microsoftID = ref("");
-const timezone = ref("Asia/Tokyo");
+const timezone = ref("Asia/Ho_Chi_Minh");
 const onDetailBranch = ref(true);
 const onDetailDepartment = ref(true);
 const errorInfo = ref({
@@ -412,26 +403,25 @@ const resetScreen = () => {
 
 let getDetail = () => {
   let successCallback = (response) => {
-    let dataResponse = response?.data?.data?.user;
+    let dataResponse = response?.data?.data;
     userCode.value = dataResponse.code;
     surName.value = dataResponse.first_name;
     userName.value = dataResponse.last_name;
-    userName.value = dataResponse.last_name;
     userEmail.value = dataResponse.email;
     phoneNumber.value = dataResponse.phone_number;
-    branchCode.value = dataResponse.branch.code;
-    selectBranch.value.defaultOptions.push(dataResponse.branch);
-    departmentCode.value = dataResponse.department.code;
-    selectDepartment.value.defaultOptions.push(dataResponse.department);
-    officeCode.value = dataResponse.office.code;
-    selectOffice.value.defaultOptions.push(dataResponse.office);
+    branchCode.value = dataResponse.branch_code.code;
+    selectBranch.value.defaultOptions.push(dataResponse.branch_code);
+    departmentCode.value = dataResponse.department_code.code;
+    selectDepartment.value.defaultOptions.push(dataResponse.department_code);
+    // officeCode.value = dataResponse.office.code;
+    // selectOffice.value.defaultOptions.push(dataResponse.office);
     positionCode.value = dataResponse.position_id;
     userRole.value = dataResponse.role_id;
     avatarPath.value = dataResponse.avatar_path;
     avatarId.value = dataResponse.avatar_id;
-    microsoftID.value = dataResponse.microsoft_id;
+    // microsoftID.value = dataResponse.microsoft_id;
     timezone.value = dataResponse.timezone;
-    selectMicrosoftTeams.value.defaultOptions = dataResponse.microsoft_id;
+    // selectMicrosoftTeams.value.defaultOptions = dataResponse.microsoft_id;
   };
   let errorCallback = () => {};
   let payload = {
@@ -466,11 +456,11 @@ let resign = () => {
         phone_number: phoneNumber.value,
         department_code: departmentCode.value,
         branch_code: branchCode.value,
-        office_code: officeCode.value,
+        // office_code: officeCode.value,
         position_id: positionCode.value,
         avatar_id: avatarId.value,
         role_id: userRole.value,
-        microsoft_id: microsoftID.value,
+        // microsoft_id: microsoftID.value,
         timezone: timezone.value,
       },
       successCallback,
@@ -482,6 +472,7 @@ let resign = () => {
 
 let save = () => {
   let check = validate();
+  console.log(check);
   if (check) {
     if (isLoading.value) return;
     isLoading.value = true;
@@ -504,11 +495,11 @@ let save = () => {
         phone_number: phoneNumber.value,
         department_code: departmentCode.value,
         branch_code: branchCode.value,
-        office_code: officeCode.value,
+        // office_code: officeCode.value,
         position_id: positionCode.value,
         avatar_id: avatarId.value,
         role_id: userRole.value,
-        microsoft_id: microsoftID.value,
+        // microsoft_id: microsoftID.value,
         timezone: timezone.value,
       },
       successCallback,
@@ -590,15 +581,15 @@ let validate = (field) => {
     }
   }
 
-  if (!field) {
-    if (officeCode.value === "" || !officeCode.value) {
-      errorInfo.value.officeCode = i18n.global.t("employee.errorOffice");
-      selectOffice.value.error = true;
-      check = false;
-    } else {
-      errorInfo.value.officeCode = "";
-    }
-  }
+  // if (!field) {
+  //   if (officeCode.value === "" || !officeCode.value) {
+  //     errorInfo.value.officeCode = i18n.global.t("employee.errorOffice");
+  //     selectOffice.value.error = true;
+  //     check = false;
+  //   } else {
+  //     errorInfo.value.officeCode = "";
+  //   }
+  // }
 
   if (!field) {
     if (departmentCode.value === "" || !departmentCode.value) {
@@ -625,13 +616,13 @@ let listFilterDepartment = async (filter) => {
   }
 };
 
-let listFilterOffice = async (filter) => {
-  let listOffice = await getListOfficeFilter(filter);
-  if (listOffice.length === 0) {
-    errorInfo.value.officeCode = i18n.global.t("employee.noOfficeSelect");
-    selectOffice.value.error = true;
-  }
-};
+// let listFilterOffice = async (filter) => {
+//   let listOffice = await getListOfficeFilter(filter);
+//   if (listOffice.length === 0) {
+//     errorInfo.value.officeCode = i18n.global.t("employee.noOfficeSelect");
+//     selectOffice.value.error = true;
+//   }
+// };
 watch(branchCode, (value) => {
   selectDepartment.value = {
     error: false,
@@ -662,7 +653,7 @@ watch(branchCode, (value) => {
     departmentCode.value = "";
     officeCode.value = "";
     listFilterDepartment(selectDepartment.value);
-    listFilterOffice(selectOffice.value);
+    // listFilterOffice(selectOffice.value);
   }
 });
 
@@ -689,11 +680,11 @@ watch(departmentCode, (value) => {
   } else {
     officeCode.value = "";
   }
-  listFilterOffice(selectOffice.value);
+  // listFilterOffice(selectOffice.value);
 });
 
 onMounted(() => {
-  getListTeam();
+  // getListTeam();
   if (!apiStore.listBranch.length) {
     getListBranch();
   }
@@ -701,14 +692,14 @@ onMounted(() => {
     getDetail();
   } else {
     getListDepartment();
-    getListOffice();
+    // getListOffice();
   }
 });
 
 onUnmounted(() => {
   removeListDepartment();
-  removeListOffice();
-  removeListTeam();
+  // removeListOffice();
+  // removeListTeam();
 });
 
 watch(

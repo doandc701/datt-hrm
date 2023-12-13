@@ -107,7 +107,7 @@ const groupStore = useGroupStore();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
 
-const roleUser = authStore.userInfo.roles;
+const roleUser = authStore.userInfo.role_id;
 const resizeTable = ref(JSON.parse(localStorage.getItem("listGroup")));
 const config = ref({
   action: "list_group",

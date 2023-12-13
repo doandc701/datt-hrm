@@ -104,7 +104,7 @@
     </div>
     <!-- END: Page right -->
   </div>
-  <div class="mt-5 box">
+  <!-- <div class="mt-5 box">
     <div
       class="flex flex-col sm:flex-row items-left py-5 border-b border-slate-200/60 dark:border-darkmode-400 p-5"
     >
@@ -226,7 +226,7 @@
         <PlusIcon class="icon" :stroke-width="0.5" :size="30" />
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- BEGIN: Register -->
   <div class="grid grid-cols-12 mt-5 gap-6">
     <div class="intro-y col-span-12">
@@ -269,7 +269,7 @@ import { TYPE_BASIC_INFORMATION } from "@/config/constants";
 
 // form
 import SelectBranch from "@/components/select/select-branch/main.vue";
-import SelectMultiUser from "@/components/select/select-multi-user/main.vue";
+// import SelectMultiUser from "@/components/select/select-multi-user/main.vue";
 
 // store-router
 import { useRoute, useRouter } from "vue-router";
@@ -329,40 +329,40 @@ const resetScreen = () => {
   offices.value = [];
 };
 
-let addOffices = (index) => {
-  offices.value.splice(index + 1, 0, {
-    code: "",
-    name: "",
-    readonly: false,
-    selectUser: {
-      error: false,
-      typeSearch: ["code", "name", "first_name", "last_name", "email"],
-      defaultOptions: [],
-      clearable: true,
-    },
-    manager_code: [],
-    type_basic_information: "",
-  });
-  errorInfo.value.offices.push({
-    code: "",
-    codeServer: false,
-    name: "",
-    typeBasicInformation: "",
-  });
-};
+// let addOffices = (index) => {
+//   offices.value.splice(index + 1, 0, {
+//     code: "",
+//     name: "",
+//     readonly: false,
+//     selectUser: {
+//       error: false,
+//       typeSearch: ["code", "name", "first_name", "last_name", "email"],
+//       defaultOptions: [],
+//       clearable: true,
+//     },
+//     manager_code: [],
+//     type_basic_information: "",
+//   });
+//   errorInfo.value.offices.push({
+//     code: "",
+//     codeServer: false,
+//     name: "",
+//     typeBasicInformation: "",
+//   });
+// };
 
-let removeOffices = (index, readonly) => {
-  if (readonly) return;
-  offices.value.splice(index, 1);
-  errorInfo.value.offices.splice(index, 1);
-};
+// let removeOffices = (index, readonly) => {
+//   if (readonly) return;
+//   offices.value.splice(index, 1);
+//   errorInfo.value.offices.splice(index, 1);
+// };
 
 let resign = () => {
   let check = validate();
   if (check) {
     if (isLoading.value) return;
     isLoading.value = true;
-    let successCallback = (response) => {
+    let successCallback = () => {
       ElMessage.success(i18n.global.t("department.resignSuccess"));
       isLoading.value = false;
       // if (response?.data?.data?.department?.code) {
@@ -572,17 +572,17 @@ let save = () => {
   }
 };
 
-let getConfig = () => {
-  let successCallback = (response) => {
-    reportStore.configBasicInformation = response.data.data;
-  };
-  let errorCallback = () => {};
-  let payload = {
-    successCallback,
-    errorCallback,
-  };
-  reportStore.get_config(payload);
-};
+// let getConfig = () => {
+//   let successCallback = (response) => {
+//     reportStore.configBasicInformation = response.data.data;
+//   };
+//   let errorCallback = () => {};
+//   let payload = {
+//     successCallback,
+//     errorCallback,
+//   };
+//   reportStore.get_config(payload);
+// };
 
 let getDetail = () => {
   let successCallback = (response) => {
@@ -662,7 +662,7 @@ watch(
 );
 
 onMounted(() => {
-  getConfig();
+  // getConfig();
   if (route.query.code) {
     getDetail();
   }

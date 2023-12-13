@@ -70,7 +70,7 @@
                 {{ row.branch?.name ?? "" }}
               </div>
             </td> -->
-            <td class="text-left">
+            <!-- <td class="text-left">
               <div class="whitespace-nowrap">
                 {{ row.offices?.[0]?.code ?? "" }}
               </div>
@@ -84,7 +84,7 @@
               <div class="whitespace-nowrap">
                 {{ getManagerName(row?.offices?.[0]?.manager_code) }}
               </div>
-            </td>
+            </td> -->
             <td class="w-56" v-if="visibleAction" :rowspan="leng">
               <div class="flex justify-center items-center">
                 <a
@@ -157,7 +157,7 @@ const masterDepartmentStore = useMasterDepartmentStore();
 const authStore = useAuthStore();
 
 // variable
-const roleUser = authStore.userInfo.roles;
+const roleUser = authStore.userInfo.role_id;
 const resizeTable = ref(JSON.parse(localStorage.getItem("listDepartment")));
 const config = ref({
   action: "list_department",
@@ -191,15 +191,15 @@ const config = ref({
       label: i18n.global.t("department.branchCode"),
     },
 
-    {
-      label: i18n.global.t("department.officeCode"),
-    },
-    {
-      label: i18n.global.t("department.officeName"),
-    },
-    {
-      label: i18n.global.t("department.responsibleHuman"),
-    },
+    // {
+    //   label: i18n.global.t("department.officeCode"),
+    // },
+    // {
+    //   label: i18n.global.t("department.officeName"),
+    // },
+    // {
+    //   label: i18n.global.t("department.responsibleHuman"),
+    // },
   ],
   sort: {
     field: "code",

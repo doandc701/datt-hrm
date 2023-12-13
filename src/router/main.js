@@ -58,8 +58,7 @@ let updateNameTab = (to) => {
 
 let checkPermissionUser = (userInfo, to) => {
   const sideMenuStore = useSideMenuStore();
-
-  const roleUser = userInfo?.roles.toString();
+  const roleUser = userInfo?.role_id;
   if (roleUser === TYPE_ADMIN) {
     sideMenuStore.addMenuAdmin();
   }

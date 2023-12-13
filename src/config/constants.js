@@ -1,16 +1,16 @@
 const APP_TOKEN_NAME = "tokenFuryhoSf";
 const PAGE_LIMIT = [10, 15, 20, 30, 50];
 const POSITION_USER = [
-  { key: 1, value: "アルバイト" },
-  { key: 2, value: "パート" },
-  { key: 3, value: "一般" },
-  { key: 4, value: "係長" },
-  { key: 5, value: "課長" },
-  { key: 6, value: "部長" },
-  { key: 7, value: "役員" },
-  { key: 8, value: "社長" },
-  { key: 9, value: "次長" },
-  { key: 10, value: "事務長" },
+  { key: 1, value: "Phó giám đốc" },
+  { key: 2, value: "Giám đốc" },
+  { key: 3, value: "Công việc bán thời gian" },
+  { key: 4, value: "Trưởng phòng" },
+  { key: 5, value: "Phó trưởng phòng" },
+  { key: 6, value: "Kỹ thuật viên trưởng" },
+  { key: 7, value: "Tư vấn" },
+  { key: 8, value: "Trợ lý giám đốc" },
+  { key: 9, value: "Chủ tịch" },
+  { key: 10, value: "Phó chủ tịch" },
 ];
 const STATUS = [
   { key: 1, value: "受付" },
@@ -67,13 +67,13 @@ const TYPE_BOOKING = [
   },
 ];
 const LIST_TIMEZONE = [
-  { key: 1, timezone: "UTC+09:00", value: "Asia/Tokyo", label: "日本" },
   {
-    key: 2,
+    key: 1,
     timezone: "UTC+07:00",
     value: "Asia/Ho_Chi_Minh",
     label: "Viet Nam",
   },
+  // { key: 2, timezone: "UTC+09:00", value: "Asia/Tokyo", label: "日本" },
 ];
 const STATUS_REQUEST = [
   { value: 0, label: "申請中" },
@@ -158,7 +158,7 @@ const TYPE_BASIC_INFORMATION = [
   { value: "metal_contractor", label: "板金業者" },
   { value: "painter", label: "塗装業者" },
 ];
-const TYPE_ADMIN = "ADMIN";
+const TYPE_ADMIN = 1;
 export {
   APP_TOKEN_NAME,
   PAGE_LIMIT,

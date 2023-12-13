@@ -455,7 +455,7 @@ const dataLinkHardware = [
     color: "#504d50",
   },
 ];
-const roleUser = authStore.userInfo.roles;
+const roleUser = authStore.userInfo.role_id;
 
 const visibleAction = computed(() => {
   return roleUser == TYPE_ADMIN;
