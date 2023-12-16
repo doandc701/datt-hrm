@@ -45,17 +45,26 @@ const uploadStore = useUploadStore();
 
 let deleteAvatar = (e) => {
   e.stopPropagation();
-  avatarId.value = null;
-  avatarPath.value = null;
-  emit("update:avatarId", avatarId.value);
-  emit("update:avatarPath", avatarPath.value);
+  let successCallback = () => {
+    avatarId.value = null;
+    avatarPath.value = null;
+    emit("update:avatarId", avatarId.value);
+    emit("update:avatarPath", avatarPath.value);
+  };
+  let errorCallback = () => {};
+  let payload = {
+    code: avatarId.value,
+    successCallback,
+    errorCallback,
+  };
+  uploadStore.delete_avatar(payload);
 };
 let beforeAvatarUpload = (file) => {
   let check = validate(file);
   if (check) {
     let successCallback = (response) => {
-      let dataResponse = response?.data?.data?.avatar;
-      avatarId.value = dataResponse.id;
+      let dataResponse = response?.data;
+      avatarId.value = dataResponse._id;
       avatarPath.value = dataResponse.path;
 
       emit("update:avatarId", avatarId.value);

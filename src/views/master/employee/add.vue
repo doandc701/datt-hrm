@@ -459,6 +459,7 @@ let resign = () => {
         // office_code: officeCode.value,
         position_id: positionCode.value,
         avatar_id: avatarId.value,
+        avatar_path: avatarPath.value,
         role_id: userRole.value,
         // microsoft_id: microsoftID.value,
         timezone: timezone.value,
@@ -472,7 +473,6 @@ let resign = () => {
 
 let save = () => {
   let check = validate();
-  console.log(check);
   if (check) {
     if (isLoading.value) return;
     isLoading.value = true;
@@ -498,6 +498,7 @@ let save = () => {
         // office_code: officeCode.value,
         position_id: positionCode.value,
         avatar_id: avatarId.value,
+        avatar_path: avatarPath.value,
         role_id: userRole.value,
         // microsoft_id: microsoftID.value,
         timezone: timezone.value,

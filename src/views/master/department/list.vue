@@ -61,15 +61,15 @@
             <td class="text-left" :rowspan="leng">
               <div>
                 <div class="whitespace-nowrap">
-                  {{ row.branch_code ?? "" }}
+                  {{ row.branch_code?.code ?? "" }}
                 </div>
               </div>
             </td>
-            <!-- <td class="text-left" :rowspan="leng">
+            <td class="text-left" :rowspan="leng">
               <div class="block-textName">
-                {{ row.branch?.name ?? "" }}
+                {{ row.branch_code?.name ?? "" }}
               </div>
-            </td> -->
+            </td>
             <!-- <td class="text-left">
               <div class="whitespace-nowrap">
                 {{ row.offices?.[0]?.code ?? "" }}
@@ -189,6 +189,10 @@ const config = ref({
     {
       sort: "branch_code",
       label: i18n.global.t("department.branchCode"),
+    },
+    {
+      sort: "branch_name",
+      label: i18n.global.t("department.branchName"),
     },
 
     // {

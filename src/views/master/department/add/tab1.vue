@@ -378,17 +378,17 @@ let resign = () => {
         path: "/master/department/list",
       });
     };
-    let errorCallback = (error) => {
-      let keyError = error?.response?.data?.messages[0];
-      if (keyError.includes("code.unique")) {
-        if (keyError === "code.unique") {
-          errorInfo.value.departmentCodeServer = true;
-        } else {
-          let arrayMessage = keyError.split(".");
-          let indexError = Number(arrayMessage[1]);
-          errorInfo.value.offices[indexError].codeServer = true;
-        }
-      }
+    let errorCallback = () => {
+      // let keyError = error?.response?.data?.messages[0];
+      // if (keyError.includes("code.unique")) {
+      //   if (keyError === "code.unique") {
+      //     errorInfo.value.departmentCodeServer = true;
+      //   } else {
+      //     let arrayMessage = keyError.split(".");
+      //     let indexError = Number(arrayMessage[1]);
+      //     errorInfo.value.offices[indexError].codeServer = true;
+      //   }
+      // }
       isLoading.value = false;
     };
     let payload = {
@@ -396,7 +396,7 @@ let resign = () => {
         code: departmentCode.value,
         name: departmentName.value,
         branch_code: codeBranch.value,
-        offices: offices.value,
+        // offices: offices.value,
       },
       successCallback,
       errorCallback,
@@ -448,97 +448,97 @@ let validate = (field, k) => {
     }
   }
   if (field === "name" && k !== undefined) {
-    if (offices.value[k].name === "" || !offices.value[k].name) {
-      errorInfo.value.offices[k].name = i18n.global.t("department.errorOffice");
-      check = false;
-    } else if (offices.value[k].name.length > 255) {
-      errorInfo.value.offices[k].name = i18n.global.t(
-        "department.errorOffice255"
-      );
-      check = false;
-    } else {
-      errorInfo.value.offices[k].name = "";
-    }
+    // if (offices.value[k].name === "" || !offices.value[k].name) {
+    //   errorInfo.value.offices[k].name = i18n.global.t("department.errorOffice");
+    //   check = false;
+    // } else if (offices.value[k].name.length > 255) {
+    //   errorInfo.value.offices[k].name = i18n.global.t(
+    //     "department.errorOffice255"
+    //   );
+    //   check = false;
+    // } else {
+    //   errorInfo.value.offices[k].name = "";
+    // }
   }
   if (field === "code" && k !== undefined) {
-    if (offices.value[k].code === "" || !offices.value[k].code) {
-      errorInfo.value.offices[k].code = i18n.global.t("text.notEmptyInput", {
-        field: i18n.global.t("department.officeCode"),
-      });
-      check = false;
-    } else if (offices.value[k].code.length > 10) {
-      errorInfo.value.offices[k].code = i18n.global.t("text.max10", {
-        field: i18n.global.t("department.officeCode"),
-      });
-      check = false;
-    } else {
-      errorInfo.value.offices[k].code = "";
-      errorInfo.value.offices[k].codeServer = false;
-    }
+    // if (offices.value[k].code === "" || !offices.value[k].code) {
+    //   errorInfo.value.offices[k].code = i18n.global.t("text.notEmptyInput", {
+    //     field: i18n.global.t("department.officeCode"),
+    //   });
+    //   check = false;
+    // } else if (offices.value[k].code.length > 10) {
+    //   errorInfo.value.offices[k].code = i18n.global.t("text.max10", {
+    //     field: i18n.global.t("department.officeCode"),
+    //   });
+    //   check = false;
+    // } else {
+    //   errorInfo.value.offices[k].code = "";
+    //   errorInfo.value.offices[k].codeServer = false;
+    // }
   }
   if (!field) {
-    let listOfficesCode = _.map(offices.value, "code");
-    let listTypeBasicInformation = _.map(
-      offices.value,
-      "type_basic_information"
-    );
-    _.forEach(offices.value, function (value, key) {
-      //unique code
-      let listCode = _.cloneDeep(listOfficesCode);
-      listCode.splice(key, 1);
-      let uniqueCode = new Set(listCode);
-      // unique type basic information
-      let listTypeBasicInfo = _.cloneDeep(listTypeBasicInformation);
-      listTypeBasicInfo.splice(key, 1);
-      let uniqueTypeBasicInfor = new Set(listTypeBasicInfo);
-      if (value.code === "" || !value.code) {
-        errorInfo.value.offices[key].code = i18n.global.t(
-          "text.notEmptyInput",
-          {
-            field: i18n.global.t("department.officeCode"),
-          }
-        );
-        check = false;
-      } else if (offices.value[key].code.length > 10) {
-        errorInfo.value.offices[key].code = i18n.global.t("text.max10", {
-          field: i18n.global.t("department.officeCode"),
-        });
-        check = false;
-      } else if (uniqueCode.has(value.code)) {
-        errorInfo.value.offices[key].code = i18n.global.t("code.duplicate");
-        check = false;
-      } else {
-        errorInfo.value.offices[key].code = "";
-        errorInfo.value.offices[key].codeServer = false;
-      }
-      if (
-        value.type_basic_information &&
-        uniqueTypeBasicInfor.has(value.type_basic_information)
-      ) {
-        errorInfo.value.offices[key].typeBasicInformation = i18n.global.t(
-          "text.duplicate",
-          {
-            field: i18n.global.t("department.selectTypeBasicInformation"),
-          }
-        );
-        check = false;
-      } else {
-        errorInfo.value.offices[key].typeBasicInformation = "";
-      }
-      if (value.name === "" || !value.name) {
-        errorInfo.value.offices[key].name = i18n.global.t(
-          "department.errorOffice"
-        );
-        check = false;
-      } else if (offices.value[key].name.length > 255) {
-        errorInfo.value.offices[key].name = i18n.global.t(
-          "department.errorOffice255"
-        );
-        check = false;
-      } else {
-        errorInfo.value.offices[key].name = "";
-      }
-    });
+    // let listOfficesCode = _.map(offices.value, "code");
+    // let listTypeBasicInformation = _.map(
+    //   offices.value,
+    //   "type_basic_information"
+    // );
+    // _.forEach(offices.value, function (value, key) {
+    //   //unique code
+    //   let listCode = _.cloneDeep(listOfficesCode);
+    //   listCode.splice(key, 1);
+    //   let uniqueCode = new Set(listCode);
+    //   // unique type basic information
+    //   let listTypeBasicInfo = _.cloneDeep(listTypeBasicInformation);
+    //   listTypeBasicInfo.splice(key, 1);
+    //   let uniqueTypeBasicInfor = new Set(listTypeBasicInfo);
+    //   if (value.code === "" || !value.code) {
+    //     errorInfo.value.offices[key].code = i18n.global.t(
+    //       "text.notEmptyInput",
+    //       {
+    //         field: i18n.global.t("department.officeCode"),
+    //       }
+    //     );
+    //     check = false;
+    //   } else if (offices.value[key].code.length > 10) {
+    //     errorInfo.value.offices[key].code = i18n.global.t("text.max10", {
+    //       field: i18n.global.t("department.officeCode"),
+    //     });
+    //     check = false;
+    //   } else if (uniqueCode.has(value.code)) {
+    //     errorInfo.value.offices[key].code = i18n.global.t("code.duplicate");
+    //     check = false;
+    //   } else {
+    //     errorInfo.value.offices[key].code = "";
+    //     errorInfo.value.offices[key].codeServer = false;
+    //   }
+    //   if (
+    //     value.type_basic_information &&
+    //     uniqueTypeBasicInfor.has(value.type_basic_information)
+    //   ) {
+    //     errorInfo.value.offices[key].typeBasicInformation = i18n.global.t(
+    //       "text.duplicate",
+    //       {
+    //         field: i18n.global.t("department.selectTypeBasicInformation"),
+    //       }
+    //     );
+    //     check = false;
+    //   } else {
+    //     errorInfo.value.offices[key].typeBasicInformation = "";
+    //   }
+    //   if (value.name === "" || !value.name) {
+    //     errorInfo.value.offices[key].name = i18n.global.t(
+    //       "department.errorOffice"
+    //     );
+    //     check = false;
+    //   } else if (offices.value[key].name.length > 255) {
+    //     errorInfo.value.offices[key].name = i18n.global.t(
+    //       "department.errorOffice255"
+    //     );
+    //     check = false;
+    //   } else {
+    //     errorInfo.value.offices[key].name = "";
+    //   }
+    // });
   }
   return check;
 };
@@ -589,27 +589,27 @@ let getDetail = () => {
     let dataResponse = response?.data?.data;
     departmentName.value = dataResponse.name;
     departmentCode.value = dataResponse.code;
-    codeBranch.value = dataResponse.branch_code;
-    // selectBranch.value.defaultOptions.push(dataResponse.branch);
-    offices.value = [];
-    dataResponse.offices.forEach((element) => {
-      offices.value.push({
-        code: element.code,
-        name: element.name,
-        readonly: true,
-        selectUser: {
-          error: false,
-          typeSearch: ["code", "name", "first_name", "last_name", "email"],
-          defaultOptions: element.manager_code,
-        },
-        manager_code: element.manager_code.map((value) => value.code),
-        type_basic_information: element.type_basic_information,
-      });
-      errorInfo.value.offices.push({
-        code: "",
-        name: "",
-      });
-    });
+    codeBranch.value = dataResponse.branch_code.code;
+    selectBranch.value.defaultOptions = dataResponse.branch_code;
+    // offices.value = [];
+    // dataResponse.offices.forEach((element) => {
+    //   offices.value.push({
+    //     code: element.code,
+    //     name: element.name,
+    //     readonly: true,
+    //     selectUser: {
+    //       error: false,
+    //       typeSearch: ["code", "name", "first_name", "last_name", "email"],
+    //       defaultOptions: element.manager_code,
+    //     },
+    //     manager_code: element.manager_code.map((value) => value.code),
+    //     type_basic_information: element.type_basic_information,
+    //   });
+    //   errorInfo.value.offices.push({
+    //     code: "",
+    //     name: "",
+    //   });
+    // });
   };
   let errorCallback = () => {};
   let payload = {

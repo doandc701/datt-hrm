@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import {
   UPLOAD_AVATAR,
+  DELETE_AVATAR,
   UPLOAD_IMAGE,
   UPLOAD_MULTI_IMAGE,
   IMPORT_FILE_SERIAL,
@@ -16,6 +17,13 @@ export const useUploadStore = defineStore("uploadStore", {
   actions: {
     upload_avatar(payload) {
       return UPLOAD_AVATAR(
+        { payload },
+        payload.successCallback,
+        payload.errorCallback
+      );
+    },
+    delete_avatar(payload) {
+      return DELETE_AVATAR(
         { payload },
         payload.successCallback,
         payload.errorCallback

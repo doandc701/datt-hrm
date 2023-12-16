@@ -4,7 +4,7 @@ import { APP_TOKEN_NAME } from "@/config/constants";
 import { generateStorageKey } from "@/utils/fomat";
 
 export let UPLOAD_AVATAR = (params, successCallback, errorCallback) => {
-  let url = `/upload/avatar`;
+  let url = `/upload/image`;
   let headers = {
     Authorization: `Bearer ${window.$cookies.get(
       generateStorageKey(APP_TOKEN_NAME)
@@ -13,6 +13,19 @@ export let UPLOAD_AVATAR = (params, successCallback, errorCallback) => {
   };
   let data = params.payload.data;
   return Api.post(url, data, { headers })
+    .then(successCallback)
+    .catch(errorCallback);
+};
+export let DELETE_AVATAR = (params, successCallback, errorCallback) => {
+  let url = `/upload/image/${params.payload.code}`;
+  let headers = {
+    Authorization: `Bearer ${window.$cookies.get(
+      generateStorageKey(APP_TOKEN_NAME)
+    )}`,
+    "content-type": "multipart/form-data",
+  };
+
+  return Api.delete(url, { headers })
     .then(successCallback)
     .catch(errorCallback);
 };

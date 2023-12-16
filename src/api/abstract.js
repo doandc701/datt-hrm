@@ -54,7 +54,7 @@ Service.interceptors.response.use(
     let originalRequest = err.config;
     if (
       err.response.status === 401 &&
-      err?.response?.data?.messages[0] === "token.expired" &&
+      err?.response?.data?.message === "token.expired" &&
       !originalRequest._retry
     ) {
       try {
@@ -86,7 +86,7 @@ Service.interceptors.response.use(
 
     if (
       err.response.status === 401 &&
-      err?.response?.data?.messages[0] === "token.invalid"
+      err?.response?.data?.message === "token.invalid"
     ) {
       let isReturnCallBack = isInvalid;
       isInvalid = true;
@@ -108,17 +108,24 @@ Service.interceptors.response.use(
 let errorResponseCallback = (error) => {
   switch (error?.response?.status) {
     case 401:
-      switch (error?.response?.data?.messages[0]) {
+      if (error?.response?.data?.message.code === 11000) {
+        for (const property in error?.response?.data?.message?.keyValue) {
+          ElMessage.error(
+            `Đã tồn tại ${error?.response?.data?.message?.keyValue[property]}`
+          );
+        }
+      }
+      switch (error?.response?.data?.message) {
         case "token.expired":
           break;
         case "auth.invalid":
-          ElMessage.error(i18n.global.t(error?.response?.data?.messages[0]));
+          ElMessage.error(i18n.global.t(error?.response?.data?.message));
           break;
         case "token.invalid":
         case "auth.unauthorized":
         case "token.blacklist":
         default:
-          ElMessage.error(i18n.global.t(error?.response?.data?.messages[0]));
+          ElMessage.error(i18n.global.t(error?.response?.data?.message));
           sessionStorage.clear();
           localStorage.clear();
           window.$cookies
@@ -130,8 +137,8 @@ let errorResponseCallback = (error) => {
       break;
     case 422:
     case 400:
-      if (error?.response?.data?.messages) {
-        let keyError = error?.response?.data?.messages[0];
+      if (error?.response?.data?.message) {
+        let keyError = error?.response?.data?.message;
         if (
           keyError.includes("serial_number") &&
           (window.location.href.includes("/request/over-time/add") ||
@@ -155,26 +162,27 @@ let errorResponseCallback = (error) => {
         ) {
           break;
         }
-        ElMessage.error(i18n.global.t(keyError));
+        // ElMessage.error(i18n.global.t(keyError));
+        ElMessage.error(keyError);
       }
       break;
     case 404:
       if (error.config.url.includes("silent")) {
         break;
       }
-      if (error?.response?.data?.messages) {
-        ElMessage.error(i18n.global.t(error?.response?.data?.messages[0]));
+      if (error?.response?.data?.message) {
+        ElMessage.error(error?.response?.data?.message);
       }
       break;
     case 429:
     case 403:
-      if (error?.response?.data?.messages) {
-        ElMessage.error(i18n.global.t(error?.response?.data?.messages[0]));
+      if (error?.response?.data?.message) {
+        ElMessage.error(i18n.global.t(error?.response?.data?.message));
       }
       break;
     case 500:
-      if (error?.response?.data?.messages) {
-        ElMessage.error(i18n.global.t(error?.response?.data?.messages[0]));
+      if (error?.response?.data?.message) {
+        ElMessage.error(i18n.global.t(error?.response?.data?.message));
       } else {
         ElMessage.error(i18n.global.t("common.system_error"));
       }
