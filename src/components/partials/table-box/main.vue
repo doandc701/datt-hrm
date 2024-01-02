@@ -172,6 +172,10 @@ let retrieveList = () => {
       let dataResponse = response?.data;
       let listData = dataResponse.data;
       data.value.total = dataResponse.total;
+      if (props.config.action === "list_timekeeping") {
+        listData = dataResponse.data[0].employees;
+        console.log(listData);
+      }
       if (!listData.length && data.value.model.page !== 1) {
         data.value.model.page = 1;
       }
@@ -204,8 +208,8 @@ let retrieveList = () => {
     case "list_serial":
       serialStore.list(payload);
       break;
-    case "list_resign_error":
-      reportStore.list_resign_error(payload);
+    case "list_timekeeping":
+      reportStore.list_time_keeping(payload);
       break;
     case "list_booking_room":
       bookingRoomStore.list(payload);

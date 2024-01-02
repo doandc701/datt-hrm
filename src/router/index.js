@@ -22,8 +22,8 @@ import ListCategory from "@/views/master/category/list.vue";
 import AddCategory from "@/views/master/category/add.vue";
 import ListGroup from "@/views/master/group/list.vue";
 import AddGroup from "@/views/master/group/add.vue";
-import ListResignError from "@/views/report/resign-error/list.vue";
-import AddResignError from "@/views/report/resign-error/add/main.vue";
+import ListTimeKeeping from "@/views/report/time-keeping/list.vue";
+import AddTimeKeeping from "@/views/report/time-keeping/add/main.vue";
 import ListPayError from "@/views/report/pay-error/list.vue";
 import ListChart from "@/views/report/chart/list.vue";
 import ListOverTime from "@/views/request/over-time/list.vue";
@@ -179,14 +179,14 @@ const routes = [
         component: AddGroup,
       },
       {
-        path: "report/resign-error/list",
+        path: "time-keeping/list",
         name: i18n.global.t("router.listResignError"),
-        component: ListResignError,
+        component: ListTimeKeeping,
       },
       {
-        path: "report/resign-error/add",
+        path: "time-keeping/add",
         name: i18n.global.t("router.addResignError"),
-        component: AddResignError,
+        component: AddTimeKeeping,
       },
       {
         path: "report/pay-error/list",

@@ -177,7 +177,7 @@
   <div class="grid grid-cols-12 mt-5 gap-6">
     <div class="intro-y col-span-12">
       <div class="text-right">
-        <router-link :to="{ path: '/report/resign-error/list' }">
+        <router-link :to="{ path: '/time-keeping/list' }">
           <button
             class="btn btn-outline-secondary w-28 mr-1 bg-white"
             type="button"

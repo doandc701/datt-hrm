@@ -82,13 +82,13 @@ const STATUS_REQUEST = [
   { value: 4, label: "却下" },
 ];
 const DAY_OF_WEEK = [
-  { value: "Sun", label: "日曜日" },
-  { value: "Mon", label: "月曜日" },
-  { value: "Tue", label: "火曜日" },
-  { value: "Wed", label: "水曜日" },
-  { value: "Thu", label: "木曜日" },
-  { value: "Fri", label: "金曜日" },
-  { value: "Sat", label: "土曜日" },
+  { value: "Sun", label: "Chủ nhật" },
+  { value: "Mon", label: "Thứ 2" },
+  { value: "Tue", label: "Thứ 3" },
+  { value: "Wed", label: "Thứ 4" },
+  { value: "Thu", label: "Thứ 5" },
+  { value: "Fri", label: "Thứ 6" },
+  { value: "Sat", label: "Thứ 7" },
 ];
 
 const FORMAT_DATE = "YYYY-MM-DD";
@@ -97,18 +97,18 @@ const FORMAT_DATETIME = "YYYY-MM-DD HH:mm:ss";
 const FORMAT_DATETIME_SHORT = "YYYY-MM-DD HH:mm";
 
 const MONTH_OF_YEAR = [
-  { en: "January", ja: "１月" },
-  { en: "February", ja: "２月" },
-  { en: "March", ja: "3月" },
-  { en: "April", ja: "４月" },
-  { en: "May", ja: "5月" },
-  { en: "June", ja: "6月" },
-  { en: "July", ja: "7月" },
-  { en: "August", ja: "8月" },
-  { en: "September", ja: "9月" },
-  { en: "October", ja: "10月" },
-  { en: "November", ja: "11月" },
-  { en: "December", ja: "12月" },
+  { en: "January", ja: "Tháng 1" },
+  { en: "February", ja: "Tháng 2" },
+  { en: "March", ja: "Tháng 3" },
+  { en: "April", ja: "Tháng 4" },
+  { en: "May", ja: "Tháng 5" },
+  { en: "June", ja: "Tháng 6" },
+  { en: "July", ja: "Tháng 7" },
+  { en: "August", ja: "Tháng 8" },
+  { en: "September", ja: "Tháng 9" },
+  { en: "October", ja: "Tháng 10" },
+  { en: "November", ja: "Tháng 11" },
+  { en: "December", ja: "Tháng 12" },
 ];
 const FILTER_CURRENT_OFFICE = [
   { value: "", label: "全部署" },

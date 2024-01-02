@@ -33,45 +33,14 @@
         </router-link>
       </div>
     </div>
-    <div class="intro-y col-span-12 flex flex-row items-end">
-      <div class="form-check mr-5">
-        <template
-          v-for="(item, key) in FILTER_CURRENT_OFFICE"
-          :key="key + 'radio1'"
-        >
-          <input
-            :id="'radio-switch-1-' + key"
-            v-model="filterCurrentOffice"
-            class="form-check-input"
-            name="radio_resign_error_1"
-            type="radio"
-            :value="item.value"
-          /><label
-            class="form-check-label mr-5"
-            :for="'radio-switch-1-' + key"
-            >{{ item.label }}</label
-          >
-        </template>
-      </div>
-    </div>
-    <div class="intro-y col-span-12 flex flex-row items-end">
-      <div class="mr-5">
-        <el-checkbox-group v-model="arrayChecked" @change="handleCheckBox">
-          <el-checkbox
-            v-for="(item, key) in FILTER_TYPE_RESIGN_ERROR"
-            :key="key + 'checked2'"
-            :label="item.value"
-            >{{ item.label }}</el-checkbox
-          >
-        </el-checkbox-group>
-      </div>
-    </div>
+
     <div class="intro-y col-span-12">
       <TableBox
         v-model:config="config"
         v-model:dataList="dataList"
         v-model:reload="reload"
         v-model:totalItems="totalItems"
+        v-model:visibleAction="visibleAction"
       >
         <template #row="{ row, index }">
           <tr class="intro-x" @dblclick="viewItem(row)">
@@ -82,77 +51,27 @@
             </td>
             <td class="text-left">
               <div class="whitespace-nowrap">
-                {{ row.serial_number ?? "" }}
+                {{ row.employee.phone_number ?? "" }}
               </div>
             </td>
             <td class="text-left">
               <div class="whitespace-nowrap">
-                {{ row.code ?? "" }}
+                {{ row.employee.code ?? "" }}
               </div>
             </td>
             <td class="text-left">
               <div class="block-textName">
-                {{ row.construction_name ?? "" }}
+                {{ row.start_time ?? "" }}
               </div>
             </td>
             <td class="text-left">
               <div class="block-textName">
-                {{ row.title ?? "" }}
-              </div>
-            </td>
-            <td class="text-left">
-              <div class="block-textName">
-                {{ row.user_contact_form?.name ?? "" }}
+                {{ row.end_time }}
               </div>
             </td>
             <td class="text-left">
               <div class="whitespace-nowrap">
-                {{ row.error_date ?? "" }}
-              </div>
-            </td>
-            <td class="text-left">
-              <div class="whitespace-nowrap">
-                {{ row.deadline ?? "" }}
-              </div>
-            </td>
-            <td class="text-left">
-              <div class="whitespace-nowrap">
-                {{
-                  helper.getNameOfficeBasicInformation(
-                    row.office,
-                    listTypeBasicInformation
-                  )
-                }}
-              </div>
-            </td>
-            <td class="text-left">
-              <div class="block-textName">
-                {{ row.master_error_name ?? "" }}
-              </div>
-            </td>
-            <td class="text-left">
-              <div class="block-textName">
-                {{ row.content ?? "" }}
-              </div>
-            </td>
-            <td class="w-56">
-              <div class="flex justify-center items-center">
-                <a
-                  class="flex items-center mr-3"
-                  href="javascript:"
-                  @click="viewItem(row)"
-                >
-                  <CheckSquareIcon class="w-4 h-4 mr-1" />
-                  {{ $t("btn.edit") }}
-                </a>
-                <a
-                  class="flex items-center text-danger"
-                  href="javascript:"
-                  @click="deleteItem(row)"
-                >
-                  <Trash2Icon class="w-4 h-4 mr-1" />
-                  {{ $t("btn.delete") }}
-                </a>
+                {{ row.date_timekeeping ?? "" }}
               </div>
             </td>
           </tr>
@@ -168,23 +87,20 @@ export default {
 </script>
 <script setup>
 import TableBox from "@/components/partials/table-box/main.vue";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import i18n from "@/i18n/i18n";
-import { ElMessage } from "element-plus";
-import { helper } from "@/utils/helper";
-import {
-  FILTER_CURRENT_OFFICE,
-  FILTER_TYPE_RESIGN_ERROR,
-  TYPE_BASIC_INFORMATION,
-} from "@/config/constants";
+
+import { TYPE_BASIC_INFORMATION } from "@/config/constants";
 
 //store-route
 import { useRouter } from "vue-router";
 import { useReportStore } from "@/stores/report";
-import { useApiStore } from "@/stores/api";
+import { useAuthStore } from "@/stores/auth";
 import _ from "lodash";
+
+const authStore = useAuthStore();
 const router = useRouter();
-const apiStore = useApiStore();
+
 const reportStore = useReportStore();
 
 const listTypeBasicInformation = ref([]);
@@ -192,28 +108,26 @@ const filterListResignError = JSON.parse(
   localStorage.getItem("filterListResignError")
 );
 const filterCurrentOffice = ref(filterListResignError?.current_office ?? 2);
-const arrayChecked = ref(
-  filterListResignError?.filter_type ? [filterListResignError?.filter_type] : []
-);
+
 const filterType = ref(filterListResignError?.filter_type ?? "");
 const resizeTable = ref(JSON.parse(localStorage.getItem("listResignError")));
 const config = ref({
-  action: "list_resign_error",
+  action: "list_timekeeping",
   fitResize: "listResignError",
   q: {
     keySearch: "",
-    typeSearch: ["serial_number", "code", "construction_name", "title"],
+    typeSearch: ["date_timekeeping"],
   },
   dataFilter: {
-    current_office: "",
-    filter_type: "",
+    code: "",
+    year: "",
   },
   headers: [
     {
       label: i18n.global.t("text.no"),
     },
     {
-      sort: "serial_number",
+      sort: "phone_number",
       label: i18n.global.t("resignError.serialNumber"),
     },
     {
@@ -221,32 +135,16 @@ const config = ref({
       label: i18n.global.t("resignError.codeOfficial"),
     },
     {
-      sort: "construction_name",
+      sort: "start_time",
       label: i18n.global.t("resignError.contructionName"),
     },
     {
-      sort: "title",
+      sort: "end_time",
       label: i18n.global.t("resignError.topic"),
     },
     {
-      label: i18n.global.t("resignError.contactName"),
-    },
-    {
-      sort: "error_date",
+      sort: "date_timekeeping",
       label: i18n.global.t("resignError.dateError"),
-    },
-    {
-      sort: "deadline",
-      label: i18n.global.t("resignError.processingTime"),
-    },
-    {
-      label: i18n.global.t("resignError.department"),
-    },
-    {
-      label: i18n.global.t("resignError.nameError"),
-    },
-    {
-      label: i18n.global.t("resignError.infoError"),
     },
   ],
   sort: {
@@ -257,21 +155,14 @@ const config = ref({
 const q = ref("");
 const dataList = ref([]);
 const reload = ref(false);
+
+const visibleAction = computed(() => {
+  return false;
+});
+console.log(visibleAction.value);
 const totalItems = ref(0);
 let search = () => {
   config.value.q.keySearch = q.value;
-};
-
-let getConfig = () => {
-  let successCallback = (response) => {
-    reportStore.configBasicInformation = response.data.data;
-  };
-  let errorCallback = () => {};
-  let payload = {
-    successCallback,
-    errorCallback,
-  };
-  reportStore.get_config(payload);
 };
 
 let viewItem = (row) => {
@@ -285,47 +176,14 @@ let viewItem = (row) => {
     },
   });
 };
-let deleteItem = (row) => {
-  let confirmCallback = () => {
-    let successCallback = () => {
-      reload.value = !reload.value;
-      ElMessage.success(i18n.global.t("text.deleteSuccess"));
-    };
-    let errorCallback = () => {};
-    let payload = {
-      successCallback,
-      errorCallback,
-      code: row.code,
-    };
-    reportStore.delete_resign_error(payload);
-  };
-  let payloadConfirm = {
-    callback: confirmCallback,
-  };
-  apiStore.openConfirmDelete(payloadConfirm);
-};
 
-function handleCheckBox(value) {
-  if (arrayChecked.value.length > 1) {
-    arrayChecked.value.shift();
-    arrayChecked.value = [...value];
-  }
-  filterType.value = arrayChecked.value[0];
-}
-
-onMounted(() => {
-  getConfig();
-});
+onMounted(() => {});
 
 watch(
   () => [filterType.value, filterCurrentOffice.value],
   () => {
-    config.value.dataFilter.current_office = filterCurrentOffice.value
-      ? filterCurrentOffice.value
-      : "";
-    config.value.dataFilter.filter_type = filterType.value
-      ? filterType.value
-      : "";
+    config.value.dataFilter.code = authStore.userInfo.code;
+    config.value.dataFilter.year = new Date().getFullYear();
     localStorage.setItem(
       "filterListResignError",
       JSON.stringify(config.value.dataFilter)

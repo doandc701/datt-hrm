@@ -7,13 +7,9 @@
       {{ $t("employee.editEmployee") }}
     </h2>
   </div>
-  <!-- BEGIN: Page Layout -->
   <div class="grid grid-cols-12 gap-6 mt-5 box">
-    <!-- BEGIN: Page left -->
     <div class="intro-y col-span-12 lg:col-span-6">
-      <!-- BEGIN: Form Layout -->
       <div class="intro-y p-5">
-        <!-- BEGIN: Layout employee -->
         <div>
           <label class="form-label font-medium text-base"
             >{{ $t("employee.code") }} <span class="text-danger">*</span></label
@@ -107,8 +103,7 @@
             {{ errorInfo.phoneNumber }}
           </div>
         </div>
-        <!-- END: Layout employee-->
-        <!-- BEGIN: Layout branch -->
+
         <div
           class="flex flex-col sm:flex-row items-left py-5 border-b border-slate-200/60 dark:border-darkmode-400"
         >
@@ -141,8 +136,7 @@
             {{ errorInfo.branchCode }}
           </div>
         </div>
-        <!-- END: Layout branch -->
-        <!-- BEGIN: Layout department -->
+
         <div class="mt-3">
           <label class="form-label font-medium text-base"
             >{{ $t("employee.department") }}
@@ -159,23 +153,7 @@
             {{ errorInfo.departmentCode }}
           </div>
         </div>
-        <!-- END: Layout department -->
-        <!-- BEGIN: Layout office -->
-        <!-- <div class="mt-3">
-          <label class="form-label font-medium text-base"
-            >{{ $t("employee.office") }}
-            <span class="text-danger">*</span></label
-          >
-          <SelectOffice
-            v-model:code="officeCode"
-            v-model:config="selectOffice"
-          ></SelectOffice>
-          <div v-if="selectOffice.error" class="d-block mt-2 pl-1 text-danger">
-            {{ errorInfo.officeCode }}
-          </div>
-        </div> -->
-        <!-- END: Layout office -->
-        <!-- BEGIN: Layout postition -->
+
         <div class="mt-3">
           <label class="form-label font-medium text-base"
             >{{ $t("employee.position") }}
@@ -194,25 +172,27 @@
             />
           </el-select>
         </div>
-        <!-- END: Layout postition -->
-        <!-- BEGIN: Microsoft Team -->
-        <!-- <div class="mt-3">
-          <label class="form-label font-medium text-base">{{
-            $t("employee.microsoftId")
-          }}</label>
-          <SelectTeam
-            v-model:code="microsoftID"
-            v-model:config="selectMicrosoftTeams"
-          ></SelectTeam>
+
+        <div class="mt-3">
+          <label class="form-label font-medium text-base"
+            >{{ $t("employee.hardSalary") }} <span class="text-danger">*</span>
+          </label>
+          <input
+            v-model="hardSalary"
+            :class="errorInfo.hardSalary ? 'is-invalid' : ''"
+            placeholder="1000000"
+            class="form-control w-full"
+            type="text"
+            @blur="validate('hardSalary')"
+          />
           <div
-            v-if="selectMicrosoftTeams.error"
+            v-if="errorInfo.hardSalary"
             class="d-block mt-2 pl-1 text-danger"
           >
-            {{ errorInfo.microsoftID }}
+            {{ errorInfo.hardSalary }}
           </div>
-        </div> -->
-        <!-- END: Microsoft Team -->
-        <!-- BEGIN: TimeZone -->
+        </div>
+
         <div class="mt-3">
           <label class="form-label font-medium text-base">{{
             $t("employee.timezone")
@@ -226,8 +206,7 @@
             />
           </el-select>
         </div>
-        <!-- END: TimeZone -->
-        <!-- BEGIN: Layout role -->
+
         <div class="mt-3">
           <label class="form-label font-medium text-base">{{
             $t("employee.role")
@@ -259,12 +238,9 @@
             </div>
           </div>
         </div>
-        <!-- END: Layout role -->
       </div>
-      <!-- END: Form Layout -->
     </div>
-    <!-- END:Page left -->
-    <!-- BEGIN: Page right -->
+
     <div class="intro-y col-span-12 lg:col-span-6">
       <div class="intro-y p-5">
         <UploadAvatar
@@ -273,9 +249,8 @@
         ></UploadAvatar>
       </div>
     </div>
-    <!-- END:Page right -->
   </div>
-  <!-- END: Page Layout -->
+
   <div class="text-right mt-5">
     <router-link :to="{ path: '/master/employee/list' }">
       <button
@@ -313,16 +288,12 @@ import UploadAvatar from "@/components/upload/upload-avatar/main.vue";
 import { ElMessage } from "element-plus";
 import SelectBranch from "@/components/select/select-branch/main.vue";
 import SelectDepartment from "@/components/select/select-department/main.vue";
-// import SelectOffice from "@/components/select/select-office/main.vue";
-// import SelectTeam from "@/components/select/select-team/main.vue";
 import { getListBranch } from "@/utils/select/branch-utils";
 import {
   getListDepartment,
   removeListDepartment,
   getListDepartmentFilter,
 } from "@/utils/select/department-utils";
-// import { getListOfficeFilter } from "@/utils/select/office-utils";
-// import { getListTeam, removeListTeam } from "@/utils/select/team-utils";
 
 import { useApiStore } from "@/stores/api";
 import { useRoute, useRouter } from "vue-router";
@@ -341,6 +312,7 @@ const userName = ref("");
 const userEmail = ref("");
 const phoneNumber = ref("");
 const branchCode = ref("");
+const hardSalary = ref("");
 const selectBranch = ref({
   error: false,
   typeSearch: ["code", "name"],
@@ -353,19 +325,8 @@ const selectDepartment = ref({
   filter: [],
   defaultOptions: [],
 });
-const officeCode = ref("");
-const selectOffice = ref({
-  error: false,
-  typeSearch: ["name", "code"],
-  filter: [],
-  defaultOptions: [],
-});
 const positionCode = ref("");
 const userRole = ref(1);
-// const selectMicrosoftTeams = ref({
-//   error: false,
-//   defaultOptions: "",
-// });
 const microsoftID = ref("");
 const timezone = ref("Asia/Ho_Chi_Minh");
 const onDetailBranch = ref(true);
@@ -377,7 +338,7 @@ const errorInfo = ref({
   userEmail: "",
   phoneNumber: "",
   branchCode: "",
-  officeCode: "",
+  hardSalary: "",
   departmentCode: "",
   positionCode: "",
   microsoftID: "",
@@ -394,9 +355,9 @@ const resetScreen = () => {
   phoneNumber.value = "";
   branchCode.value = "";
   departmentCode.value = "";
-  officeCode.value = "";
   positionCode.value = "";
   microsoftID.value = "";
+  hardSalary.value = "";
   onDetailBranch.value = true;
   onDetailDepartment.value = true;
 };
@@ -413,15 +374,12 @@ let getDetail = () => {
     selectBranch.value.defaultOptions.push(dataResponse.branch_code);
     departmentCode.value = dataResponse.department_code.code;
     selectDepartment.value.defaultOptions.push(dataResponse.department_code);
-    // officeCode.value = dataResponse.office.code;
-    // selectOffice.value.defaultOptions.push(dataResponse.office);
+    hardSalary.value = dataResponse.hard_salary;
     positionCode.value = dataResponse.position_id;
     userRole.value = dataResponse.role_id;
     avatarPath.value = dataResponse.avatar_path;
     avatarId.value = dataResponse.avatar_id;
-    // microsoftID.value = dataResponse.microsoft_id;
     timezone.value = dataResponse.timezone;
-    // selectMicrosoftTeams.value.defaultOptions = dataResponse.microsoft_id;
   };
   let errorCallback = () => {};
   let payload = {
@@ -456,12 +414,11 @@ let resign = () => {
         phone_number: phoneNumber.value,
         department_code: departmentCode.value,
         branch_code: branchCode.value,
-        // office_code: officeCode.value,
+        hard_salary: hardSalary.value,
         position_id: positionCode.value,
         avatar_id: avatarId.value,
         avatar_path: avatarPath.value,
         role_id: userRole.value,
-        // microsoft_id: microsoftID.value,
         timezone: timezone.value,
       },
       successCallback,
@@ -495,12 +452,11 @@ let save = () => {
         phone_number: phoneNumber.value,
         department_code: departmentCode.value,
         branch_code: branchCode.value,
-        // office_code: officeCode.value,
+        hard_salary: hardSalary.value,
         position_id: positionCode.value,
         avatar_id: avatarId.value,
         avatar_path: avatarPath.value,
         role_id: userRole.value,
-        // microsoft_id: microsoftID.value,
         timezone: timezone.value,
       },
       successCallback,
@@ -571,6 +527,14 @@ let validate = (field) => {
       errorInfo.value.phoneNumber = "";
     }
   }
+  if (field === "hardSalary" || !field) {
+    if (hardSalary.value === "" || !hardSalary.value) {
+      errorInfo.value.hardSalary = i18n.global.t("employee.errorHardSalary");
+      check = false;
+    } else {
+      errorInfo.value.hardSalary = "";
+    }
+  }
 
   if (!field) {
     if (branchCode.value === "" || !branchCode.value) {
@@ -581,17 +545,6 @@ let validate = (field) => {
       errorInfo.value.branchCode = "";
     }
   }
-
-  // if (!field) {
-  //   if (officeCode.value === "" || !officeCode.value) {
-  //     errorInfo.value.officeCode = i18n.global.t("employee.errorOffice");
-  //     selectOffice.value.error = true;
-  //     check = false;
-  //   } else {
-  //     errorInfo.value.officeCode = "";
-  //   }
-  // }
-
   if (!field) {
     if (departmentCode.value === "" || !departmentCode.value) {
       errorInfo.value.departmentCode = i18n.global.t(
@@ -617,28 +570,10 @@ let listFilterDepartment = async (filter) => {
   }
 };
 
-// let listFilterOffice = async (filter) => {
-//   let listOffice = await getListOfficeFilter(filter);
-//   if (listOffice.length === 0) {
-//     errorInfo.value.officeCode = i18n.global.t("employee.noOfficeSelect");
-//     selectOffice.value.error = true;
-//   }
-// };
 watch(branchCode, (value) => {
   selectDepartment.value = {
     error: false,
     typeSearch: ["name", "code", "branch_code", "branch_name"],
-    filter: [
-      {
-        field: "branch",
-        value: value ?? "",
-      },
-    ],
-    defaultOptions: [],
-  };
-  selectOffice.value = {
-    error: false,
-    typeSearch: ["name", "code"],
     filter: [
       {
         field: "branch",
@@ -652,40 +587,17 @@ watch(branchCode, (value) => {
     listFilterDepartment(selectDepartment.value);
   } else {
     departmentCode.value = "";
-    officeCode.value = "";
     listFilterDepartment(selectDepartment.value);
-    // listFilterOffice(selectOffice.value);
   }
 });
 
-watch(departmentCode, (value) => {
-  selectOffice.value = {
-    error: false,
-    typeSearch: ["name", "code"],
-    filter: [
-      {
-        field: "department",
-        value: value ?? "",
-      },
-    ],
-    defaultOptions: [],
-  };
-  if (branchCode.value) {
-    selectOffice.value.filter.push({
-      field: "branch",
-      value: branchCode.value,
-    });
-  }
+watch(departmentCode, () => {
   if (route.query.code && onDetailDepartment.value) {
     onDetailDepartment.value = false;
-  } else {
-    officeCode.value = "";
   }
-  // listFilterOffice(selectOffice.value);
 });
 
 onMounted(() => {
-  // getListTeam();
   if (!apiStore.listBranch.length) {
     getListBranch();
   }
@@ -693,14 +605,11 @@ onMounted(() => {
     getDetail();
   } else {
     getListDepartment();
-    // getListOffice();
   }
 });
 
 onUnmounted(() => {
   removeListDepartment();
-  // removeListOffice();
-  // removeListTeam();
 });
 
 watch(

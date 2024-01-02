@@ -23,7 +23,6 @@
           </template>
           <template v-if="!isLoadingCount">
             <template v-if="reportStore.isEditing">
-              <CountDownTime></CountDownTime>
               <button
                 class="btn btn-primary w-24 mr-2"
                 type="button"
@@ -50,24 +49,6 @@
           >
         </template>
       </template>
-
-      <!-- END: Edit-->
-      <!-- BEGIN: PDF -->
-      <template v-if="isLoadingPDF">
-        <div class="w-28 h-4 text-center">
-          <LoadingIcon icon="spinning-circles" color="blue" class="w-4 h-4" />
-        </div>
-      </template>
-      <template v-else>
-        <button
-          class="btn btn-twitter w-28 mr-2"
-          v-if="route.query.code"
-          @click="exportPDF()"
-        >
-          {{ $t("resignError.exportPDF") }}
-        </button>
-      </template>
-      <!-- END: PDF -->
     </div>
   </div>
   <!-- BEGIN: Page Layout -->
@@ -83,15 +64,6 @@
             <Tab class="w-full py-2" tag="button"
               >{{ $t("resignError.basicInformation") }}
             </Tab>
-            <!-- <Tab class="w-full py-2" tag="button" :disabled="!route.query.code"
-              >{{ $t("resignError.processingContent") }}
-            </Tab>
-            <Tab class="w-full py-2" tag="button" :disabled="!route.query.code"
-              >{{ $t("resignError.summary") }}
-            </Tab>
-            <Tab class="w-full py-2" tag="button" :disabled="!route.query.code"
-              >{{ $t("resignError.payError") }}
-            </Tab> -->
           </TabList>
         </div>
       </div>
@@ -99,23 +71,6 @@
         <TabPanel>
           <Tab1 v-model:data="data" v-model:data-changed="dataBasicInfo"></Tab1>
         </TabPanel>
-        <!-- <TabPanel>
-          <Tab2
-            v-model:data="data"
-            v-model:data-changed="dataDetail"
-            v-model:list-config-basic-information="listConfigBasicInformation"
-          ></Tab2>
-        </TabPanel>
-        <TabPanel>
-          <Tab4
-            v-model:data="data"
-            v-model:data-changed="dataSummary"
-            v-model:list-config-basic-information="listConfigBasicInformation"
-          ></Tab4>
-        </TabPanel>
-        <TabPanel>
-          <Tab3 v-model:data="data" v-model:data-changed="dataCost"></Tab3>
-        </TabPanel> -->
       </TabPanels>
     </TabGroup>
   </div>
@@ -127,28 +82,11 @@ export default {
 };
 </script>
 <script setup>
-// form import
-import CountDownTime from "./count-down-time.vue";
 import Tab1 from "./tab1.vue";
-// import Tab2 from "./tab2.vue";
-// import Tab3 from "./tab3.vue";
-// import Tab4 from "./tab4.vue";
 import _ from "lodash";
 
 import { onMounted, ref, watch, onUnmounted } from "vue";
-import { getListUser, removeListUser } from "@/utils/select/user-utils";
-import { getListSerial } from "@/utils/select/serial-utils";
-import { getListOffice, removeListOffice } from "@/utils/select/office-utils";
-import {
-  getListErrorCode,
-  removeListErrorCode,
-} from "@/utils/select/errorCode-utils";
-import {
-  getListDepartment,
-  removeListDepartment,
-} from "@/utils/select/department-utils";
 import { helper } from "@/utils/helper";
-import { ElMessage } from "element-plus";
 import i18n from "@/i18n/i18n";
 import { TYPE_BASIC_INFORMATION } from "@/config/constants";
 
@@ -164,7 +102,6 @@ const route = useRoute();
 //variable
 const selectIndex = ref(route.query.step ? Number(route.query.step) : 0);
 const data = ref({});
-const isLoadingPDF = ref(false);
 const isLoadingCount = ref(false);
 const continueEdit = ref();
 const clearEdit = ref();
@@ -199,17 +136,6 @@ let getDetail = () => {
   reportStore.get_resign_error(payload);
 };
 
-let getConfig = () => {
-  let successCallback = (response) => {
-    reportStore.configBasicInformation = response.data.data;
-  };
-  let errorCallback = () => {};
-  let payload = {
-    successCallback,
-    errorCallback,
-  };
-  reportStore.get_config(payload);
-};
 let tabChangeTest = (index) => {
   if (typeof index === "number") selectIndex.value = index;
 };
@@ -260,24 +186,6 @@ const handleForgetSaveData = (oldValue) => {
       }
       break;
   }
-};
-
-let exportPDF = () => {
-  if (isLoadingPDF.value) return;
-  isLoadingPDF.value = true;
-  let successCallback = (response) => {
-    downloadPDF(response.data.data.url);
-    isLoadingPDF.value = false;
-  };
-  let errorCallback = () => {
-    isLoadingPDF.value = false;
-  };
-  let payload = {
-    code: route.query.code ?? null,
-    successCallback,
-    errorCallback,
-  };
-  reportStore.get_PDF_FILE(payload);
 };
 
 const confirmSaveTab = (callback) => {
@@ -344,35 +252,15 @@ let editResignError = () => {
   accessEdit(false);
 };
 
-let downloadPDF = (url) => {
-  let nameFile = url.substring(url.lastIndexOf("/") + 1);
-  fetch(url)
-    .then((resp) => resp.blob())
-    .then((blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      // the filename you want
-      a.download = nameFile;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    })
-    .catch(() => {
-      ElMessage.error(i18n.global.t("common.system_error"));
-    });
-};
-
 onMounted(() => {
-  getConfig();
-  if (!apiStore.listSerial.length) {
-    getListSerial();
-  }
-  getListDepartment();
-  getListUser();
-  getListOffice();
-  getListErrorCode();
+  // getConfig();
+  // if (!apiStore.listSerial.length) {
+  //   getListSerial();
+  // }
+  // getListDepartment();
+  // getListUser();
+  // getListOffice();
+  // getListErrorCode();
 });
 
 watch(
@@ -483,9 +371,5 @@ onUnmounted(() => {
   reportStore.disconnectEcho();
   clearTimeout(continueEdit.value);
   clearTimeout(clearEdit.value);
-  removeListDepartment();
-  removeListUser();
-  removeListErrorCode();
-  removeListOffice();
 });
 </script>

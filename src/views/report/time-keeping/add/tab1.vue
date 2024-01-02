@@ -60,7 +60,7 @@
         <!-- END:Page seri -->
       </div>
       <div class="text-right my-5 pr-2">
-        <router-link :to="{ path: '/report/resign-error/list' }">
+        <router-link :to="{ path: '/time-keeping/list' }">
           <button class="btn btn-outline-secondary w-28 mr-1" type="button">
             {{ $t("btn.cancel") }}
           </button>
@@ -98,10 +98,6 @@ import { ElMessage } from "element-plus";
 import { formatDate } from "@/utils/fomat";
 import moment from "moment/moment";
 import { useAuthStore } from "@/stores/auth";
-// form import
-// import SelectSerial from "@/components/select/select-serial/main.vue";
-// import SelectMultiUserResignError from "@/components/select/select-multi-user-resign-error/main.vue";
-
 // router-store
 import { useRoute, useRouter } from "vue-router";
 import { useReportStore } from "@/stores/report";
@@ -141,30 +137,17 @@ function handleCatchError(filed) {
   }
 }
 
-// get detail
-let getListBasicInfomation = (code) => {
-  let successCallback = (response) => {
-    const dataResponse = response.data.data;
-  };
-  let errorCallback = () => {};
-  let payload = {
-    code: code + "-0001",
-    action: "silent",
-    successCallback,
-    errorCallback,
-  };
-  reportStore.get_resign_error_serial(payload);
-};
-
 // resign-save
 let resign = () => {
   let check = validate();
   if (check) {
     if (isLoading.value) return;
     isLoading.value = true;
-    let successCallback = (response) => {
-      let dataResponse = response?.data?.data;
+    let successCallback = () => {
       ElMessage.success(i18n.global.t("resignError.resignSuccess"));
+      router.push({
+        path: "/time-keeping/list",
+      });
       isLoading.value = false;
     };
     let errorCallback = () => {
@@ -172,15 +155,18 @@ let resign = () => {
     };
     let payload = {
       data: {
-        employee: authStore.userInfo,
-        start_time: startTime.value,
-        end_time: endTime.value,
-        date_timekeeping: dateTimekeeping.value,
+        year: moment().format("YYYY"),
+        employees: {
+          employee: authStore.userInfo,
+          start_time: startTime.value,
+          end_time: endTime.value,
+          date_timekeeping: dateTimekeeping.value,
+        },
       },
       successCallback,
       errorCallback,
     };
-    reportStore.register_information_basic(payload);
+    reportStore.register_time_keeping(payload);
   }
 };
 

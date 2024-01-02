@@ -26,7 +26,7 @@
         {{ $t("btn.entries") }}
       </div>
       <div class="w-auto mt-3 sm:mt-0">
-        <router-link :to="{ path: '/report/resign-error/add' }">
+        <router-link :to="{ path: '/time-keeping/add' }">
           <button class="btn btn-primary shadow-md mr-2">
             {{ $t("btn.register") }}
           </button>
@@ -228,7 +228,7 @@ let totalPay = (row) => {
 
 let viewItem = (row) => {
   router.push({
-    path: "/report/resign-error/add",
+    path: "/time-keeping/add",
     query: {
       code: row.code,
       type: "view",

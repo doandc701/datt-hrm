@@ -39,36 +39,47 @@ const props = defineProps({
     default: null,
   },
 });
-const avatarId = ref(null);
-const avatarPath = ref(null);
+const avtId = ref(null);
+const avtPath = ref(null);
 const uploadStore = useUploadStore();
-
+const deleteIdAvt = ref(null);
 let deleteAvatar = (e) => {
   e.stopPropagation();
   let successCallback = () => {
-    avatarId.value = null;
-    avatarPath.value = null;
-    emit("update:avatarId", avatarId.value);
-    emit("update:avatarPath", avatarPath.value);
+    avtId.value = null;
+    avtPath.value = null;
+    emit("update:avatarId", avtId.value);
+    emit("update:avatarPath", avtPath.value);
   };
   let errorCallback = () => {};
   let payload = {
-    code: avatarId.value,
+    code: avtId.value,
     successCallback,
     errorCallback,
   };
   uploadStore.delete_avatar(payload);
 };
 let beforeAvatarUpload = (file) => {
+  deleteIdAvt.value = avtId.value;
   let check = validate(file);
   if (check) {
     let successCallback = (response) => {
       let dataResponse = response?.data;
-      avatarId.value = dataResponse._id;
-      avatarPath.value = dataResponse.path;
+      avtId.value = dataResponse._id;
+      avtPath.value = dataResponse.path;
 
-      emit("update:avatarId", avatarId.value);
-      emit("update:avatarPath", avatarPath.value);
+      emit("update:avatarId", avtId.value);
+      emit("update:avatarPath", avtPath.value);
+
+      if (!deleteIdAvt.value) return;
+      let successCallback = () => {};
+      let errorCallback = () => {};
+      let payload = {
+        code: deleteIdAvt.value,
+        successCallback,
+        errorCallback,
+      };
+      uploadStore.delete_avatar(payload);
     };
     let errorCallback = () => {};
     let formData = new FormData();
@@ -101,8 +112,8 @@ let validate = (file) => {
 watch(
   computed(() => props.avatarId),
   () => {
-    avatarId.value = props.avatarId;
-    avatarPath.value = props.avatarPath;
+    avtId.value = props.avatarId;
+    avtPath.value = props.avatarPath;
   },
   { deep: true }
 );

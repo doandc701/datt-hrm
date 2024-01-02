@@ -379,16 +379,6 @@ calendar-add
   .el-date-editor.el-input__wrapper:hover {
     box-shadow: 0 0 0 1px #dcdfe6 inset !important;
   }
-  .shadow__error {
-    box-shadow: none;
-    border: 1px solid #fb3434;
-    border-radius: 5px;
-  }
-  .msg__error {
-    margin: 5px 0px 0px 0px;
-    font-size: 12px;
-    color: #fb3434;
-  }
   .el-button.el-button--primary:focus {
     background-color: #3453b7;
   }
@@ -628,4 +618,18 @@ time-range-select element
   .el-input--prefix {
     height: 40px !important;
   }
+}
+
+/*
+error common
+*/
+.shadow__error {
+  box-shadow: none;
+  border: 1px solid #fb3434;
+  border-radius: 5px;
+}
+.msg__error {
+  margin: 5px 0px 0px 0px;
+  font-size: 12px;
+  color: #fb3434;
 }

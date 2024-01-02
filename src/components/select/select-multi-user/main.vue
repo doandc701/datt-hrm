@@ -22,7 +22,7 @@
     <el-option
       v-for="(item, key) in options"
       :key="key"
-      :label="item.code + ' - ' + item.name"
+      :label="item.code + ' - ' + item.first_name + item.last_name"
       :value="item.code"
     />
   </el-select>

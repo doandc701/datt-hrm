@@ -304,6 +304,7 @@
     "errorEmail": "メールを入力してください。",
     "errorMailFormat": "メール形式は不正されていません。",
     "errorEmail255": "メールを２５５文字以内で入力してください。",
+    "errorHardSalary":"Vui lòng nhập tiền lương",
     "errorPhone20": "電話番号を２０文字以内で入力してください。",
     "errorBranch": "支社名を選択してください。",
     "errorDepartment": "部署を選択してください",

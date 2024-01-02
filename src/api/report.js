@@ -5,6 +5,10 @@ export let LIST_RESIGN_ERROR = (params, successCallback, errorCallback) => {
   let url = `/matter?${params.payload.query}`;
   return Api.get(url).then(successCallback).catch(errorCallback);
 };
+export let LIST_TIME_KEEPING = (params, successCallback, errorCallback) => {
+  let url = `/timekeeping?${params.payload.query}`;
+  return Api.get(url).then(successCallback).catch(errorCallback);
+};
 export let GET_RESIGN_ERROR = (params, successCallback, errorCallback) => {
   let url = params.payload.action
     ? `/matter/${params.payload.code}?${params.payload.action}`
@@ -26,7 +30,7 @@ export let CREATE_BASIC_INFORMATION = (
   successCallback,
   errorCallback
 ) => {
-  let url = `/matter/basic-information`;
+  let url = `/timekeeping`;
   let data = params.payload.data;
   return Api.post(url, data).then(successCallback).catch(errorCallback);
 };
@@ -36,7 +40,7 @@ export let UPDATE_BASIC_INFORMATION = (
   successCallback,
   errorCallback
 ) => {
-  let url = `/matter/basic-information/${params.payload.code}`;
+  let url = `/timekeeping/${params.payload.code}`;
   let data = params.payload.data;
   return Api.put(url, data).then(successCallback).catch(errorCallback);
 };

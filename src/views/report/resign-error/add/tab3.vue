@@ -121,7 +121,7 @@
           />
         </div>
         <div class="text-right mt-5">
-          <router-link :to="{ path: '/report/resign-error/list' }">
+          <router-link :to="{ path: '/time-keeping/list' }">
             <button class="btn btn-outline-secondary w-28 mr-1" type="button">
               {{ $t("btn.cancel") }}
             </button>
