@@ -26,7 +26,7 @@
         {{ $t("btn.entries") }}
       </div>
       <div class="w-auto mt-3 sm:mt-0">
-        <router-link :to="{ path: '/master/error-code/add' }">
+        <router-link :to="{ path: '/master/salary/add' }">
           <button class="btn btn-primary shadow-md mr-2">
             {{ $t("btn.register") }}
           </button>
@@ -163,7 +163,7 @@ let search = () => {
 
 let editItem = (row) => {
   router.push({
-    path: "/master/error-code/add",
+    path: "/master/salary/add",
     query: {
       code: row.code,
       type: "edit",

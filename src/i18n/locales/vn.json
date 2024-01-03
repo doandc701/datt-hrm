@@ -132,7 +132,7 @@
     "addDepartmentMaster": "Thêm mới phòng ban",
     "listEmployeeMaster": "Danh sách nhân viên",
     "addEmployeeMaster": "Thêm mới nhân viên",
-    "listErrorCodeMaster": "不良コード一覧",
+    "listErrorCodeMaster": "Danh sách lương",
     "addErrorCodeMaster": "不良コード登録",
     "listSeriReport": "製番情報一覧",
     "addSeriReport": "製番情報登録",
@@ -174,7 +174,7 @@
     "branchMaster": "Chi nhánh",
     "departmentMaster": "Quản lý phòng ban",
     "employeeMaster": "Quản lý nhân viên",
-    "errorCodeMaster": "不良コード管理",
+    "errorCodeMaster": "Quản lý lương",
     "report": "Chấm công",
     "serialReport": "製番情報",
     "categoryBooking": "カテゴリ",
@@ -326,7 +326,7 @@
     "errorHardSalary":"Vui lòng nhập tiền lương"
   },
   "errorCode": {
-    "list": "不良コード一覧",
+    "list": "Danh sách lương",
     "resignErorCode": "不良コード登録",
     "valueSearch": "不良コード,不良名,課コード,課名",
     "code": "不良コード",

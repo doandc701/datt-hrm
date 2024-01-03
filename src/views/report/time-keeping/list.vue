@@ -50,16 +50,6 @@
               </div>
             </td>
             <td class="text-left">
-              <div class="whitespace-nowrap">
-                {{ row.employee.phone_number ?? "" }}
-              </div>
-            </td>
-            <td class="text-left">
-              <div class="whitespace-nowrap">
-                {{ row.employee.code ?? "" }}
-              </div>
-            </td>
-            <td class="text-left">
               <div class="block-textName">
                 {{ row.start_time ?? "" }}
               </div>
@@ -125,14 +115,6 @@ const config = ref({
   headers: [
     {
       label: i18n.global.t("text.no"),
-    },
-    {
-      sort: "phone_number",
-      label: i18n.global.t("resignError.serialNumber"),
-    },
-    {
-      sort: "code",
-      label: i18n.global.t("resignError.codeOfficial"),
     },
     {
       sort: "start_time",

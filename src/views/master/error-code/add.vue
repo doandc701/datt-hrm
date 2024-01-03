@@ -86,7 +86,7 @@
           </div>
         </div>
         <div class="text-right mt-5">
-          <router-link :to="{ path: '/master/error-code/list' }">
+          <router-link :to="{ path: '/master/salary/list' }">
             <button class="btn btn-outline-secondary w-28 mr-1" type="button">
               {{ $t("btn.cancel") }}
             </button>
@@ -188,7 +188,7 @@ let resign = () => {
     let successCallback = () => {
       ElMessage.success(i18n.global.t("errorCode.resignSuccess"));
       router.push({
-        path: "/master/error-code/list",
+        path: "/master/salary/list",
       });
       isLoading.value = false;
     };
@@ -216,7 +216,7 @@ let save = () => {
     let successCallback = () => {
       ElMessage.success(i18n.global.t("errorCode.saveSuccess"));
       router.push({
-        path: "/master/error-code/list",
+        path: "/master/salary/list",
       });
       isLoading.value = false;
     };

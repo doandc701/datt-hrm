@@ -139,12 +139,12 @@ const routes = [
         component: AddEmployee,
       },
       {
-        path: "master/error-code/list",
+        path: "master/salary/list",
         name: i18n.global.t("router.listErrorCodeMaster"),
         component: ListErrorCode,
       },
       {
-        path: "master/error-code/add",
+        path: "master/salary/add",
         name: i18n.global.t("router.addErrorCodeMaster"),
         component: AddErrorCode,
       },
