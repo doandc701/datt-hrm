@@ -14,7 +14,7 @@
             :placeholder="$t('timePicker.selectDate')"
             format="YYYY-MM-DD"
             value-format="YYYY-MM-DD"
-            :disabled="true"
+            :disabled="false"
           />
         </div>
         <div class="mt-3 flex flex-col items-start">
@@ -72,15 +72,6 @@
           @click="resign"
         >
           {{ $t("btn.register") }}
-        </button>
-        <button
-          v-else
-          class="btn btn-primary w-24"
-          type="button"
-          @click="save"
-          :disabled="!!!!(!reportStore.isEditing && route.query.code)"
-        >
-          {{ $t("btn.save") }}
         </button>
       </div>
     </div>
@@ -167,28 +158,6 @@ let resign = () => {
       errorCallback,
     };
     reportStore.register_time_keeping(payload);
-  }
-};
-
-let save = () => {
-  let check = validate();
-
-  if (check) {
-    if (isLoading.value) return;
-    isLoading.value = true;
-    let successCallback = () => {
-      ElMessage.success(i18n.global.t("resignError.saveSuccess"));
-      isLoading.value = false;
-    };
-    let errorCallback = () => {
-      isLoading.value = false;
-    };
-    let payload = {
-      code: route.query.code,
-      successCallback,
-      errorCallback,
-    };
-    reportStore.update_information_basic(payload);
   }
 };
 

@@ -43,7 +43,7 @@
         v-model:visibleAction="visibleAction"
       >
         <template #row="{ row, index }">
-          <tr class="intro-x" @dblclick="viewItem(row)">
+          <tr class="intro-x">
             <td class="w-10">
               <div class="font-medium whitespace-nowrap">
                 {{ index }}
@@ -83,13 +83,11 @@ import i18n from "@/i18n/i18n";
 import { TYPE_BASIC_INFORMATION } from "@/config/constants";
 
 //store-route
-import { useRouter } from "vue-router";
 import { useReportStore } from "@/stores/report";
 import { useAuthStore } from "@/stores/auth";
 import _ from "lodash";
 
 const authStore = useAuthStore();
-const router = useRouter();
 
 const reportStore = useReportStore();
 
@@ -141,22 +139,9 @@ const reload = ref(false);
 const visibleAction = computed(() => {
   return false;
 });
-console.log(visibleAction.value);
 const totalItems = ref(0);
 let search = () => {
   config.value.q.keySearch = q.value;
-};
-
-let viewItem = (row) => {
-  reportStore.isDisabled = true;
-  router.push({
-    path: "/time-keeping/add",
-    query: {
-      step: 1,
-      code: row.code,
-      pageName: i18n.global.t("resignError.editResignError"),
-    },
-  });
 };
 
 onMounted(() => {});

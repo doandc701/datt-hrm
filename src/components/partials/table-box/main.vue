@@ -174,7 +174,6 @@ let retrieveList = () => {
       data.value.total = dataResponse.total;
       if (props.config.action === "list_timekeeping") {
         listData = dataResponse.data[0].employees;
-        console.log(listData);
       }
       if (!listData.length && data.value.model.page !== 1) {
         data.value.model.page = 1;
