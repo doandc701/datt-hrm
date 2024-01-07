@@ -14,7 +14,7 @@
             :placeholder="$t('timePicker.selectDate')"
             format="YYYY-MM-DD"
             value-format="YYYY-MM-DD"
-            :disabled="false"
+            :disabled="true"
           />
         </div>
         <div class="mt-3 flex flex-col items-start">

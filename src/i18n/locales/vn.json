@@ -39,8 +39,8 @@
     "resignSuccess": "Đăng ký thành công",
     "noData": "Không có dữ liệu.",
     "notEmptyData": "Vui lòng hoàn thành trường này.",
-    "notEmptyChoose": "{field}Xin vui lòng chọn.",
-    "notEmptyInput": "{field} không được để trống",
+    "notEmptyChoose": "Xin vui lòng chọn {field}.",
+    "notEmptyInput": "Không được để trống",
     "errorTimePast": "Không chọn thời gian qua.",
     "saveSuccess": "{field} Nó đã được lưu.",
     "max255": "{field}Vui lòng nhập trong vòng 255 ký tự.",
@@ -163,7 +163,9 @@
     "listGroup": "Danh sách nhóm",
     "addGroup": "Thêm nhóm",
     "editPost": "Sửa bài viết",
-    "detailPost": "Chi tiết bài viết"
+    "detailPost": "Chi tiết bài viết",
+    "listSalary":"Danh sách lương",
+    "addSalary": "Tính lương"
   },
   "menu": {
     "list": "Danh sách",
@@ -190,7 +192,8 @@
     "approvalRequest": "稟議申請",
     "booking": "施設予約",
     "calendar": "Lịch",
-    "groupCalendar": "グループ"
+    "groupCalendar": "グループ",
+    "salary":"Bảng lương"
   },
   "confirm": {
     "userConfirm": "承認者"
@@ -920,5 +923,35 @@
     "checkAll":"Chọn tất cả",
     "errorListUser": "Vui lòng chọn nhân viên phải đọc nó.",
     "selectMode": "Chế độ lựa chọn"
+  },
+  "salary": {
+    "listSalary":"Danh sách lương",
+    "list": "Danh sách chi nhánh",
+    "resignSalary": "Tính lương",
+    "valueSearch": "Tên chi nhánh hoặc mã",
+    "salaryCode": "Mã chi nhánh",
+    "salaryName": "Tên chi nhánh",
+    "editSalary": "Sửa chi nhánh",
+    "resignSuccess": "Đăng ký thành công",
+    "saveSuccess": " Nó đã được lưu.",
+    "errorSalaryName": "Vui lòng nhập tên chi nhánh của bạn.",
+    "errorSalaryName255": "Vui lòng nhập tên chi nhánh trong vòng 255 ký tự.",
+    "flow": "Quyền",
+    "useCreate": "Sửa đổi",
+    "useApprove": "Tất cả",
+    "selectOffice": "Chọn phòng ban (người được chọn là người phê duyệt)",
+    "confirmSuccess": "Luồng xác nhận đã được tạo",
+    "titleConfirm": "Tiêu đề xác nhận",
+    "flowConfirm": "Phân quyền",
+    "employee":"Nhân viên",
+    "actualWorkday":"Ngày công tính lương",
+    "standardWorkingDay":"Ngày công chuẩn",
+    "deductedFromSalary":"Các khoản phải khấu trừ vào lương",
+    "socialInsurance":"Bảo hiểm xã hội (8%)",
+    "healthInsurance":"Bảo hiểm y tế (1.5%)",
+    "voluntaryInsurance":"Bảo hiểm thất nghiệp (1%)",
+    "personalIncomeTax":"Thuế TNCN",
+    "totalDeducted": "Tổng số tiền phải khẩu trừ",
+    "salary_received": "Thực lãnh"
   }
 }

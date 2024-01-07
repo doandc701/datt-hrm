@@ -67,15 +67,14 @@ let checkPermissionUser = (userInfo, to) => {
     const redirect404Paths = [
       "/master/branch/list",
       "/master/branch/add",
-      "master/department/list",
-      "master/department/add",
-      "master/employee/list",
-      "master/employee/add",
-      "master/salary/list",
-      "master/salary/add",
-      "master/serial/list",
-      "master/serial/add",
-      "post/add",
+      "/master/department/list",
+      "/master/department/add",
+      "/master/employee/list",
+      "/master/employee/add",
+      "/salary/add",
+      "/master/serial/list",
+      "/master/serial/add",
+      "/post/add",
     ];
     if (redirect404Paths.includes(to.path)) {
       router

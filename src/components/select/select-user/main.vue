@@ -21,6 +21,7 @@
       :key="key"
       :label="item.code + ' - ' + item.first_name + item.last_name"
       :value="item.code"
+      :disabled="item.disabled"
     />
   </el-select>
 </template>

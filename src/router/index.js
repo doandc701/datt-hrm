@@ -43,6 +43,8 @@ import AddBooking from "@/views/request/booking/add.vue";
 import FuryhoChart from "@/views/orgchart/FuryhoChart.vue";
 import Calendar from "@/views/calendar/main.vue";
 import CalendarAdd from "@/views/calendar/add.vue";
+import Salary from "@/views/salary/list.vue";
+import SalaryAdd from "@/views/salary/add.vue";
 import { generateStorageKey } from "@/utils/fomat";
 import {
   checkRouterWithToken,
@@ -277,6 +279,16 @@ const routes = [
         path: "calendar/add",
         name: i18n.global.t("router.addCalendar"),
         component: CalendarAdd,
+      },
+      {
+        path: "salary/list",
+        name: i18n.global.t("router.listSalary"),
+        component: Salary,
+      },
+      {
+        path: "salary/add",
+        name: i18n.global.t("router.addSalary"),
+        component: SalaryAdd,
       },
     ],
   },

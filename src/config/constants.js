@@ -97,18 +97,18 @@ const FORMAT_DATETIME = "YYYY-MM-DD HH:mm:ss";
 const FORMAT_DATETIME_SHORT = "YYYY-MM-DD HH:mm";
 
 const MONTH_OF_YEAR = [
-  { en: "January", ja: "Tháng 1" },
-  { en: "February", ja: "Tháng 2" },
-  { en: "March", ja: "Tháng 3" },
-  { en: "April", ja: "Tháng 4" },
-  { en: "May", ja: "Tháng 5" },
-  { en: "June", ja: "Tháng 6" },
-  { en: "July", ja: "Tháng 7" },
-  { en: "August", ja: "Tháng 8" },
-  { en: "September", ja: "Tháng 9" },
-  { en: "October", ja: "Tháng 10" },
-  { en: "November", ja: "Tháng 11" },
-  { en: "December", ja: "Tháng 12" },
+  { en: "January", ja: "Tháng 1", value: 1 },
+  { en: "February", ja: "Tháng 2", value: 2 },
+  { en: "March", ja: "Tháng 3", value: 3 },
+  { en: "April", ja: "Tháng 4", value: 4 },
+  { en: "May", ja: "Tháng 5", value: 5 },
+  { en: "June", ja: "Tháng 6", value: 6 },
+  { en: "July", ja: "Tháng 7", value: 7 },
+  { en: "August", ja: "Tháng 8", value: 8 },
+  { en: "September", ja: "Tháng 9", value: 9 },
+  { en: "October", ja: "Tháng 10", value: 10 },
+  { en: "November", ja: "Tháng 11", value: 11 },
+  { en: "December", ja: "Tháng 12", value: 12 },
 ];
 const FILTER_CURRENT_OFFICE = [
   { value: "", label: "全部署" },
