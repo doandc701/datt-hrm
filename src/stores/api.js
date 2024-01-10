@@ -57,6 +57,9 @@ const defaultState = {
   // group
   listGroup: null,
   pageGroup: null,
+  listSalary: [],
+  pageSalary: null,
+  limitSalary: null,
 };
 
 export const useApiStore = defineStore("apiStore", {

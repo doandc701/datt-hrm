@@ -92,16 +92,14 @@ const authStore = useAuthStore();
 const reportStore = useReportStore();
 
 const listTypeBasicInformation = ref([]);
-const filterListResignError = JSON.parse(
-  localStorage.getItem("filterListResignError")
+const filterListTimeKeeping = JSON.parse(
+  localStorage.getItem("filterListTimeKeeping")
 );
-const filterCurrentOffice = ref(filterListResignError?.current_office ?? 2);
-
-const filterType = ref(filterListResignError?.filter_type ?? "");
-const resizeTable = ref(JSON.parse(localStorage.getItem("listResignError")));
+const filterType = ref(filterListTimeKeeping?.year ?? "");
+const resizeTable = ref(JSON.parse(localStorage.getItem("listTimeKeeping")));
 const config = ref({
   action: "list_timekeeping",
-  fitResize: "listResignError",
+  fitResize: "listTimeKeeping",
   q: {
     keySearch: "",
     typeSearch: ["date_timekeeping"],
@@ -147,12 +145,12 @@ let search = () => {
 onMounted(() => {});
 
 watch(
-  () => [filterType.value, filterCurrentOffice.value],
+  () => [filterType.value],
   () => {
     config.value.dataFilter.code = authStore.userInfo.code;
     config.value.dataFilter.year = new Date().getFullYear();
     localStorage.setItem(
-      "filterListResignError",
+      "filterListTimeKeeping",
       JSON.stringify(config.value.dataFilter)
     );
   },

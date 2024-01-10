@@ -100,6 +100,7 @@ import { useReportStore } from "@/stores/report";
 import { useBookingRoomStore } from "@/stores/customer/booking-room";
 import { useMasterBranchStore } from "@/stores/admin/master-branch";
 import { useMasterUserStore } from "@/stores/admin/master-user";
+import { useMasterSalaryStore } from "@/stores/admin/master-salary";
 import { useCategoryCalendarStore } from "@/stores/calendar/category";
 import { useGroupStore } from "@/stores/admin/group";
 import { useSerialStore } from "@/stores/admin/master-serial";
@@ -111,6 +112,7 @@ const bookingRoomStore = useBookingRoomStore();
 const categoryCalendarStore = useCategoryCalendarStore();
 const groupStore = useGroupStore();
 const serialStore = useSerialStore();
+const masterSalaryStore = useMasterSalaryStore();
 
 const emit = defineEmits([
   "update:config",
@@ -172,9 +174,13 @@ let retrieveList = () => {
       let dataResponse = response?.data;
       let listData = dataResponse.data;
       data.value.total = dataResponse.total;
-      if (props.config.action === "list_timekeeping") {
+      if (
+        props.config.action === "list_timekeeping" ||
+        props.config.action === "salary"
+      ) {
         listData = dataResponse.data[0].employees;
       }
+
       if (!listData.length && data.value.model.page !== 1) {
         data.value.model.page = 1;
       }
@@ -215,6 +221,9 @@ let retrieveList = () => {
       break;
     case "list_group":
       groupStore.list(payload);
+      break;
+    case "salary":
+      masterSalaryStore.list(payload);
       break;
     default:
       console.log("error");

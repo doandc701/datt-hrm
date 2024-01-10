@@ -926,16 +926,17 @@
   },
   "salary": {
     "listSalary":"Danh sách lương",
-    "list": "Danh sách chi nhánh",
+    "list": "Danh sách lương",
     "resignSalary": "Tính lương",
     "valueSearch": "Tên chi nhánh hoặc mã",
-    "salaryCode": "Mã chi nhánh",
-    "salaryName": "Tên chi nhánh",
-    "editSalary": "Sửa chi nhánh",
+    "salaryCode": "Mã lương",
+    "employeeName": "Tên nhân viên",
+    "salaryMonth": "Tháng",
+    "editSalary": "Sửa bảng lương",
     "resignSuccess": "Đăng ký thành công",
     "saveSuccess": " Nó đã được lưu.",
-    "errorSalaryName": "Vui lòng nhập tên chi nhánh của bạn.",
-    "errorSalaryName255": "Vui lòng nhập tên chi nhánh trong vòng 255 ký tự.",
+    "errorSalaryName": "Vui lòng nhập tên lương của bạn.",
+    "errorSalaryName255": "Vui lòng nhập tên lương trong vòng 255 ký tự.",
     "flow": "Quyền",
     "useCreate": "Sửa đổi",
     "useApprove": "Tất cả",
@@ -952,6 +953,6 @@
     "voluntaryInsurance":"Bảo hiểm thất nghiệp (1%)",
     "personalIncomeTax":"Thuế TNCN",
     "totalDeducted": "Tổng số tiền phải khẩu trừ",
-    "salary_received": "Thực lãnh"
+    "salaryReceived": "Thực lãnh"
   }
 }

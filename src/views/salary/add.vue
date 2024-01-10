@@ -175,11 +175,11 @@
 
         <div class="mt-3">
           <label class="form-label font-medium text-base"
-            >{{ $t("salary.salary_received") }}
+            >{{ $t("salary.salaryReceived") }}
           </label>
           <input
             v-model="salaryReceived"
-            :placeholder="$t('salary.salary_received')"
+            :placeholder="$t('salary.salaryReceived')"
             class="form-control w-full"
             type="text"
             readonly
@@ -390,6 +390,7 @@ let resign = () => {
             personal_income_tax: deductedFromSalary.personalIncomeTax,
             total: deductedFromSalary.totalDeducted,
           },
+          month: selectMonth.value,
           salary_received: salaryReceived.value,
         },
       ],

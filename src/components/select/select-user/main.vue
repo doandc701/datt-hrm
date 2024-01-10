@@ -19,7 +19,7 @@
     <el-option
       v-for="(item, key) in options"
       :key="key"
-      :label="item.code + ' - ' + item.first_name + item.last_name"
+      :label="`${item.code} - ${item.first_name} ${item.last_name}`"
       :value="item.code"
       :disabled="item.disabled"
     />

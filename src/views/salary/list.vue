@@ -7,19 +7,11 @@
       class="intro-y col-span-12 flex sm:justify-between flex-wrap items-center mt-2"
     >
       <div class="flex w-full sm:w-1/3">
-        <div class="relative w-full text-slate-500">
-          <input
-            v-model="q"
-            :placeholder="$t('salary.valueSearch')"
-            class="form-control w-full box pr-10 placeholderOverFlow"
-            type="text"
-            @keydown.enter="search"
-          />
-          <SearchIcon
-            class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0 cursor-pointer"
-            @click="search"
-          />
-        </div>
+        <SelectUser
+          :id="`select-user-salary`"
+          v-model:code="userDirector"
+          v-model:config="selectUser"
+        ></SelectUser>
       </div>
 
       <div class="hidden xl:block mx-auto text-slate-500">
@@ -50,12 +42,27 @@
             </td>
             <td class="text-left">
               <div class="whitespace-nowrap">
-                {{ row.code ?? "" }}
+                {{ row.employee.first_name }} {{ row.employee.last_name }}
               </div>
             </td>
             <td class="text-left">
               <div class="block-textName">
-                {{ row.name ?? "" }}
+                {{ row.month }}
+              </div>
+            </td>
+            <td class="text-left">
+              <div class="block-textName">
+                {{ row.actual_workday }}
+              </div>
+            </td>
+            <td class="text-left">
+              <div class="block-textName">
+                {{ row.standard_working_day }}
+              </div>
+            </td>
+            <td class="text-left">
+              <div class="block-textName">
+                {{ row.salary_received }}
               </div>
             </td>
             <td class="w-56" v-if="visibleAction">
@@ -91,42 +98,66 @@ export default {
 </script>
 <script setup>
 import TableBox from "@/components/partials/table-box/main.vue";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, onMounted, onUnmounted } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useRouter } from "vue-router";
 import i18n from "@/i18n/i18n";
 import { ElMessage } from "element-plus";
 import { TYPE_ADMIN } from "@/config/constants";
-
-import { useMasterBranchStore } from "@/stores/admin/master-branch";
+import SelectUser from "@/components/select/select-user/main.vue";
+import { getListUser, removeListUser } from "@/utils/select/user-utils";
+import { useMasterSalaryStore } from "@/stores/admin/master-salary";
 import { useAuthStore } from "@/stores/auth";
+
 const router = useRouter();
-const masterBranchStore = useMasterBranchStore();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
+const masterSalaryStore = useMasterSalaryStore();
 
 const roleUser = authStore.userInfo.role_id;
-
-const resizeTable = ref(JSON.parse(localStorage.getItem("listBranch")));
+const filterListSalary = JSON.parse(localStorage.getItem("filterListSalary"));
+const filterType = ref(filterListSalary?.year ?? "");
+const userDirector = ref("");
+const selectUser = ref({
+  error: false,
+  typeSearch: ["code", "name", "first_name", "last_name", "email"],
+  defaultOptions: [],
+  clearable: true,
+});
+const resizeTable = ref(JSON.parse(localStorage.getItem("listSalary")));
 const config = ref({
-  action: "list_branch",
-  fitResize: "listBranch",
+  action: "salary",
+  fitResize: "listSalary",
   q: {
     keySearch: "",
     typeSearch: ["code", "name"],
   },
-  dataFilter: {},
+  dataFilter: {
+    year: "",
+  },
   headers: [
     {
       label: i18n.global.t("text.no"),
     },
     {
-      sort: "code",
-      label: i18n.global.t("branch.branchCode"),
+      sort: "name",
+      label: i18n.global.t("salary.employeeName"),
     },
     {
-      sort: "name",
-      label: i18n.global.t("branch.branchName"),
+      sort: "month",
+      label: i18n.global.t("salary.salaryMonth"),
+    },
+    {
+      sort: "actual_workday",
+      label: i18n.global.t("salary.actualWorkday"),
+    },
+    {
+      sort: "standard_working_day",
+      label: i18n.global.t("salary.standardWorkingDay"),
+    },
+    {
+      sort: "salary_received",
+      label: i18n.global.t("salary.salaryReceived"),
     },
   ],
   sort: {
@@ -134,24 +165,20 @@ const config = ref({
     order: "desc",
   },
 });
-const q = ref("");
 const dataList = ref([]);
 const reload = ref(false);
 const visibleAction = computed(() => {
   return roleUser == TYPE_ADMIN;
 });
 const totalItems = ref(0);
-let search = () => {
-  config.value.q.keySearch = q.value;
-};
 
 let editItem = (row) => {
   router.push({
-    path: "/master/branch/add",
+    path: "/salary/add",
     query: {
       code: row.code,
       type: "edit",
-      pageName: i18n.global.t("branch.editBranch"),
+      pageName: i18n.global.t("salary.editSalary"),
     },
   });
 };
@@ -167,7 +194,7 @@ let deleteItem = (row) => {
       errorCallback,
       code: row.code,
     };
-    masterBranchStore.delete(payload);
+    masterSalaryStore.delete(payload);
   };
   let payloadConfirm = {
     callback: confirmCallback,
@@ -186,4 +213,50 @@ watch(
   },
   { immediate: true }
 );
+
+watch(
+  () => [filterType.value],
+  () => {
+    config.value.dataFilter.year = new Date().getFullYear();
+    localStorage.setItem(
+      "filterListSalary",
+      JSON.stringify(config.value.dataFilter)
+    );
+  },
+  { deep: true, immediate: true }
+);
+
+watch(
+  () => userDirector.value,
+  () => {
+    let successCallback = (response) => {
+      const result = response.data;
+      apiStore.listSalary = result.data[0].employees;
+      apiStore.pageSalary = result.current_page;
+      apiStore.limitSalary = result.limit;
+      console.log(
+        "apiStore.listSalary",
+        apiStore.listSalary,
+        apiStore.pageSalary,
+        apiStore.limitSalary
+      );
+    };
+    let errorCallback = () => {};
+    let payload = {
+      successCallback,
+      errorCallback,
+      query: `page=1&limit=100&filters[year]=${new Date().getFullYear()}&filters[code]=${
+        userDirector.value
+      }`,
+    };
+    masterSalaryStore.list(payload);
+  }
+);
+
+onMounted(() => {
+  getListUser();
+});
+onUnmounted(() => {
+  removeListUser();
+});
 </script>
