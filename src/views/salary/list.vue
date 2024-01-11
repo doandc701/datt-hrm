@@ -176,7 +176,7 @@ let editItem = (row) => {
   router.push({
     path: "/salary/add",
     query: {
-      code: row.code,
+      code: row.employee.code,
       type: "edit",
       pageName: i18n.global.t("salary.editSalary"),
     },
@@ -192,7 +192,7 @@ let deleteItem = (row) => {
     let payload = {
       successCallback,
       errorCallback,
-      code: row.code,
+      code: row.employee.code,
     };
     masterSalaryStore.delete(payload);
   };
@@ -231,15 +231,7 @@ watch(
   () => {
     let successCallback = (response) => {
       const result = response.data;
-      apiStore.listSalary = result.data[0].employees;
-      apiStore.pageSalary = result.current_page;
-      apiStore.limitSalary = result.limit;
-      console.log(
-        "apiStore.listSalary",
-        apiStore.listSalary,
-        apiStore.pageSalary,
-        apiStore.limitSalary
-      );
+      dataList.value = result.data[0].employees;
     };
     let errorCallback = () => {};
     let payload = {
