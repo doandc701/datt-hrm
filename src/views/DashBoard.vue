@@ -1,193 +1,6 @@
 <template>
   <div class="page__dashboard master grid grid-cols-12 gap-6">
     <div class="col-span-12">
-      <div class="">
-        <div class="intro-y col-span-12 mt-8 flex flex-wrap-reverse">
-          <div class="flex-1">
-            <div
-              class="custom__scroll grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5"
-            >
-              <div
-                v-for="item in dataLinkHardware"
-                :key="item.id"
-                class="intro-y"
-              >
-                <div class="zoom-in relative box__note">
-                  <a :href="item.note" @click.prevent="handleTargetLink(item)">
-                    <div
-                      class="box p-5 overflow-hidden"
-                      :style="`background-color:${item.color}`"
-                    >
-                      <div class="flex items-center gap-5">
-                        <div
-                          class="iconsframe w-10 h-10 min-w-[40px] rounded-full flex items-center justify-center bg-[#fff]"
-                        >
-                          <ChevronRightIcon class="w-5 h-5" />
-                        </div>
-                        <div class="text-[#fff] w-[70%]">
-                          <div
-                            class="flex-1 font-medium block-textName-dashboard"
-                          >
-                            {{ item.title }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </div>
-              <div v-for="item in dataLink" :key="item.id" class="intro-y">
-                <div class="zoom-in relative box__note">
-                  <a :href="item.note">
-                    <div
-                      class="box p-5 overflow-hidden"
-                      :style="`background-color:${item.color}`"
-                    >
-                      <div class="flex items-center gap-5">
-                        <div
-                          class="iconsframe w-10 h-10 min-w-[40px] rounded-full flex items-center justify-center bg-[#fff]"
-                        >
-                          <ChevronRightIcon class="w-5 h-5" />
-                        </div>
-                        <div class="text-[#fff] w-[70%]">
-                          <div
-                            class="flex-1 font-medium block-textName-dashboard"
-                          >
-                            {{ item.title }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <div
-                    class="box__note--x absolute z-99 top-0 right-0 text-[#fff]"
-                    @click="handleDelete(item)"
-                  >
-                    <XIcon />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="absolute right-0 top-[-25px] flex gap-3">
-            <span class="top-[-23px]">{{ $t("dashboard.shortCutText") }}</span>
-            <span class="mb-2 hover:text-[#613a3a]" @click="handleOpenAddLink"
-              ><PlusCircleIcon v-if="!isOpenLink" class="cursor-pointer" />
-              <XIcon v-else class="cursor-pointer" />
-            </span>
-          </div>
-          <!-- CREATE LINK -->
-          <div class="max-[639px]:w-full">
-            <div v-if="isOpenLink" class="flex-1 box p-5 h-max ml-3">
-              <div class="w-4 h-4 mb-1" v-if="isLoading">
-                <LoadingIcon
-                  icon="spinning-circles"
-                  color="black"
-                  class="w-full h-full"
-                />
-              </div>
-              <div>
-                <label for="crud-form-1" class="form-label"
-                  >{{ $t("dashboard.title") }}
-                  <span class="text-danger">*</span>
-                </label>
-                <input
-                  v-model="textTitle"
-                  id="crud-form-1"
-                  type="text"
-                  class="form-control w-full"
-                  :placeholder="$t('dashboard.pleaseTitle')"
-                  @blur="handleBlur('title')"
-                />
-                <div
-                  v-if="errorInfo.title"
-                  class="d-block mt-2 pl-1 text-danger"
-                >
-                  {{ errorInfo.title }}
-                </div>
-              </div>
-              <div class="mt-3">
-                <label for="crud-form-2" class="form-label"
-                  >{{ $t("dashboard.linkConnect") }}
-                  <span class="text-danger">*</span>
-                </label>
-                <input
-                  v-model="textLink"
-                  id="crud-form-1"
-                  type="text"
-                  class="form-control w-full"
-                  :placeholder="$t('dashboard.pleaseLink')"
-                  @blur="handleBlur('note')"
-                />
-                <div
-                  v-if="errorInfo.textLink"
-                  class="d-block mt-2 pl-1 text-danger"
-                >
-                  {{ errorInfo.textLink }}
-                </div>
-              </div>
-              <div class="text-right mt-5">
-                <button
-                  type="button"
-                  class="btn btn-primary w-24"
-                  @click="handleSaveLink"
-                >
-                  {{ $t("btn.save") }}
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- CREATE LINK -->
-        </div>
-      </div>
-      <div
-        class="grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5 my-3"
-      >
-        <a
-          href="/calendar/list"
-          @click.prevent="
-            router.push({
-              path: '/calendar/list',
-            })
-          "
-          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
-          ><span class="flex gap-3 items-center"
-            ><img
-              class="w-[45px]"
-              src="@/assets/images/svg/dashboard/calendar.png" /></span
-        ></a>
-        <a
-          href="https://teams.microsoft.com/l/chat/0/0?tenantId=6fd7afce-64cf-4904-8e48-bf3ae1c332ec"
-          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
-          ><span class="flex gap-3 items-center"
-            ><img
-              class="w-[45px]"
-              src="@/assets/images/svg/dashboard/teams.svg" /></span
-        ></a>
-        <a
-          href="https://outlook.office.com/"
-          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
-        >
-          <span class="flex gap-3 items-center">
-            <img
-              class="w-[45px]"
-              src="@/assets/images/svg/dashboard/outlook.svg"
-            />
-          </span>
-        </a>
-        <a
-          href="https://kosecgr.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx"
-          class="btn hover:opacity-80 bg-[#dfe4e9] py-3"
-        >
-          <span class="flex gap-3 items-center">
-            <img
-              class="w-[45px]"
-              src="@/assets/images/svg/dashboard/folder.png"
-            />
-          </span>
-        </a>
-      </div>
-
       <div class="mt-[26px`]">
         <h2 class="text-lg font-medium truncate mr-5 mt-[26px]">
           {{ $t("dashboard.companyNews") }}
@@ -357,10 +170,9 @@ export default {
 <script setup>
 import { onMounted, ref, computed, reactive } from "vue";
 import dom from "@left4code/tw-starter/dist/js/dom";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import i18n from "@/i18n/i18n";
-import { useNoteLinkDashBoardStore } from "@/stores/dashboard/note-link";
 import { usePostDashBoardStore } from "@/stores/dashboard/post";
 import { formatAverageNumbro } from "@/utils/fomat";
 import { useAuthStore } from "@/stores/auth";
@@ -369,28 +181,10 @@ import { TYPE_ADMIN } from "@/config/constants";
 const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 const authStore = useAuthStore();
 const router = useRouter();
-const route = useRoute();
-const noteLinkDashBoardStore = useNoteLinkDashBoardStore();
 const postDashBoardStore = usePostDashBoardStore();
 
-const arrayBackGroundColor = [
-  "#397ed4",
-  "#9f28a6",
-  "#3c8592",
-  "#d93125",
-  "#459229",
-  "#183592",
-  "#504d50",
-  "#957455",
-  "#d23a87",
-];
-const isLoading = ref(false);
-const isOpenLink = ref(false);
 const inputComment = ref({});
 const currentUser = ref([]);
-const textTitle = ref("");
-const textLink = ref("");
-const dataLink = ref([]);
 const dataPost = ref([]);
 const objPostRequriedRead = reactive({
   dataRead: [],
@@ -401,60 +195,13 @@ const objPostRequriedRead = reactive({
   },
 });
 const numberNotification = ref(0);
-const errorInfo = reactive({
-  title: "",
-  textLink: "",
-});
 
 const pagination = reactive({
   page: 1,
   limit: 12,
   total: 0,
 });
-const dataLinkHardware = [
-  {
-    id: 1,
-    title: "Thông báo nghỉ phép. Các hình thức ứng tuyển đa dạng",
-    note: "/request/leave-application/add",
-    color: "#397ed4",
-  },
-  {
-    id: 2,
-    title: "Văn bản đề nghị phê duyệt",
-    note: "/request/other-request/add",
-    color: "#9f28a6",
-  },
-  {
-    id: 3,
-    title: "Mẫu đơn liên quan đến viễn thông",
-    note: "/request/leave-application/add",
-    color: "#3c8592",
-  },
-  {
-    id: 4,
-    title: "Báo cáo chuyến công tác [cho bộ phận sản xuất]",
-    note: "/request/time-report/add",
-    color: "#d93125",
-  },
-  {
-    id: 5,
-    title: "Danh sách số điện thoại di động của công ty",
-    note: "https://site-portal-storage.s3.ap-northeast-1.amazonaws.com/file/%E6%90%BA%E5%B8%AF%E7%95%AA%E5%8F%B7%E4%B8%80%E8%A6%A7%E8%A1%A8%E3%80%80.pdf",
-    color: "#459229",
-  },
-  {
-    id: 6,
-    title: "Sơ đồ tổ chức KOSEC",
-    note: "/organization-chart",
-    color: "#183592",
-  },
-  {
-    id: 7,
-    title: "Bảng số mở rộng",
-    note: "https://site-portal-storage.s3.ap-northeast-1.amazonaws.com/file/%E5%86%85%E7%B7%9A%E7%95%AA%E5%8F%B7%E8%A1%A8R5.1%EF%BD%9E.pdf",
-    color: "#504d50",
-  },
-];
+
 const roleUser = authStore.userInfo.role_id;
 
 const visibleAction = computed(() => {
@@ -462,42 +209,6 @@ const visibleAction = computed(() => {
 });
 
 // method
-
-function handleBlur(value) {
-  if (value === "title") {
-    if (!textTitle.value || !textTitle.value.trim()) {
-      errorInfo.title = i18n.global.t("dashboard.errorTitle");
-    } else {
-      errorInfo.title = "";
-    }
-  } else if (value === "note") {
-    /* eslint-disable no-useless-escape */
-    const expression =
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-    const regex = new RegExp(expression);
-    if (!textLink.value || !textLink.value.trim()) {
-      errorInfo.textLink = i18n.global.t("dashboard.errorLink");
-    } else {
-      if (textLink.value.match(regex)) {
-        errorInfo.textLink = "";
-      } else {
-        errorInfo.textLink = i18n.global.t("dashboard.errorURL");
-      }
-    }
-  }
-}
-
-function handleTargetLink(params) {
-  if (params.id === 5) {
-    window.location.href = params.note;
-  } else if (params.id === 7) {
-    window.location.href = params.note;
-  } else {
-    router.push({
-      path: params.note,
-    });
-  }
-}
 
 function customGUI(body) {
   const parser = new DOMParser();
@@ -517,28 +228,6 @@ function customGUI(body) {
   };
 }
 
-function resetInput() {
-  textTitle.value = textLink.value = "";
-}
-
-function validate() {
-  let check = true;
-  if (!textTitle.value || !textTitle.value.trim()) {
-    errorInfo.title = i18n.global.t("dashboard.errorTitle");
-    check = false;
-  }
-  if (!textLink.value || !textLink.value.trim()) {
-    errorInfo.textLink = i18n.global.t("dashboard.errorLink");
-    check = false;
-  }
-  if (errorInfo.title || errorInfo.textLink) check = false;
-  return check;
-}
-
-function handleOpenAddLink() {
-  isOpenLink.value = !isOpenLink.value;
-}
-
 function handleNumberNotification() {
   if (numberNotification.value <= 0) return;
   dataPost.value = objPostRequriedRead.dataRead;
@@ -555,34 +244,6 @@ function handleNumberNotification() {
       if (mapIDLike) currentUser.value.push(...mapIDLike);
     }
   }
-}
-
-function handleSaveLink() {
-  let isValidate = validate();
-  if (!isValidate) return;
-  if (isLoading.value) return;
-  isLoading.value = true;
-  const randomColor = Math.floor(Math.random() * arrayBackGroundColor.length);
-  let successCallback = (response) => {
-    const responeData = response?.data?.data;
-    ElMessage.success(i18n.global.t("text.saveSuccess"));
-    dataLink.value.push(responeData);
-    isLoading.value = false;
-    resetInput();
-  };
-  let errorCallback = () => {
-    isLoading.value = false;
-  };
-  let payload = {
-    data: {
-      title: textTitle.value.trim(),
-      note: textLink.value.trim(),
-      color: arrayBackGroundColor[randomColor],
-    },
-    successCallback,
-    errorCallback,
-  };
-  noteLinkDashBoardStore.create(payload);
 }
 
 function handleDetailPost(param) {
@@ -627,20 +288,6 @@ function handleDeletePost(paramsID) {
     errorCallback,
   };
   postDashBoardStore.delete(payload);
-}
-
-function handleDelete(param) {
-  let successCallback = () => {
-    ElMessage.success(i18n.global.t("text.deleteSuccess"));
-    dataLink.value = dataLink.value.filter((item) => item.id !== param.id);
-  };
-  let errorCallback = () => {};
-  let payload = {
-    code: param.id,
-    successCallback,
-    errorCallback,
-  };
-  noteLinkDashBoardStore.delete(payload);
 }
 
 function postLikedByCurrentUser(post) {
@@ -711,19 +358,6 @@ function handleChangePage(value) {
   window.scrollTo(0, 0);
 }
 
-function getNoteLink() {
-  let successCallback = (response) => {
-    dataLink.value = response?.data?.data;
-  };
-  let errorCallback = () => {};
-  let payload = {
-    code: route.query.code ?? "",
-    successCallback,
-    errorCallback,
-  };
-  noteLinkDashBoardStore.get(payload);
-}
-
 function getListPostRead() {
   let successCallback = (response) => {
     const responeData = response?.data?.data;
@@ -779,7 +413,6 @@ function alreadyRead(paramId) {
 }
 
 function initialData() {
-  getNoteLink();
   getListPost();
   getListPostRead();
 }
