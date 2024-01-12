@@ -200,6 +200,14 @@
           >
             {{ $t("btn.register") }}
           </button>
+          <button
+            v-else
+            class="btn btn-primary w-24"
+            type="button"
+            @click="save"
+          >
+            {{ $t("btn.edit") }}
+          </button>
         </div>
       </div>
     </div>
@@ -246,6 +254,7 @@ const errorInfo = ref({
   standardWorkDay: "",
 });
 const userDirector = ref("");
+const tempUser = ref("");
 const selectUser = ref({
   error: false,
   typeSearch: ["code", "name", "first_name", "last_name", "email"],
@@ -344,9 +353,24 @@ function handleInputWorkingDay() {
 let getDetail = () => {
   let successCallback = (response) => {
     let dataResponse = response?.data.data;
-    salaryCode.value = dataResponse.code;
-    userDirector.value = _.map(dataResponse.director, "code");
-    selectUser.value.defaultOptions.push(...dataResponse.director);
+
+    userDirector.value = dataResponse.employee.code;
+    tempUser.value = dataResponse.employee.code;
+    selectUser.value.defaultOptions = dataResponse.employee;
+    hardSalary.value = dataResponse.official_paid_working;
+    selectMonth.value = dataResponse.month;
+    actualWorkday.value = dataResponse.actual_workday;
+    standardWorkingDay.value = dataResponse.standard_working_day;
+    deductedFromSalary.socialInsurance =
+      dataResponse.deducted_from_salary.social_insurance;
+    deductedFromSalary.healthInsurance =
+      dataResponse.deducted_from_salary.health_insurance;
+    deductedFromSalary.voluntaryInsurance =
+      dataResponse.deducted_from_salary.voluntary_insurance;
+    deductedFromSalary.personalIncomeTax =
+      dataResponse.deducted_from_salary.personal_income_tax;
+    deductedFromSalary.totalDeducted = dataResponse.deducted_from_salary.total;
+    salaryReceived.value = dataResponse.salary_received;
   };
   let errorCallback = () => {};
   let payload = {
@@ -417,10 +441,24 @@ let save = () => {
     isLoading.value = false;
   };
   let payload = {
+    year: new Date().getFullYear(),
     code: route.query.code,
     data: {
-      // director: userDirector.value,
-      // flow: flow.value,
+      employee: apiStore.listUser.find(
+        (item) => item.code === userDirector.value
+      ),
+      standard_working_day: parseInt(standardWorkingDay.value),
+      actual_workday: actualWorkday.value,
+      official_paid_working: hardSalary.value,
+      deducted_from_salary: {
+        social_insurance: deductedFromSalary.socialInsurance,
+        health_insurance: deductedFromSalary.healthInsurance,
+        voluntary_insurance: deductedFromSalary.voluntaryInsurance,
+        personal_income_tax: deductedFromSalary.personalIncomeTax,
+        total: deductedFromSalary.totalDeducted,
+      },
+      month: selectMonth.value,
+      salary_received: salaryReceived.value,
     },
     successCallback,
     errorCallback,
@@ -487,6 +525,8 @@ watch(
 watch(
   () => userDirector.value,
   (newOld) => {
+    if (tempUser.value === newOld) return;
+
     hardSalary.value = apiStore.listUser.find(
       (item) => item.code === newOld
     )?.hard_salary;

@@ -18,7 +18,7 @@ export let GET = (params, successCallback, errorCallback) => {
 };
 
 export let UPDATE = (params, successCallback, errorCallback) => {
-  let url = `/management/salary/${params.payload.code}`;
+  let url = `/management/salary/${params.payload.code}/${params.payload.year}`;
 
   let data = params.payload.data;
   return Api.put(url, data).then(successCallback).catch(errorCallback);
