@@ -139,7 +139,7 @@ let login = () => {
     let successCallback = (response) => {
       window.$cookies.set(
         generateStorageKey(APP_TOKEN_NAME),
-        response.data.data.access_token,
+        response.data.data.accessToken,
         moment().endOf("day").utc().toString()
       );
       localStorage.setItem("emailLogin", email.value);

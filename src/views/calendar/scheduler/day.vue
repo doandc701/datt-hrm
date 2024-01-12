@@ -414,7 +414,7 @@ export default {
       () => [dateDisplay.value, listUserConfig.value],
       () => {
         if (listUserConfig.value.length) {
-          loadData(dateDisplay.value);
+          // loadData(dateDisplay.value);
         } else {
           listUserConfig.value = [authStore.userInfo];
         }

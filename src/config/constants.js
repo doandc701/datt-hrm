@@ -1,4 +1,4 @@
-const APP_TOKEN_NAME = "tokenFuryhoSf";
+const APP_TOKEN_NAME = "tokenQLNS";
 const PAGE_LIMIT = [10, 15, 20, 30, 50];
 const POSITION_USER = [
   { key: 1, value: "Chủ tịch" },
@@ -10,10 +10,9 @@ const POSITION_USER = [
   { key: 7, value: "Phó trưởng phòng" },
   { key: 8, value: "Kỹ thuật viên trưởng" },
   { key: 9, value: "Kỹ thuật viên" },
-  { key: 10, value: "Công việc bán thời gian" },
-  { key: 11, value: "Công việc toàn thời gian" },
-  { key: 11, value: "Tư vấn" },
-
+  { key: 10, value: "Công việc toàn thời gian" },
+  { key: 11, value: "Công việc bán thời gian" },
+  { key: 12, value: "Tư vấn" },
 ];
 const STATUS = [
   { key: 1, value: "受付" },

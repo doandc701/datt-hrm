@@ -11,10 +11,7 @@
             :key="day.date"
             :class="{ saturday: day.isSaturday, sunday: day.isSunday }"
           >
-            <td
-              class="w-1/5 cursor-pointer hover:underline hover:text-[#c30]"
-              @click="handleDate(day)"
-            >
+            <td class="w-1/5 cursor-pointer hover:underline hover:text-[#c30]">
               {{ day.date }}
             </td>
             <td class="w-4/5">{{ day.subject }}</td>
@@ -27,19 +24,12 @@
 
 <script setup>
 import { ref, watch, onMounted } from "vue";
-import { useEventCalendarStore } from "@/stores/calendar/event";
-import { LIST_TIMEZONE, MONTH_OF_YEAR } from "@/config/constants.js";
-import moment from "moment";
-import { useRouter } from "vue-router";
+import { MONTH_OF_YEAR } from "@/config/constants.js";
 
 const props = defineProps({
   year: { require: true, type: Number },
 });
-const router = useRouter();
-const eventCalendarStore = useEventCalendarStore();
-const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-const arrayAPI = ref([]);
 const dataYears = ref([]);
 
 function converDateToTimestamp(parame) {
@@ -62,51 +52,6 @@ function initialDataYears(year) {
       weeks,
     });
   }
-
-  const successCallback = async (response) => {
-    const responesData = response.data.data;
-    // console.log("response.data.data", responesData);
-    for (let i = 0; i < responesData.length; i++) {
-      // push vào mảng mới để xử lý dữ liệu
-
-      arrayAPI.value.push({
-        nameAssigned: responesData[i].assigned.name,
-        subject: responesData[i].subject,
-        timeStart: converDateToTimestamp(responesData[i].start),
-        timeEnd: converDateToTimestamp(responesData[i].start),
-      });
-    }
-
-    let newArray = [];
-    // matching dữ liệu ở mảng BE vào mảng FE
-    // dataYears.value.forEach((item) => {
-    //   // Lặp qua các tuần trong mỗi tháng
-    //   let newWeeks = item.weeks.map((week) => {
-    //     return week.map((day) => {
-    //       let matchedAPI = arrayAPI.value.find(
-    //         (objB) => objB.timeStart === day.timestamp
-    //       );
-    //       day.subject = "";
-    //       if (matchedAPI) {
-    //         // console.log("matchedAPI", matchedAPI);
-    //         day.subject = matchedAPI.subject;
-    //       }
-    //       return day;
-    //     });
-    //   });
-    //   newArray.push({ month: item.month, weeks: newWeeks });
-    // });
-    // dataYears.value = newArray;
-  };
-
-  const errorCallback = () => {};
-
-  const payload = {
-    query: `year=${year}&timezone=${userInfo.timezone}`, // timezone mặc định là Tokyo
-    successCallback,
-    errorCallback,
-  };
-  eventCalendarStore.listEventYear(payload);
 }
 
 function generateWeeks(start, end) {
@@ -125,17 +70,6 @@ function generateWeeks(start, end) {
     weeks.push(week);
   }
   return weeks;
-}
-
-function handleDate(param) {
-  const formatted = moment(+param.timestamp).format("YYYY-MM-DD");
-  router.push({
-    path: "/calendar/list",
-    query: {
-      screen: "day",
-      day: formatted,
-    },
-  });
 }
 
 watch(

@@ -91,11 +91,11 @@ export const useSideMenuStore = defineStore("sideMenu", {
             pageName: i18n.global.t("router.listCalendar"),
             title: i18n.global.t("menu.list"),
           },
-          {
-            icon: "",
-            pageName: i18n.global.t("router.addCalendar"),
-            title: i18n.global.t("menu.add"),
-          },
+          // {
+          //   icon: "",
+          //   pageName: i18n.global.t("router.addCalendar"),
+          //   title: i18n.global.t("menu.add"),
+          // },
         ],
       },
     ],

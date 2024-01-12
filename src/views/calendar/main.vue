@@ -8,7 +8,7 @@
         $t("calendar.listCalendar")
       }}</span>
     </div>
-    <div>
+    <!-- <div>
       <ul class="flex w-full border rounded">
         <li
           :class="selected === 'day' ? 'bg-primary/90 text-white' : ''"
@@ -39,7 +39,7 @@
           <span>{{ $t("calendar.year") }}</span>
         </li>
       </ul>
-    </div>
+    </div> -->
   </div>
   <!-- BEGIN: Page Layout -->
   <div class="intro-y p-5 box">
@@ -59,7 +59,6 @@ export default {
 </script>
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
-import { getListUser, removeListUser } from "@/utils/select/user-utils";
 
 // form import
 import Day from "./scheduler/day.vue";
@@ -68,35 +67,25 @@ import Month from "./scheduler/month.vue";
 import Year from "./scheduler/year.vue";
 
 // router-store
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useApiStore } from "@/stores/api";
-import {
-  getListCategory,
-  removeListCategory,
-} from "@/utils/select/category-utils";
 const apiStore = useApiStore();
 const route = useRoute();
-const router = useRouter();
 
 const isLoading = ref(false);
-const selected = ref("month");
+const selected = ref("year");
 
-let selectedCalendar = (type) => {
-  selected.value = type;
-  router.push({
-    path: "/calendar/list",
-    query: {
-      screen: type,
-    },
-  });
-};
+// let selectedCalendar = (type) => {
+//   selected.value = type;
+//   router.push({
+//     path: "/calendar/list",
+//     query: {
+//       screen: type,
+//     },
+//   });
+// };
 
-onMounted(() => {
-  if (!apiStore.listUser.length) {
-    getListUser();
-  }
-  getListCategory();
-});
+onMounted(() => {});
 
 watch(
   () => route.query.screen,
@@ -110,7 +99,5 @@ watch(
 
 onUnmounted(() => {
   apiStore.resetListGroup();
-  removeListCategory();
-  removeListUser();
 });
 </script>
