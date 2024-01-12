@@ -37,7 +37,7 @@
         <DropdownContent class="bg-primary text-white">
           <DropdownHeader class="!font-normal" tag="div">
             <div class="font-medium">
-              {{ userInfo?.first_name }}{{ userInfo?.last_name }}
+              {{ userInfo?.first_name }} {{ userInfo?.last_name }}
             </div>
           </DropdownHeader>
           <DropdownDivider class="border-white/[0.08]" />

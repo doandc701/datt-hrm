@@ -1,16 +1,19 @@
 const APP_TOKEN_NAME = "tokenFuryhoSf";
 const PAGE_LIMIT = [10, 15, 20, 30, 50];
 const POSITION_USER = [
-  { key: 1, value: "Phó giám đốc" },
-  { key: 2, value: "Giám đốc" },
-  { key: 3, value: "Công việc bán thời gian" },
-  { key: 4, value: "Trưởng phòng" },
-  { key: 5, value: "Phó trưởng phòng" },
-  { key: 6, value: "Kỹ thuật viên trưởng" },
-  { key: 7, value: "Tư vấn" },
-  { key: 8, value: "Trợ lý giám đốc" },
-  { key: 9, value: "Chủ tịch" },
-  { key: 10, value: "Phó chủ tịch" },
+  { key: 1, value: "Chủ tịch" },
+  { key: 2, value: "Phó chủ tịch" },
+  { key: 3, value: "Giám đốc" },
+  { key: 4, value: "Phó giám đốc" },
+  { key: 5, value: "Trợ lý giám đốc" },
+  { key: 6, value: "Trưởng phòng" },
+  { key: 7, value: "Phó trưởng phòng" },
+  { key: 8, value: "Kỹ thuật viên trưởng" },
+  { key: 9, value: "Kỹ thuật viên" },
+  { key: 10, value: "Công việc bán thời gian" },
+  { key: 11, value: "Công việc toàn thời gian" },
+  { key: 11, value: "Tư vấn" },
+
 ];
 const STATUS = [
   { key: 1, value: "受付" },

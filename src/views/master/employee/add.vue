@@ -326,7 +326,7 @@ const selectDepartment = ref({
   defaultOptions: [],
 });
 const positionCode = ref("");
-const userRole = ref(1);
+const userRole = ref(2);
 const microsoftID = ref("");
 const timezone = ref("Asia/Ho_Chi_Minh");
 const onDetailBranch = ref(true);

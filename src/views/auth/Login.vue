@@ -95,11 +95,6 @@
                   {{ $t("auth.login") }}
                 </a>
               </div>
-              <div
-                class="intro-x mt-10 text-center text-slate-600 dark:text-slate-500 xl:mt-24 xl:text-left"
-              >
-                {{ $t("auth.sub") }}
-              </div>
             </form>
           </div>
         </div>
