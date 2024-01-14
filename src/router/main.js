@@ -30,12 +30,7 @@ let checkRouterWithToken = (token, to, userInfo) => {
       if (to.path === "/") {
         return true;
       }
-      const publicPaths = [
-        "/login",
-        "/forgot-password",
-        "/reset-password",
-        "/setting-password",
-      ];
+      const publicPaths = ["/login", "/forgot-password", "/reset-password"];
       if (publicPaths.includes(to.path)) {
         return { path: "/" };
       }

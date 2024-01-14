@@ -33,30 +33,58 @@
               </h2>
               <div class="intro-x mt-8">
                 <!-- BEGIN: Input Form -->
+
                 <div class="relative block">
                   <input
-                    v-model="password"
-                    :class="errorInfo.password ? 'is-invalid' : ''"
-                    :placeholder="$t('auth.password')"
-                    :type="passwordFieldType"
-                    autocomplete="new-password"
-                    class="intro-x login__input form-control mb-4 block py-3 px-4"
-                    @blur="validate('password')"
-                    @keyup="validate('password')"
+                    v-model="passwordOld"
+                    :class="errorInfo.passwordOld ? 'is-invalid' : ''"
+                    :placeholder="$t('auth.passwordOld')"
+                    :type="passwordFieldTypeOld"
+                    class="intro-x login__input form-control block py-3 px-4"
+                    @blur="validate('passwordOld')"
+                    @keyup="validate('passwordOld')"
                   />
                   <div
                     class="absolute top-1/2 right-7 z-50 -translate-y-1/2 cursor-pointer"
-                    @click="showPass"
+                    @click="showPassOld"
                   >
-                    <eye-offIcon v-if="passwordFieldType == 'password'" />
+                    <eye-offIcon v-if="passwordFieldTypeOld == 'password'" />
                     <eyeIcon v-else />
                   </div>
                 </div>
                 <div
-                  v-if="errorInfo.password"
+                  v-if="errorInfo.passwordOld"
                   class="d-block mt-2 pl-1 text-danger"
                 >
-                  {{ errorInfo.password }}
+                  {{ errorInfo.passwordOld }}
+                </div>
+
+                <div class="my-3">
+                  <div class="relative block">
+                    <input
+                      v-model="password"
+                      :class="errorInfo.password ? 'is-invalid' : ''"
+                      :placeholder="$t('auth.password')"
+                      :type="passwordFieldType"
+                      autocomplete="new-password"
+                      class="intro-x login__input form-control block py-3 px-4"
+                      @blur="validate('password')"
+                      @keyup="validate('password')"
+                    />
+                    <div
+                      class="absolute top-1/2 right-7 z-50 -translate-y-1/2 cursor-pointer"
+                      @click="showPass"
+                    >
+                      <eye-offIcon v-if="passwordFieldType == 'password'" />
+                      <eyeIcon v-else />
+                    </div>
+                  </div>
+                  <div
+                    v-if="errorInfo.password"
+                    class="d-block mt-2 pl-1 text-danger"
+                  >
+                    {{ errorInfo.password }}
+                  </div>
                 </div>
                 <div class="relative block">
                   <input
@@ -122,11 +150,14 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 //variable
+const passwordOld = ref("");
 const password = ref("");
 const rePassword = ref("");
+const passwordFieldTypeOld = ref("password");
 const passwordFieldType = ref("password");
 const passwordType = ref("password");
 const errorInfo = ref({
+  passwordOld: "",
   password: "",
   rePassword: "",
 });
@@ -152,7 +183,7 @@ let updatePass = () => {
     let errorCallback = () => {};
     let payload = {
       data: {
-        first_login: true,
+        old_password: passwordOld.value,
         new_password: password.value,
       },
       successCallback,
@@ -164,6 +195,22 @@ let updatePass = () => {
 
 let validate = (field) => {
   let check = true;
+  if (field === "passwordOld" || !field) {
+    if (passwordOld.value === "" || !passwordOld.value) {
+      errorInfo.value.passwordOld = i18n.global.t("auth.errorPass");
+      check = false;
+    } else if (
+      passwordOld.value &&
+      (passwordOld.value.length < 8 ||
+        passwordOld.value.length > 32 ||
+        !validPassword(passwordOld.value))
+    ) {
+      errorInfo.value.passwordOld = i18n.global.t("auth.errorPassLength");
+      check = false;
+    } else {
+      errorInfo.value.passwordOld = "";
+    }
+  }
   if (field === "password" || !field) {
     if (password.value === "" || !password.value) {
       errorInfo.value.password = i18n.global.t("auth.errorPass");
@@ -193,6 +240,10 @@ let validate = (field) => {
     }
   }
   return check;
+};
+let showPassOld = () => {
+  passwordFieldTypeOld.value =
+    passwordFieldTypeOld.value === "password" ? "text" : "password";
 };
 let showPass = () => {
   passwordFieldType.value =

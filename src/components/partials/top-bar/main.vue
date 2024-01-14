@@ -48,6 +48,9 @@
           <DropdownItem class="hover:bg-white/5" @click="settingTimezone">
             <EditIcon class="w-4 h-4 mr-2" /> {{ $t("topBar.settingTimezone") }}
           </DropdownItem>
+          <DropdownItem class="hover:bg-white/5" @click="settingPassword">
+            <KeyRoundIcon class="w-4 h-4 mr-2" /> {{ $t("topBar.changePass") }}
+          </DropdownItem>
           <DropdownItem class="hover:bg-white/5" @click="logout">
             <ToggleRightIcon class="mr-2 h-4 w-4" />
             {{ $t("topBar.logout") }}
@@ -72,7 +75,6 @@ import { useRouter, useRoute } from "vue-router";
 import { APP_TOKEN_NAME } from "@/config/constants";
 import { generateStorageKey } from "@/utils/fomat";
 import i18n from "@/i18n/i18n";
-
 //form
 import SettingTimeZone from "@/components/partials/top-bar/setting-timezone.vue";
 
@@ -120,6 +122,12 @@ const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
 let settingTimezone = () => {
   showPopup.value = true;
+};
+
+let settingPassword = () => {
+  router.push({
+    path: "/setting-password",
+  });
 };
 
 let logout = () => {
