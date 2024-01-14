@@ -4,7 +4,7 @@
       <DashboardChartDoughnut
         v-if="visibleAction"
         :data_labels="dataLabel"
-        :height="650"
+        :height="550"
         :data_datasets_data="datasetsData"
         :data_backgroud_color="dataBackgroudColor"
       />
@@ -321,7 +321,7 @@ function getListPost() {
   };
   let errorCallback = () => {};
   let payload = {
-    query: `page=${pagination.page}&limit=${pagination.limit}&sorts[code]=desc`,
+    query: `page=${pagination.page}&limit=${pagination.limit}&sorts[_id]=desc`,
     successCallback,
     errorCallback,
   };

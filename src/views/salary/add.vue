@@ -405,9 +405,9 @@ let resign = () => {
   if (isLoading.value) return;
   isLoading.value = true;
   let successCallback = () => {
-    // router.push({
-    //   path: "/salary/list",
-    // });
+    router.push({
+      path: "/salary/list",
+    });
     ElMessage.success(i18n.global.t("text.resignSuccess"));
     isLoading.value = false;
   };

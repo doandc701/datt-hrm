@@ -927,7 +927,8 @@
     "errorListUser": "Vui lòng chọn nhân viên phải đọc nó.",
     "selectMode": "Chế độ lựa chọn",
     "errorTitlePost": "Tiêu đề không được để trống",
-    "errorContentPost": "Nội dung không được để trống"
+    "errorContentPost": "Nội dung không được để trống",
+    "max100": "Tiêu đề không vượt quá 100 kí tự"
   },
   "salary": {
     "listSalary":"Danh sách lương",
