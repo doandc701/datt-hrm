@@ -12,45 +12,18 @@
     <div class="intro-y mt-6 break-all">
       <div v-html="dataPost.body"></div>
     </div>
-    <div class="intro-y flex relative pt-16 sm:pt-6 items-center pb-6">
-      <div
-        class="absolute sm:relative -mt-12 sm:mt-0 w-full flex text-slate-600 dark:text-slate-500 text-xs sm:text-sm"
-      >
-        <div class="intro-x mr-1 sm:mr-3">
-          {{ $t("dashboard.comments") }}:
-          <span class="font-medium">{{
-            formatAverageNumbro(dataPost.comment_count)
-          }}</span>
-        </div>
-
-        <div class="intro-x sm:mr-3 ml-auto" @click="handleLike(dataPost)">
-          <div
-            v-if="postLikedByCurrentUser(dataPost).length > 0"
-            class="text-[#0566ff]"
-          >
-            {{ $t("dashboard.likes") }}:
-            <span class="font-medium">{{
-              formatAverageNumbro(dataPost.like_count)
-            }}</span>
-          </div>
-          <div v-else>
-            {{ $t("dashboard.likes") }}:
-            <span class="font-medium">{{
-              formatAverageNumbro(dataPost.like_count)
-            }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
     <div
       class="intro-y flex text-xs sm:text-sm flex-col sm:flex-row items-center mt-5 pt-5 border-t border-slate-200/60 dark:border-darkmode-400"
     >
       <div class="flex items-center">
         <div class="w-12 h-12 flex-none image-fit">
-          <img class="rounded-full" :src="dataPost.created_by.avatar_path" />
+          <img class="rounded-full" :src="dataPost.created_by?.avatar_path" />
         </div>
         <div class="ml-3 mr-auto">
-          <a href="" class="font-medium">{{ dataPost.created_by.name }}</a>
+          <a href="" class="font-medium"
+            >{{ dataPost.created_by.first_name }}
+            {{ dataPost.created_by.last_name }}</a
+          >
         </div>
       </div>
     </div>
@@ -60,7 +33,7 @@
       class="intro-y mt-5 pt-5 border-t border-slate-200/60 dark:border-darkmode-400"
     >
       <div class="text-base sm:text-lg font-medium">
-        {{ formatAverageNumbro(dataPost.comment_count) }}
+        {{ dataPost.comment_count }}
         {{ $t("dashboard.responses") }}
       </div>
       <div class="news__input mt-5 flex items-center gap-2">
@@ -103,11 +76,22 @@
             </div>
             <div class="mt-2">{{ cmt.comment }}</div>
           </div>
-          <div
-            class="pr-4 cursor-pointer hover:opacity-80"
-            @click="handleDeleteComment(dataPost, cmt)"
-          >
-            <span><Trash2Icon /></span>
+          <div v-if="visibleAction">
+            <div
+              class="pr-4 cursor-pointer hover:opacity-80"
+              @click="handleDeleteComment(dataPost, cmt)"
+            >
+              <span><Trash2Icon /></span>
+            </div>
+          </div>
+          <div v-else>
+            <div
+              v-if="cmt?.user?.name === nameLocal"
+              class="pr-4 cursor-pointer hover:opacity-80"
+              @click="handleDeleteComment(dataPost, cmt)"
+            >
+              <span><Trash2Icon /></span>
+            </div>
           </div>
         </div>
       </div>
@@ -117,28 +101,36 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
-import { formatAverageNumbro } from "@/utils/fomat";
 import { usePostDashBoardStore } from "@/stores/dashboard/post";
+import { ElMessage } from "element-plus";
+import { useAuthStore } from "@/stores/auth";
+import { TYPE_ADMIN } from "@/config/constants";
 
 const route = useRoute();
 const postDashBoardStore = usePostDashBoardStore();
 const dataPost = ref(null);
 const inputComment = ref("");
 const getQuery = route.query;
-const currentUser = ref([]);
+const authStore = useAuthStore();
+const nameLocal = `${authStore.userInfo.first_name} ${authStore.userInfo.last_name}`;
+const roleUser = authStore.userInfo.role_id;
 
+const visibleAction = computed(() => {
+  return roleUser == TYPE_ADMIN;
+});
 function handleComment(paramsComment) {
+  if (!inputComment.value) return;
   let successCallback = (response) => {
+    ElMessage.success(response.data.message);
     const responeData = response?.data?.data;
-    paramsComment.comment_count++;
-    dataPost.value.comment.unshift(responeData);
+    dataPost.value.comment = responeData.comment;
     inputComment.value = "";
   };
   let errorCallback = () => {};
   let payload = {
-    code: paramsComment.id,
+    code: paramsComment._id,
     data: {
       comment: inputComment.value,
     },
@@ -148,61 +140,17 @@ function handleComment(paramsComment) {
   postDashBoardStore.actionComment(payload);
 }
 
-function postLikedByCurrentUser(post) {
-  const mapID = post.like.map((item) => item.id);
-  const result = mapID.filter((item) => currentUser.value.includes(item));
-  return result;
-}
-
-function handleLike(paramsLike) {
-  const mapID = paramsLike.like.map((item) => item.id);
-  const result = mapID.filter((item) => currentUser.value.includes(item));
-  let errorCallback = () => {};
-  if (!result.length) {
-    let successCallback = (response) => {
-      const responeData = response?.data?.data;
-      if (dataPost.value.id === responeData.post_id) {
-        dataPost.value.like.push(responeData);
-        currentUser.value.push(responeData.id);
-        paramsLike.like_count++;
-      }
-    };
-    let payload = {
-      code: paramsLike.id,
-      successCallback,
-      errorCallback,
-    };
-    postDashBoardStore.actionLike(payload);
-  } else {
-    let successCallback = () => {
-      if (paramsLike) {
-        const findIndex = paramsLike.like.findIndex(
-          (item) => item.post_id === paramsLike.id
-        );
-        paramsLike.like.splice(findIndex, 1);
-      }
-      paramsLike.like_count--;
-    };
-    let payload = {
-      code: paramsLike.id,
-      successCallback,
-      errorCallback,
-    };
-    postDashBoardStore.actionUnLike(payload);
-  }
-}
-
 function handleDeleteComment(paramIdPost, paramIdCMT) {
-  let successCallback = () => {
-    dataPost.value.comment_count--;
+  let successCallback = (response) => {
+    ElMessage.success(response.data.message);
     dataPost.value.comment = dataPost.value.comment.filter(
-      (item) => item.id !== paramIdCMT.id
+      (item) => item._id !== paramIdCMT._id
     );
   };
   let errorCallback = () => {};
   let payload = {
-    code: paramIdPost.id,
-    codeComment: paramIdCMT.id,
+    code: paramIdPost._id,
+    codeComment: paramIdCMT._id,
     successCallback,
     errorCallback,
   };
@@ -212,9 +160,7 @@ function handleDeleteComment(paramIdPost, paramIdCMT) {
 function getPost(param) {
   let successCallback = (response) => {
     const responeData = response.data.data;
-    const mapIDLike = responeData.like.map((item) => item.id);
     dataPost.value = responeData;
-    currentUser.value = mapIDLike;
   };
   let errorCallback = () => {};
   let payload = {

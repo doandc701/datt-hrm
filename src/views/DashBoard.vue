@@ -49,11 +49,14 @@
                   <img
                     alt="Midone Tailwind HTML Admin Template"
                     class="rounded-full"
-                    :src="post.created_by.avatar_path"
+                    :src="post.created_by?.avatar_path"
                   />
                 </div>
                 <div class="ml-3 mr-auto">
-                  <a href="" class="font-medium">{{ post.created_by.name }}</a>
+                  <a href="" class="font-medium"
+                    >{{ post.created_by.first_name }}
+                    {{ post.created_by.last_name }}</a
+                  >
                   <div class="text-slate-500 truncate text-xs mt-0.5">
                     <span class="">{{ post.created_at }}</span>
                   </div>
@@ -68,11 +71,11 @@
                   </DropdownToggle>
                   <DropdownMenu class="w-40">
                     <DropdownContent>
-                      <DropdownItem @click="handleEditPost(post.id)">
+                      <DropdownItem @click="handleEditPost(post._id)">
                         <Edit2Icon class="w-4 h-4 mr-2" />
                         {{ $t("dashboard.editPost") }}
                       </DropdownItem>
-                      <DropdownItem @click="handleDeletePost(post.id)">
+                      <DropdownItem @click="handleDeletePost(post._id)">
                         <TrashIcon class="w-4 h-4 mr-2" />
                         {{ $t("dashboard.deletePost") }}
                       </DropdownItem>
@@ -82,7 +85,7 @@
               </div>
               <div
                 class="p-5 cursor-pointer pb-[105px]"
-                @click="handleDetailPost(post.id)"
+                @click="handleDetailPost(post._id)"
               >
                 <div
                   v-if="customGUI(post.body).image?.src"
@@ -101,38 +104,13 @@
               <div
                 class="px-5 pt-3 pb-5 border-t border-slate-200/60 dark:border-darkmode-400 absolute w-full left-0 bottom-0"
               >
-                <div class="w-full flex text-slate-500 text-xs sm:text-sm">
-                  <div class="mr-2">
-                    {{ $t("dashboard.comments") }}:
-                    <span class="font-medium">{{
-                      formatAverageNumbro(post.comment_count)
-                    }}</span>
-                  </div>
-                  <div class="ml-auto cursor-pointer" @click="handleLike(post)">
-                    <div
-                      v-if="postLikedByCurrentUser(post).length > 0"
-                      class="text-[#0566ff]"
-                    >
-                      {{ $t("dashboard.likes") }}:
-                      <span class="font-medium">{{
-                        formatAverageNumbro(post.like_count)
-                      }}</span>
-                    </div>
-                    <div v-else>
-                      {{ $t("dashboard.likes") }}:
-                      <span class="font-medium">{{
-                        formatAverageNumbro(post.like_count)
-                      }}</span>
-                    </div>
-                  </div>
-                </div>
                 <div class="w-full flex items-center mt-3">
                   <div class="w-8 h-8 flex-none image-fit mr-3">
                     <img class="rounded-full" :src="userInfo?.avatar_path" />
                   </div>
                   <div class="flex-1 relative text-slate-600">
                     <input
-                      v-model="inputComment[post.id]"
+                      v-model="inputComment[post._id]"
                       type="text"
                       class="form-control form-control-rounded border-transparent bg-slate-100 pr-10"
                       :placeholder="$t('dashboard.postAComment')"
@@ -180,7 +158,6 @@ import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import i18n from "@/i18n/i18n";
 import { usePostDashBoardStore } from "@/stores/dashboard/post";
-import { formatAverageNumbro } from "@/utils/fomat";
 import { useAuthStore } from "@/stores/auth";
 import { TYPE_ADMIN } from "@/config/constants";
 import DashboardChartDoughnut from "../components/chart/doughnut-pie-chart/main.vue";
@@ -288,7 +265,7 @@ function handleEditPost(params) {
 function handleDeletePost(paramsID) {
   let successCallback = () => {
     ElMessage.success(i18n.global.t("text.deleteSuccess"));
-    dataPost.value = dataPost.value.filter((item) => item.id !== paramsID);
+    dataPost.value = dataPost.value.filter((item) => item._id !== paramsID);
   };
   let errorCallback = () => {};
   let payload = {
@@ -299,61 +276,15 @@ function handleDeletePost(paramsID) {
   postDashBoardStore.delete(payload);
 }
 
-function postLikedByCurrentUser(post) {
-  const mapID = post.like.map((item) => item.id);
-  const result = mapID.filter((item) => currentUser.value.includes(item));
-  return result;
-}
-
-function handleLike(paramsLike) {
-  const mapID = paramsLike.like.map((item) => item.id);
-  const result = mapID.filter((item) => currentUser.value.includes(item));
-  let errorCallback = () => {};
-  if (!result.length) {
-    let successCallback = (response) => {
-      const responeData = response?.data?.data;
-      const findPostLiked = dataPost.value.find(
-        (item) => item.id === responeData.post_id
-      );
-      findPostLiked.like.push(responeData);
-      currentUser.value.push(responeData.id);
-      paramsLike.like_count++;
-    };
-    let payload = {
-      code: paramsLike.id,
-      successCallback,
-      errorCallback,
-    };
-    postDashBoardStore.actionLike(payload);
-  } else {
-    let successCallback = () => {
-      if (paramsLike) {
-        const findIndex = paramsLike.like.findIndex(
-          (item) => item.post_id === paramsLike.id
-        );
-        paramsLike.like.splice(findIndex, 1);
-      }
-      paramsLike.like_count--;
-    };
-    let payload = {
-      code: paramsLike.id,
-      successCallback,
-      errorCallback,
-    };
-    postDashBoardStore.actionUnLike(payload);
-  }
-}
-
 function handleComment(paramsComment) {
   let successCallback = () => {
-    paramsComment.comment_count++;
-    inputComment.value[paramsComment.id] = "";
+    inputComment.value[paramsComment._id] = "";
   };
   let errorCallback = () => {};
   let payload = {
-    code: paramsComment.id,
+    code: paramsComment._id,
     data: {
-      comment: inputComment.value[paramsComment.id],
+      comment: inputComment.value[paramsComment._id],
     },
     successCallback,
     errorCallback,
@@ -367,39 +298,13 @@ function handleChangePage(value) {
   window.scrollTo(0, 0);
 }
 
-function getListPostRead() {
-  let successCallback = (response) => {
-    const responeData = response?.data?.data;
-    numberNotification.value = responeData.total;
-    objPostRequriedRead.dataRead = responeData.data;
-    objPostRequriedRead.pageP.total = responeData.total;
-    objPostRequriedRead.pageP.limit = responeData.limit;
-    objPostRequriedRead.pageP.page = Math.ceil(
-      responeData.total / responeData.limit
-    );
-  };
-  let errorCallback = () => {};
-  let payload = {
-    query: `filters[user_code]=${userInfo.code}&filters[is_required]=1&filters[is_readed]=0`,
-    successCallback,
-    errorCallback,
-  };
-  postDashBoardStore.list(payload);
-}
-
 function getListPost() {
   let successCallback = (response) => {
-    const responeData = response?.data?.data;
+    const responeData = response?.data;
     dataPost.value = responeData.data;
     pagination.total = responeData.total;
     pagination.limit = responeData.limit;
-    pagination.page = Math.ceil(responeData.total / responeData.limit);
-    for (let i = 0; i < responeData.data.length; i++) {
-      if (responeData.data[i].like.length > 0) {
-        const mapIDLike = responeData.data[i].like.map((item) => item.id);
-        if (mapIDLike) currentUser.value.push(...mapIDLike);
-      }
-    }
+    pagination.page = responeData.current_page;
   };
   let errorCallback = () => {};
   let payload = {
@@ -449,7 +354,6 @@ function alreadyRead(paramId) {
 function initialData() {
   getListStatistic();
   getListPost();
-  getListPostRead();
 }
 
 onMounted(() => {

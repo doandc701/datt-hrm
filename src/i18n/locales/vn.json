@@ -914,7 +914,7 @@
     "responses": "Phản hồi",
     "postAComment": "Bình luận",
     "content": "Nội dung",
-    "textContent": "テキストコンテンツ",
+    "textContent": "Nội dung văn bản",
     "images": "Hình ảnh",
     "uploadImage": "Tải lên hình ảnh",
     "uploadAFile": "ファイルをアップロードす",
@@ -925,7 +925,9 @@
     "requiredRead": "Cần đọc",
     "checkAll":"Chọn tất cả",
     "errorListUser": "Vui lòng chọn nhân viên phải đọc nó.",
-    "selectMode": "Chế độ lựa chọn"
+    "selectMode": "Chế độ lựa chọn",
+    "errorTitlePost": "Tiêu đề không được để trống",
+    "errorContentPost": "Nội dung không được để trống"
   },
   "salary": {
     "listSalary":"Danh sách lương",

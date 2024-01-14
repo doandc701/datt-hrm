@@ -73,60 +73,9 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="border border-slate-200/60 dark:border-darkmode-400 rounded-md p-5 mt-5"
-              >
-                <div
-                  class="font-medium flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5"
-                >
-                  <ChevronDownIcon class="w-4 h-4 mr-2" />
-                  {{ $t("dashboard.images") }}
-                </div>
-                <div class="mt-5">
-                  <div class="mt-3">
-                    <label class="form-label">
-                      {{ $t("dashboard.uploadImage") }}</label
-                    >
-                    <div
-                      class="border-2 border-dashed dark:border-darkmode-400 rounded-md pt-4"
-                    >
-                      <UploadListImage
-                        v-model:file-list="fileListImage"
-                        v-model:list-image-id="listImageId"
-                      ></UploadListImage>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </TabPanel>
           </TabPanels>
         </TabGroup>
-        <div class="mt-5">
-          <p class="mb-3">{{ $t("dashboard.selectMode") }}</p>
-          <el-radio-group v-model="modeRead">
-            <el-radio :label="false">
-              {{ $t("dashboard.noRequiredRead") }}</el-radio
-            >
-            <el-radio :label="true">
-              {{ $t("dashboard.requiredRead") }}</el-radio
-            >
-          </el-radio-group>
-
-          <div class="list__employee mt-3" v-if="modeRead">
-            <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">{{
-              $t("dashboard.checkAll")
-            }}</el-checkbox>
-            <SelectMultiUser
-              :id="`select-user-regular`"
-              :code="userDirector"
-              :config="selectUser"
-              :class="msgError.selectAttendees ? 'shadow__error' : ''"
-            ></SelectMultiUser>
-            <span class="text-danger" v-if="msgError.selectAttendees">
-              {{ msgError.selectAttendees }}
-            </span>
-          </div>
-        </div>
       </div>
       <!-- END: Post Content -->
     </div>
@@ -134,21 +83,19 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import UploadListImage from "@/components/upload/upload-list-image/main.vue";
-import SelectMultiUser from "@/components/select/select-multi-user/main.vue";
-import { getListUser, removeListUser } from "@/utils/select/user-utils";
-import { useApiStore } from "@/stores/api";
 import { usePostDashBoardStore } from "@/stores/dashboard/post";
 import { ElMessage } from "element-plus";
 import i18n from "@/i18n/i18n";
+import moment from "moment/moment";
+import { useAuthStore } from "@/stores/auth";
 
-const apiStore = useApiStore();
 const router = useRouter();
 const route = useRoute();
 const postDashBoardStore = usePostDashBoardStore();
+const authStore = useAuthStore();
 
 const getQuery = route.query;
 const editor = ref(ClassicEditor);
@@ -175,19 +122,7 @@ const editorConfig = ref({
     ],
   },
 });
-const fileListImage = ref(null);
-const listImageId = ref([]);
-const modeRead = ref(false);
-const checkAll = ref(false);
-const isIndeterminate = ref(false);
-const userDirector = ref([]);
-const selectUser = ref({
-  error: false,
-  typeSearch: ["code", "name", "first_name", "last_name", "email"],
-  defaultOptions: [],
-  clearable: true,
-  placeholder: "",
-});
+
 const formPost = reactive({
   title: "",
   body: "",
@@ -241,14 +176,7 @@ function validate() {
     errorInfo.body = i18n.global.t("dashboard.errorContentPost");
     check = false;
   }
-  if (modeRead.value) {
-    if (userDirector.value.length <= 0) {
-      msgError.selectAttendees = i18n.global.t("text.notEmptyChoose", {
-        field: i18n.global.t("dashboard.errorListUser"),
-      });
-      check = false;
-    }
-  }
+
   if (errorInfo.title || errorInfo.body) check = false;
   return check;
 }
@@ -259,8 +187,8 @@ function handlePost() {
   const partialData = {
     title: formPost.title.trim(),
     body: formPost.body.trim(),
-    image_posts: listImageId.value,
-    user_reads: userDirector.value,
+    created_by: authStore.userInfo,
+    created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
   };
   let errorCallback = () => {};
   let successCallback = () => {
@@ -291,17 +219,8 @@ function handlePost() {
 function getPostEdit(paramsID) {
   let successCallback = (response) => {
     const responeData = response?.data?.data;
-    const mapID = responeData.image_posts.map((item) => item.id);
-    const arrayInfor = responeData.user_reads.map((item) => item.user_info);
-    const mapIdCode = arrayInfor.map((item) => item.code);
-    console.log("arrayInfor", arrayInfor.code);
     formPost.title = responeData.title;
     formPost.body = responeData.body;
-    listImageId.value = mapID;
-    if (responeData.user_reads.length > 0) {
-      modeRead.value = true;
-    }
-    userDirector.value = mapIdCode;
   };
   let errorCallback = () => {};
 
@@ -313,51 +232,9 @@ function getPostEdit(paramsID) {
   postDashBoardStore.get(payload);
 }
 
-watch(
-  () => fileListImage.value,
-  () => {
-    let arrayImage = [];
-    for (let i = 0; i < fileListImage.value.length; i++) {
-      if (arrayImage.indexOf(fileListImage.value[i].url) === -1) {
-        arrayImage = fileListImage.value[i].url;
-      }
-    }
-    formPost.body += '<img src="' + arrayImage.toString() + '">';
-  }
-);
-
-watch(
-  () => checkAll.value,
-  () => {
-    if (!checkAll.value) {
-      userDirector.value =
-        userDirector.value =
-        selectUser.value.defaultOptions =
-          [];
-      isIndeterminate.value = false;
-    } else {
-      selectUser.value.defaultOptions = apiStore.listUser;
-      userDirector.value = apiStore.listUser;
-    }
-  }
-);
-
-watch(
-  () => userDirector.value,
-  (newOld) => {
-    handleBlur("attendees", newOld);
-    isIndeterminate.value =
-      newOld.length > 0 && newOld.length < apiStore.listUser.length;
-  }
-);
-
 onMounted(() => {
-  getListUser();
   if (getQuery.id) {
     getPostEdit(getQuery.id);
   }
-});
-onUnmounted(() => {
-  removeListUser();
 });
 </script>
