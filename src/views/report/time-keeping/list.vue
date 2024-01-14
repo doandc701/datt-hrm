@@ -26,7 +26,7 @@
         {{ $t("btn.entries") }}
       </div>
       <div class="w-auto mt-3 sm:mt-0">
-        <router-link :to="{ path: '/time-keeping/add' }">
+        <router-link :to="{ path: '/time-keeping/check-in' }">
           <button class="btn btn-primary shadow-md mr-2">
             {{ $t("btn.register") }}
           </button>
@@ -64,6 +64,18 @@
                 {{ row.date_timekeeping ?? "" }}
               </div>
             </td>
+            <!-- <td class="w-56">
+              <div class="flex justify-center items-center">
+                <a
+                  class="flex items-center text-danger"
+                  href="javascript:"
+                  @click="deleteItem(row)"
+                >
+                  <Trash2Icon class="w-4 h-4 mr-1" />
+                  {{ $t("btn.delete") }}
+                </a>
+              </div>
+            </td> -->
           </tr>
         </template>
       </TableBox>
@@ -77,18 +89,20 @@ export default {
 </script>
 <script setup>
 import TableBox from "@/components/partials/table-box/main.vue";
-import { onMounted, ref, watch, computed } from "vue";
+import { ref, watch, computed } from "vue";
 import i18n from "@/i18n/i18n";
+// import { useApiStore } from "@/stores/api";
 
 import { TYPE_BASIC_INFORMATION } from "@/config/constants";
 
 //store-route
 import { useReportStore } from "@/stores/report";
 import { useAuthStore } from "@/stores/auth";
+
 import _ from "lodash";
 
+// const apiStore = useApiStore();
 const authStore = useAuthStore();
-
 const reportStore = useReportStore();
 
 const listTypeBasicInformation = ref([]);
@@ -142,7 +156,24 @@ let search = () => {
   config.value.q.keySearch = q.value;
 };
 
-onMounted(() => {});
+// let deleteItem = (row) => {
+//   let confirmCallback = () => {
+//     let successCallback = () => {
+//       reload.value = !reload.value;
+//     };
+//     let errorCallback = () => {};
+//     let payload = {
+//       successCallback,
+//       errorCallback,
+//       code: row.employee.code,
+//     };
+//     reportStore.delete_time_keeping(payload);
+//   };
+//   let payloadConfirm = {
+//     callback: confirmCallback,
+//   };
+//   apiStore.openConfirmDelete(payloadConfirm);
+// };
 
 watch(
   () => [filterType.value],

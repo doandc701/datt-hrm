@@ -1,11 +1,17 @@
 <template>
   <div class="page__dashboard master grid grid-cols-12 gap-6">
     <div class="col-span-12">
+      <DashboardChartDoughnut
+        v-if="visibleAction"
+        :data_labels="dataLabel"
+        :height="650"
+        :data_datasets_data="datasetsData"
+        :data_backgroud_color="dataBackgroudColor"
+      />
       <div class="mt-[26px`]">
         <h2 class="text-lg font-medium truncate mr-5 mt-[26px]">
           {{ $t("dashboard.companyNews") }}
         </h2>
-
         <div>
           <div class="flex items-center justify-end">
             <div
@@ -177,6 +183,7 @@ import { usePostDashBoardStore } from "@/stores/dashboard/post";
 import { formatAverageNumbro } from "@/utils/fomat";
 import { useAuthStore } from "@/stores/auth";
 import { TYPE_ADMIN } from "@/config/constants";
+import DashboardChartDoughnut from "../components/chart/doughnut-pie-chart/main.vue";
 
 const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 const authStore = useAuthStore();
@@ -195,7 +202,9 @@ const objPostRequriedRead = reactive({
   },
 });
 const numberNotification = ref(0);
-
+const dataLabel = ref([]);
+const datasetsData = ref([]);
+const dataBackgroudColor = ref([]);
 const pagination = reactive({
   page: 1,
   limit: 12,
@@ -401,6 +410,31 @@ function getListPost() {
   postDashBoardStore.list(payload);
 }
 
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function getListStatistic() {
+  let successCallback = (response) => {
+    const responeData = response?.data?.data;
+    const uniqueColors = [...new Set(responeData.map(() => getRandomColor()))];
+    dataLabel.value = responeData.map((item) => item.key);
+    datasetsData.value = responeData.map((item) => item.value);
+    dataBackgroudColor.value = uniqueColors;
+  };
+  let errorCallback = () => {};
+  let payload = {
+    successCallback,
+    errorCallback,
+  };
+  postDashBoardStore.list_statistic(payload);
+}
+
 function alreadyRead(paramId) {
   let errorCallback = () => {};
   let successCallback = () => {};
@@ -413,6 +447,7 @@ function alreadyRead(paramId) {
 }
 
 function initialData() {
+  getListStatistic();
   getListPost();
   getListPostRead();
 }

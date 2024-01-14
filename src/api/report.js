@@ -19,8 +19,8 @@ export let GET_CONFIG = (successCallback, errorCallback) => {
   let url = `/matter/config`;
   return Api.get(url).then(successCallback).catch(errorCallback);
 };
-export let DELETE_RESIGN_ERROR = (params, successCallback, errorCallback) => {
-  let url = `/matter/${params.payload.code}`;
+export let DELETE_TIME_KEEPING = (params, successCallback, errorCallback) => {
+  let url = `/timekeeping/${params.payload.code}`;
   return Api.delete(url).then(successCallback).catch(errorCallback);
 };
 
@@ -31,6 +31,26 @@ export let CREATE_BASIC_INFORMATION = (
   errorCallback
 ) => {
   let url = `/timekeeping`;
+  let data = params.payload.data;
+  return Api.post(url, data).then(successCallback).catch(errorCallback);
+};
+
+export let CREATE_BASIC_INFORMATION_CHECK_IN = (
+  params,
+  successCallback,
+  errorCallback
+) => {
+  let url = `/timekeeping/check-in`;
+  let data = params.payload.data;
+  return Api.post(url, data).then(successCallback).catch(errorCallback);
+};
+
+export let CREATE_BASIC_INFORMATION_CHECK_OUT = (
+  params,
+  successCallback,
+  errorCallback
+) => {
+  let url = `/timekeeping/check-out`;
   let data = params.payload.data;
   return Api.post(url, data).then(successCallback).catch(errorCallback);
 };

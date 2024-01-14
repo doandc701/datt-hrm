@@ -1,11 +1,18 @@
 <template>
   <div class="intro-y mt-8 flex items-center">
-    <h2 v-if="!route.query.code" class="mr-auto text-lg font-medium">
-      {{ $t("salary.resignSalary") }}
-    </h2>
-    <h2 v-else class="mr-auto text-lg font-medium">
-      {{ $t("salary.editSalary") }}
-    </h2>
+    <div v-if="visibleAction">
+      <h2 v-if="!route.query.code" class="mr-auto text-lg font-medium">
+        {{ $t("salary.resignSalary") }}
+      </h2>
+      <h2 v-else class="mr-auto text-lg font-medium">
+        {{ $t("salary.editSalary") }}
+      </h2>
+    </div>
+    <div v-else>
+      <h2 class="mr-auto text-lg font-medium">
+        {{ $t("salary.detailSalary") }}
+      </h2>
+    </div>
   </div>
   <!-- BEGIN: Page Layout -->
   <div class="grid grid-cols-12 gap-6 mt-5">
@@ -21,6 +28,7 @@
             :id="`select-user-salary`"
             v-model:code="userDirector"
             v-model:config="selectUser"
+            :is-disabled="!visibleAction"
           ></SelectUser>
           <div v-if="selectUser.error" class="d-block mt-2 pl-1 text-danger">
             {{ errorInfo.employee }}
@@ -51,6 +59,7 @@
             clearable
             class="w-full"
             size="large"
+            :disabled="!visibleAction"
             @change="handleMonth"
             :class="errorInfo.month ? 'is-invalid-select' : ''"
           >
@@ -91,6 +100,7 @@
             :class="errorInfo.standardWorkDay ? 'is-invalid-select' : ''"
             type="text"
             maxlength="2"
+            :disabled="!visibleAction"
             @blur="validate('work_day')"
             @input="handleInputWorkingDay"
           />
@@ -189,11 +199,11 @@
         <div class="text-right my-5 pr-2">
           <router-link :to="{ path: '/salary/list' }">
             <button class="btn btn-outline-secondary w-28 mr-1" type="button">
-              {{ $t("btn.cancel") }}
+              {{ !visibleAction ? $t("btn.back") : $t("btn.cancel") }}
             </button>
           </router-link>
           <button
-            v-if="!route.query.code"
+            v-if="!route.query.code && visibleAction"
             class="btn btn-primary w-24"
             type="button"
             @click="resign"
@@ -220,7 +230,7 @@ export default {
 };
 </script>
 <script setup>
-import { onMounted, ref, watch, onUnmounted, reactive } from "vue";
+import { onMounted, ref, watch, onUnmounted, reactive, computed } from "vue";
 import { MONTH_OF_YEAR } from "@/config/constants.js";
 import { useReportStore } from "@/stores/report";
 
@@ -233,15 +243,23 @@ import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useMasterSalaryStore } from "@/stores/admin/master-salary";
 import { useApiStore } from "@/stores/api";
+import { useAuthStore } from "@/stores/auth";
 import _ from "lodash";
 import i18n from "@/i18n/i18n";
+import { TYPE_ADMIN } from "@/config/constants";
 
 const route = useRoute();
 const router = useRouter();
 const masterSalaryStore = useMasterSalaryStore();
 const reportStore = useReportStore();
 const apiStore = useApiStore();
+const authStore = useAuthStore();
 
+const roleUser = authStore.userInfo.role_id;
+
+const visibleAction = computed(() => {
+  return roleUser == TYPE_ADMIN;
+});
 //variable
 const isLoading = ref(false);
 const salaryReceived = ref("");

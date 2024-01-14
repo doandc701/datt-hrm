@@ -1,5 +1,10 @@
 import Api from "../abstract";
 
+export let LIST_STATISTIC = (params, successCallback, errorCallback) => {
+  let url = `/statistics`;
+  return Api.get(url).then(successCallback).catch(errorCallback);
+};
+
 export let LIST_POST = (params, successCallback, errorCallback) => {
   let url = `/post-dashboard?${params.payload.query}`;
   return Api.get(url).then(successCallback).catch(errorCallback);

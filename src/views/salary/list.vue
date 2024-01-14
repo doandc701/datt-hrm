@@ -4,6 +4,7 @@
   </h2>
   <div class="grid grid-cols-12 gap-6 mt-5">
     <div
+      v-if="visibleAction"
       class="intro-y col-span-12 flex sm:justify-between flex-wrap items-center mt-2"
     >
       <div class="flex w-full sm:w-1/3">
@@ -134,6 +135,7 @@ const config = ref({
   },
   dataFilter: {
     year: "",
+    code: "",
   },
   headers: [
     {
@@ -177,8 +179,10 @@ let editItem = (row) => {
     path: "/salary/add",
     query: {
       code: row.employee.code,
-      type: "edit",
-      pageName: i18n.global.t("salary.editSalary"),
+      type: !visibleAction.value ? "detail" : "edit",
+      pageName: !visibleAction.value
+        ? i18n.global.t("salary.detailSalary")
+        : i18n.global.t("salary.editSalary"),
     },
   });
 };
@@ -217,6 +221,9 @@ watch(
 watch(
   () => [filterType.value],
   () => {
+    if (!visibleAction.value) {
+      config.value.dataFilter.code = authStore.userInfo.code;
+    }
     config.value.dataFilter.year = new Date().getFullYear();
     localStorage.setItem(
       "filterListSalary",

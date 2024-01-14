@@ -71,7 +71,6 @@ let checkPermissionUser = (userInfo, to) => {
       "/master/department/add",
       "/master/employee/list",
       "/master/employee/add",
-      "/salary/add",
       "/master/serial/list",
       "/master/serial/add",
       "/post/add",

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 import {
+  LIST_STATISTIC,
   LIST_POST,
   GET_POST,
   CREATE_POST,
@@ -27,6 +28,17 @@ export const usePostDashBoardStore = defineStore("postDashBoardStore", {
       return CREATE_POST(
         { payload },
         payload.successCallback,
+        payload.errorCallback
+      );
+    },
+    list_statistic(payload) {
+      const successCallBack = (resource) => {
+        this.listCategory = resource?.data?.data;
+        payload.successCallback(resource);
+      };
+      return LIST_STATISTIC(
+        { payload },
+        successCallBack,
         payload.errorCallback
       );
     },

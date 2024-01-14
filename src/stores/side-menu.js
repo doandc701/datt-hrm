@@ -112,8 +112,13 @@ export const useSideMenuStore = defineStore("sideMenu", {
           },
           {
             icon: "",
-            pageName: i18n.global.t("router.addResignError"),
-            title: i18n.global.t("menu.add"),
+            pageName: i18n.global.t("router.checkInResignError"),
+            title: i18n.global.t("menu.checkIn"),
+          },
+          {
+            icon: "",
+            pageName: i18n.global.t("router.checkOutResignError"),
+            title: i18n.global.t("menu.checkOut"),
           },
         ],
       },

@@ -69,7 +69,7 @@
       </div>
       <TabPanels>
         <TabPanel>
-          <Tab1 v-model:data="data" v-model:data-changed="dataBasicInfo"></Tab1>
+          <Tab1 v-model:data="data" v-model:data-changed="dataBasicInfo" />
         </TabPanel>
       </TabPanels>
     </TabGroup>
@@ -85,10 +85,9 @@ export default {
 import Tab1 from "./tab1.vue";
 import _ from "lodash";
 
-import { onMounted, ref, watch, onUnmounted } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { helper } from "@/utils/helper";
 import i18n from "@/i18n/i18n";
-import { TYPE_BASIC_INFORMATION } from "@/config/constants";
 
 // router-store
 import { useRoute } from "vue-router";
@@ -110,7 +109,6 @@ const dataBasicInfo = ref(null);
 const dataDetail = ref(null);
 const dataCost = ref(null);
 const dataSummary = ref(null);
-const listConfigBasicInformation = ref([]);
 
 //reset screen
 const resetScreen = () => {
@@ -196,14 +194,6 @@ const confirmSaveTab = (callback) => {
   apiStore.openConfirm(payloadConfirm);
 };
 
-const confirmContinueEdit = (callback) => {
-  let payloadConfirm = {
-    callback: callback,
-    message: i18n.global.t("resignError.continueEditing"),
-  };
-  apiStore.openConfirm(payloadConfirm);
-};
-
 let accessEdit = (extend) => {
   if (isLoadingCount.value) return;
   isLoadingCount.value = true;
@@ -252,28 +242,15 @@ let editResignError = () => {
   accessEdit(false);
 };
 
-onMounted(() => {
-  // getConfig();
-  // if (!apiStore.listSerial.length) {
-  //   getListSerial();
-  // }
-  // getListDepartment();
-  // getListUser();
-  // getListOffice();
-  // getListErrorCode();
-});
+onMounted(() => {});
 
 watch(
   () => route.query.code,
   () => {
     if (route.query.code) {
       getDetail();
-      reportStore.listenEcho(route.query.code);
     } else {
-      clearTimeout(continueEdit.value);
-      clearTimeout(clearEdit.value);
       resetScreen();
-      reportStore.disconnectEcho();
     }
   },
   { immediate: true }
@@ -288,88 +265,11 @@ watch(
       reportStore.matterCost &&
       reportStore.matterDetail &&
       reportStore.matterBasicInfo &&
-      route.path === "/time-keeping/add" &&
+      route.path === "/time-keeping/check-in" &&
       route.query.code
     ) {
       handleForgetSaveData(oldValue);
     }
   }
 );
-
-watch(
-  () => [reportStore.configBasicInformation, reportStore.matterBasicInfo],
-  () => {
-    let listKey;
-    let configBasicInformation = _.cloneDeep(
-      reportStore.configBasicInformation
-    );
-    let masterBasicInfo = _.cloneDeep(reportStore.matterBasicInfo);
-    if (!configBasicInformation) {
-      return;
-    }
-    if (!reportStore.matterBasicInfo) {
-      return;
-    }
-    listKey = Object.keys(configBasicInformation).filter(
-      (key) => configBasicInformation[key] != null
-    );
-
-    let listDataFilter = TYPE_BASIC_INFORMATION.filter((item) =>
-      listKey.includes(item.value)
-    );
-    listDataFilter.forEach((item) => {
-      item.data = configBasicInformation[item.value];
-      if (
-        masterBasicInfo[item.value] &&
-        masterBasicInfo[item.value].length > 0
-      ) {
-        item.isUpdate = true;
-      } else {
-        item.isUpdate = false;
-      }
-    });
-    listConfigBasicInformation.value = listDataFilter ?? [];
-  },
-  { deep: true, immediate: true }
-);
-
-watch(
-  () => [reportStore.isEditing, reportStore.countEdit],
-  () => {
-    if (reportStore.countEdit <= 0) {
-      return;
-    }
-
-    if (reportStore.countEdit > 0) {
-      clearEdit.value = setTimeout(() => {
-        reportStore.isAccessEdit = true;
-        reportStore.isEditing = false;
-        reportStore.userIsEditing = null;
-      }, reportStore.countEdit);
-    }
-
-    if (!reportStore.isEditing) {
-      return;
-    }
-
-    if (reportStore.countEdit > 60 * 1000) {
-      let timeDelayConfirm = reportStore.countEdit - 60 * 1000;
-      continueEdit.value = setTimeout(() => {
-        const callback = () => {
-          clearTimeout(clearEdit.value);
-          accessEdit(true);
-        };
-        confirmContinueEdit(callback);
-      }, timeDelayConfirm);
-    }
-  },
-  { deep: true, immediate: true }
-);
-
-onUnmounted(() => {
-  apiStore.resetListUserFilter();
-  reportStore.disconnectEcho();
-  clearTimeout(continueEdit.value);
-  clearTimeout(clearEdit.value);
-});
 </script>

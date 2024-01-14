@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import {
-  DELETE_RESIGN_ERROR,
+  DELETE_TIME_KEEPING,
   LIST_RESIGN_ERROR,
   LIST_TIME_KEEPING,
   CREATE_BASIC_INFORMATION,
+  CREATE_BASIC_INFORMATION_CHECK_IN,
+  CREATE_BASIC_INFORMATION_CHECK_OUT,
   UPDATE_BASIC_INFORMATION,
   GET_RESIGN_ERROR,
   CREATE_PROCESS_CONTENT,
@@ -93,8 +95,8 @@ export const useReportStore = defineStore("reportStore", {
         payload.errorCallback
       );
     },
-    delete_resign_error(payload) {
-      return DELETE_RESIGN_ERROR(
+    delete_time_keeping(payload) {
+      return DELETE_TIME_KEEPING(
         { payload },
         payload.successCallback,
         payload.errorCallback
@@ -205,6 +207,21 @@ export const useReportStore = defineStore("reportStore", {
     // information basic
     register_time_keeping(payload) {
       return CREATE_BASIC_INFORMATION(
+        { payload },
+        payload.successCallback,
+        payload.errorCallback
+      );
+    },
+    register_time_keeping_check_in(payload) {
+      return CREATE_BASIC_INFORMATION_CHECK_IN(
+        { payload },
+        payload.successCallback,
+        payload.errorCallback
+      );
+    },
+
+    register_time_keeping_check_out(payload) {
+      return CREATE_BASIC_INFORMATION_CHECK_OUT(
         { payload },
         payload.successCallback,
         payload.errorCallback

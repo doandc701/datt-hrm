@@ -23,7 +23,8 @@ import AddCategory from "@/views/master/category/add.vue";
 import ListGroup from "@/views/master/group/list.vue";
 import AddGroup from "@/views/master/group/add.vue";
 import ListTimeKeeping from "@/views/report/time-keeping/list.vue";
-import AddTimeKeeping from "@/views/report/time-keeping/add/main.vue";
+import CheckIn from "@/views/report/time-keeping/check-in/main.vue";
+import CheckOut from "@/views/report/time-keeping/check-out/main.vue";
 import ListPayError from "@/views/report/pay-error/list.vue";
 import ListChart from "@/views/report/chart/list.vue";
 import ListOverTime from "@/views/request/over-time/list.vue";
@@ -186,10 +187,16 @@ const routes = [
         component: ListTimeKeeping,
       },
       {
-        path: "time-keeping/add",
-        name: i18n.global.t("router.addResignError"),
-        component: AddTimeKeeping,
+        path: "time-keeping/check-in",
+        name: i18n.global.t("router.checkInResignError"),
+        component: CheckIn,
       },
+      {
+        path: "time-keeping/check-out",
+        name: i18n.global.t("router.checkOutResignError"),
+        component: CheckOut,
+      },
+
       {
         path: "report/pay-error/list",
         name: i18n.global.t("router.listPayError"),

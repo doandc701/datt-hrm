@@ -4,6 +4,7 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "./tab";
 import LoadingIcon from "./loading-icon/Main.vue";
 import ChartBar from "./chart/bar-chart/Main.vue";
 import ChatLine from "./chart/line-chart/Main.vue";
+import ChartDoughnut from "./chart/doughnut-pie-chart/Main.vue";
 import {
   Dropdown,
   DropdownContent,
@@ -38,6 +39,7 @@ export default (app) => {
   app.component("LoadingIcon", LoadingIcon);
   app.component("ChartBar", ChartBar);
   app.component("ChatLine", ChatLine);
+  app.component("ChartDoughnut", ChartDoughnut);
 
   for (const [key, icon] of Object.entries(LucideIcons)) {
     app.component(key, icon);
