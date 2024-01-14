@@ -47,9 +47,14 @@
               >
                 <div class="w-10 h-10 flex-none image-fit">
                   <img
+                    v-if="post.created_by.avatar_path"
                     alt="Midone Tailwind HTML Admin Template"
                     class="rounded-full"
-                    :src="post.created_by?.avatar_path"
+                    :src="post.created_by.avatar_path"
+                  />
+                  <User2Icon
+                    v-else
+                    class="rounded-full h-full w-full bg-[#f6845e] text-[#fff]"
                   />
                 </div>
                 <div class="ml-3 mr-auto">
@@ -106,7 +111,15 @@
               >
                 <div class="w-full flex items-center mt-3">
                   <div class="w-8 h-8 flex-none image-fit mr-3">
-                    <img class="rounded-full" :src="userInfo?.avatar_path" />
+                    <img
+                      v-if="userInfo?.avatar_path"
+                      class="rounded-full"
+                      :src="userInfo?.avatar_path"
+                    />
+                    <User2Icon
+                      v-else
+                      class="rounded-full h-full w-full bg-[#1e40af] text-[#fff]"
+                    />
                   </div>
                   <div class="flex-1 relative text-slate-600">
                     <input

@@ -32,6 +32,10 @@
           alt="profile"
           v-if="userInfo?.avatar_path"
         />
+        <User2Icon
+          v-else
+          class="rounded-full h-full w-full bg-[#1e40af] text-[#fff]"
+        />
       </DropdownToggle>
       <DropdownMenu class="w-56">
         <DropdownContent class="bg-primary text-white">
