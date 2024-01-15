@@ -17,6 +17,13 @@ export let GET = (params, successCallback, errorCallback) => {
   return Api.get(url).then(successCallback).catch(errorCallback);
 };
 
+export let EXPORT_EXCEL = (params, successCallback, errorCallback) => {
+  let url = `/management/export-salary/${params.payload.code}`;
+  return Api.get(url, { responseType: "arraybuffer" })
+    .then(successCallback)
+    .catch(errorCallback);
+};
+
 export let UPDATE = (params, successCallback, errorCallback) => {
   let url = `/management/salary/${params.payload.code}/${params.payload.year}`;
 

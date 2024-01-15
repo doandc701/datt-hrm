@@ -1,12 +1,22 @@
 <template>
-  <div class="intro-y mt-8 flex items-center">
-    <div v-if="visibleAction">
+  <div class="intro-y mt-8">
+    <div v-if="visibleAction" class="flex justify-between items-center">
       <h2 v-if="!route.query.code" class="mr-auto text-lg font-medium">
         {{ $t("salary.resignSalary") }}
       </h2>
       <h2 v-else class="mr-auto text-lg font-medium">
         {{ $t("salary.editSalary") }}
       </h2>
+      <div>
+        <button
+          v-if="route.query.code"
+          class="btn btn-primary w-24"
+          type="button"
+          @click="handleExportExcel"
+        >
+          {{ $t("btn.export") }}
+        </button>
+      </div>
     </div>
     <div v-else>
       <h2 class="mr-auto text-lg font-medium">
@@ -302,6 +312,13 @@ const deductedFromSalary = reactive({
 const resetScreen = () => {
   salaryCode.value = "";
   selectMonth.value = "";
+  deductedFromSalary.value = {
+    socialInsurance: "",
+    healthInsurance: "",
+    voluntaryInsurance: "",
+    personalIncomeTax: "",
+    totalDeducted: "",
+  };
   errorInfo.value = {
     salaryCode: "",
     branchName: "",
@@ -311,6 +328,26 @@ const resetScreen = () => {
   };
   userDirector.value = [];
 };
+
+function handleExportExcel() {
+  let successCallback = (response) => {
+    const excelFile = response.data;
+    const blob = new Blob([excelFile], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "Salary.xlsx";
+    link.click();
+  };
+  let errorCallback = () => {};
+  let payload = {
+    code: route.query.code,
+    successCallback,
+    errorCallback,
+  };
+  masterSalaryStore.export_excel(payload);
+}
 
 function handleMonth() {
   if (!selectMonth.value) {

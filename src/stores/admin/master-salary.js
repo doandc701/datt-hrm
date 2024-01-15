@@ -1,5 +1,12 @@
 import { defineStore } from "pinia";
-import { CREATE, DELETE, GET, LIST, UPDATE } from "@/api/admin/master-salary";
+import {
+  CREATE,
+  DELETE,
+  GET,
+  LIST,
+  UPDATE,
+  EXPORT_EXCEL,
+} from "@/api/admin/master-salary";
 
 const defaultState = {
   registerData: false,
@@ -26,6 +33,14 @@ export const useMasterSalaryStore = defineStore("masterSalaryStore", {
     },
     get(payload) {
       return GET({ payload }, payload.successCallback, payload.errorCallback);
+    },
+
+    export_excel(payload) {
+      return EXPORT_EXCEL(
+        { payload },
+        payload.successCallback,
+        payload.errorCallback
+      );
     },
 
     update(payload) {
