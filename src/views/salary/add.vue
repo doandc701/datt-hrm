@@ -196,28 +196,30 @@
           />
         </div>
 
-        <div class="text-right my-5 pr-2">
+        <div class="text-right my-5 pr-2 flex justify-end gap-3">
           <router-link :to="{ path: '/salary/list' }">
             <button class="btn btn-outline-secondary w-28 mr-1" type="button">
               {{ !visibleAction ? $t("btn.back") : $t("btn.cancel") }}
             </button>
           </router-link>
-          <button
-            v-if="!route.query.code && visibleAction"
-            class="btn btn-primary w-24"
-            type="button"
-            @click="resign"
-          >
-            {{ $t("btn.register") }}
-          </button>
-          <button
-            v-else
-            class="btn btn-primary w-24"
-            type="button"
-            @click="save"
-          >
-            {{ $t("btn.edit") }}
-          </button>
+          <div v-if="visibleAction">
+            <button
+              v-if="!route.query.code"
+              class="btn btn-primary w-24"
+              type="button"
+              @click="resign"
+            >
+              {{ $t("btn.register") }}
+            </button>
+            <button
+              v-else
+              class="btn btn-primary w-24"
+              type="button"
+              @click="save"
+            >
+              {{ $t("btn.edit") }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
