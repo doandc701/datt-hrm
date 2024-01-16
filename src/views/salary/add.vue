@@ -273,6 +273,7 @@ const visibleAction = computed(() => {
   return roleUser == TYPE_ADMIN;
 });
 //variable
+const userSalary = ref("");
 const isLoading = ref(false);
 const salaryReceived = ref("");
 const salaryCode = ref("");
@@ -337,7 +338,7 @@ function handleExportExcel() {
     });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.download = "Salary.xlsx";
+    link.download = `Lương tháng ${selectMonth.value} - ${userSalary.value}.xlsx`;
     link.click();
   };
   let errorCallback = () => {};
@@ -410,7 +411,7 @@ function handleInputWorkingDay() {
 let getDetail = () => {
   let successCallback = (response) => {
     let dataResponse = response?.data.data;
-
+    userSalary.value = `${dataResponse.employee.first_name} ${dataResponse.employee.last_name}`;
     userDirector.value = dataResponse.employee.code;
     tempUser.value = dataResponse.employee.code;
     selectUser.value.defaultOptions = dataResponse.employee;

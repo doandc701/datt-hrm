@@ -7,7 +7,14 @@
       class="intro-y col-span-12 flex sm:justify-between flex-wrap items-center mt-2"
     >
       <div class="flex w-full sm:w-1/3">
-        <div class="w-full relative text-slate-500">
+        <div v-if="visibleAction" class="flex w-full max-w-[320px]">
+          <SelectUser
+            :id="`select-user-salary`"
+            v-model:code="userDirector"
+            v-model:config="selectUser"
+          ></SelectUser>
+        </div>
+        <div v-else class="w-full relative text-slate-500">
           <input
             v-model="q"
             :placeholder="$t('resignError.valueSearch')"
@@ -25,7 +32,7 @@
         {{ $t("btn.total") }} {{ totalItems }}
         {{ $t("btn.entries") }}
       </div>
-      <div class="w-auto mt-3 sm:mt-0">
+      <div v-if="!visibleAction" class="w-auto mt-3 sm:mt-0">
         <router-link :to="{ path: '/time-keeping/check-in' }">
           <button class="btn btn-primary shadow-md mr-2">
             {{ $t("btn.register") }}
@@ -51,6 +58,16 @@
             </td>
             <td class="text-left">
               <div class="block-textName">
+                {{ row.employee.code }}
+              </div>
+            </td>
+            <td class="text-left">
+              <div class="block-textName">
+                {{ row.employee.first_name }} {{ row.employee.last_name }}
+              </div>
+            </td>
+            <td class="text-left">
+              <div class="block-textName">
                 {{ row.start_time ?? "" }}
               </div>
             </td>
@@ -64,7 +81,7 @@
                 {{ row.date_timekeeping ?? "" }}
               </div>
             </td>
-            <!-- <td class="w-56">
+            <td v-if="visibleAction" class="w-56">
               <div class="flex justify-center items-center">
                 <a
                   class="flex items-center text-danger"
@@ -75,7 +92,7 @@
                   {{ $t("btn.delete") }}
                 </a>
               </div>
-            </td> -->
+            </td>
           </tr>
         </template>
       </TableBox>
@@ -89,10 +106,13 @@ export default {
 </script>
 <script setup>
 import TableBox from "@/components/partials/table-box/main.vue";
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted, onUnmounted } from "vue";
 import i18n from "@/i18n/i18n";
-// import { useApiStore } from "@/stores/api";
+import SelectUser from "@/components/select/select-user/main.vue";
+import { getListUser, removeListUser } from "@/utils/select/user-utils";
+import { useApiStore } from "@/stores/api";
 
+import { TYPE_ADMIN } from "@/config/constants";
 import { TYPE_BASIC_INFORMATION } from "@/config/constants";
 
 //store-route
@@ -101,10 +121,20 @@ import { useAuthStore } from "@/stores/auth";
 
 import _ from "lodash";
 
-// const apiStore = useApiStore();
+const apiStore = useApiStore();
 const authStore = useAuthStore();
+const roleUser = authStore.userInfo.role_id;
 const reportStore = useReportStore();
-
+const visibleAction = computed(() => {
+  return roleUser == TYPE_ADMIN;
+});
+const userDirector = ref("");
+const selectUser = ref({
+  error: false,
+  typeSearch: ["code", "name", "first_name", "last_name", "email"],
+  defaultOptions: [],
+  clearable: true,
+});
 const listTypeBasicInformation = ref([]);
 const filterListTimeKeeping = JSON.parse(
   localStorage.getItem("filterListTimeKeeping")
@@ -127,6 +157,14 @@ const config = ref({
       label: i18n.global.t("text.no"),
     },
     {
+      sort: "code",
+      label: i18n.global.t("resignError.resignError"),
+    },
+    {
+      sort: "name",
+      label: i18n.global.t("resignError.employeeName"),
+    },
+    {
       sort: "start_time",
       label: i18n.global.t("resignError.contructionName"),
     },
@@ -147,38 +185,36 @@ const config = ref({
 const q = ref("");
 const dataList = ref([]);
 const reload = ref(false);
-
-const visibleAction = computed(() => {
-  return false;
-});
 const totalItems = ref(0);
 let search = () => {
   config.value.q.keySearch = q.value;
 };
 
-// let deleteItem = (row) => {
-//   let confirmCallback = () => {
-//     let successCallback = () => {
-//       reload.value = !reload.value;
-//     };
-//     let errorCallback = () => {};
-//     let payload = {
-//       successCallback,
-//       errorCallback,
-//       code: row.employee.code,
-//     };
-//     reportStore.delete_time_keeping(payload);
-//   };
-//   let payloadConfirm = {
-//     callback: confirmCallback,
-//   };
-//   apiStore.openConfirmDelete(payloadConfirm);
-// };
+let deleteItem = (row) => {
+  let confirmCallback = () => {
+    let successCallback = () => {
+      reload.value = !reload.value;
+    };
+    let errorCallback = () => {};
+    let payload = {
+      successCallback,
+      errorCallback,
+      code: row.employee.code,
+    };
+    reportStore.delete_time_keeping(payload);
+  };
+  let payloadConfirm = {
+    callback: confirmCallback,
+  };
+  apiStore.openConfirmDelete(payloadConfirm);
+};
 
 watch(
   () => [filterType.value],
   () => {
-    config.value.dataFilter.code = authStore.userInfo.code;
+    if (!visibleAction.value) {
+      config.value.dataFilter.code = authStore.userInfo.code;
+    }
     config.value.dataFilter.year = new Date().getFullYear();
     localStorage.setItem(
       "filterListTimeKeeping",
@@ -186,6 +222,25 @@ watch(
     );
   },
   { deep: true, immediate: true }
+);
+
+watch(
+  () => userDirector.value,
+  () => {
+    let successCallback = (response) => {
+      const result = response.data;
+      dataList.value = result.data[0].employees;
+    };
+    let errorCallback = () => {};
+    let payload = {
+      successCallback,
+      errorCallback,
+      query: `page=1&limit=10&filters[year]=${new Date().getFullYear()}&filters[code]=${
+        userDirector.value
+      }`,
+    };
+    reportStore.list_time_keeping(payload);
+  }
 );
 
 watch(
@@ -218,6 +273,13 @@ watch(
   },
   { deep: true, immediate: true }
 );
+
+onMounted(() => {
+  getListUser();
+});
+onUnmounted(() => {
+  removeListUser();
+});
 </script>
 <style scoped>
 :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {

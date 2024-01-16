@@ -81,6 +81,20 @@ export const useSideMenuStore = defineStore("sideMenu", {
           },
         ],
       },
+      "devider",
+      {
+        icon: "HardDriveIcon",
+        pageName: "resign-menu",
+        title: i18n.global.t("menu.report"),
+        subMenu: [
+          {
+            icon: "",
+            pageName: i18n.global.t("router.listResignError"),
+            title: i18n.global.t("menu.list"),
+          },
+        ],
+      },
+      "devider",
       {
         icon: "CalendarIcon",
         pageName: "calendar",
@@ -135,6 +149,7 @@ export const useSideMenuStore = defineStore("sideMenu", {
           },
         ],
       },
+      "devider",
       {
         icon: "CalendarIcon",
         pageName: "calendar",
