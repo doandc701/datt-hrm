@@ -30,3 +30,6 @@ coverage
 #enviroment
 .env
 .env.development
+
+# package
+package-lock.json
