@@ -7,7 +7,7 @@
     }"
   >
     <div class="mobile-menu-bar">
-      <a href="" class="mr-auto flex">
+      <a href="/" class="mr-auto flex">
         <img
           alt="Midone Tailwind HTML Admin Template"
           class="w-6"
