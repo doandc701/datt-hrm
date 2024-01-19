@@ -230,6 +230,7 @@ watch(
     let successCallback = (response) => {
       const result = response.data;
       dataList.value = result.data[0].employees;
+      totalItems.value = result.data[0].employees.length;
     };
     let errorCallback = () => {};
     let payload = {

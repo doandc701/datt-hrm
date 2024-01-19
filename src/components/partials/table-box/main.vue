@@ -76,7 +76,11 @@
     class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-3"
   >
     <Pagination
-      v-if="data.total"
+      v-if="
+        data.total &&
+        props.config.action !== 'list_timekeeping' &&
+        props.config.action !== 'salary'
+      "
       v-model:limit="data.model.limit"
       v-model:page="data.model.page"
       v-model:total="data.total"
@@ -179,13 +183,15 @@ let retrieveList = () => {
         props.config.action === "salary"
       ) {
         listData = dataResponse.data[0].employees;
+        emit("update:total-items", dataResponse.data[0].employees.length);
+      } else {
+        emit("update:total-items", data.value.total);
       }
 
       if (!listData.length && data.value.model.page !== 1) {
         data.value.model.page = 1;
       }
       emit("update:dataList", listData);
-      emit("update:total-items", data.value.total);
       emit("page", dataResponse.current_page);
       emit("limit", dataResponse.limit);
       sessionStorage.setItem("PAGE_NUMBER", dataResponse.current_page);
