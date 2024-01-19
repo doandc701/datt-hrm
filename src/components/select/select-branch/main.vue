@@ -128,7 +128,7 @@ const loadmore = () => {
 };
 
 let getQueryString = (key_search) => {
-  let query = [`page=${page.value}}`, `limit=20`];
+  let query = [`page=${page.value}`, `limit=20`];
 
   if (props.config.typeSearch && key_search) {
     props.config.typeSearch.forEach((item) => {
