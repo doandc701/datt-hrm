@@ -89,9 +89,15 @@
               <div class="intro-x mt-5 text-center xl:mt-8 xl:text-left">
                 <a
                   type="submit"
-                  class="btn btn-primary w-full py-3 px-4 align-top xl:mr-3 xl:w-32"
+                  class="btn btn-primary w-full py-3 px-4 align-top xl:mr-3 xl:w-32 justify-evenly"
                   @click="login"
                 >
+                  <LoadingIcon
+                    v-if="isLoading"
+                    icon="spinning-circles"
+                    color="white"
+                    class="w-4 h-4"
+                  />
                   {{ $t("auth.login") }}
                 </a>
               </div>
@@ -127,6 +133,7 @@ const email = ref(localStorage.getItem("emailLogin") ?? "");
 const password = ref("");
 const passwordFieldType = ref("password");
 const errorInfo = ref({ email: "", password: "" });
+const isLoading = ref(false);
 
 let enterKeyboard = (e) => {
   if (e.keyCode === 13) {
@@ -136,6 +143,8 @@ let enterKeyboard = (e) => {
 let login = () => {
   let check = validate();
   if (check) {
+    if (isLoading.value) return;
+    isLoading.value = true;
     let successCallback = (response) => {
       window.$cookies.set(
         generateStorageKey(APP_TOKEN_NAME),
@@ -155,8 +164,11 @@ let login = () => {
           path: "/",
         });
       }
+      isLoading.value = false;
     };
-    let errorCallback = () => {};
+    let errorCallback = () => {
+      isLoading.value = false;
+    };
     let payload = {
       data: {
         email: email.value,
