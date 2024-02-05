@@ -365,7 +365,9 @@ function alreadyRead(paramId) {
 }
 
 function initialData() {
-  getListStatistic();
+  if (visibleAction.value) {
+    getListStatistic();
+  }
   getListPost();
 }
 
